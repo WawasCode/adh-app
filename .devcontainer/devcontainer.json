@@ -1,0 +1,25 @@
+{
+  "name": "adh-app-devcontainer",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "web",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "python.formatting.provider": "black",
+        "eslint.format.enable": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "git remote get-url mirror 2>/dev/null || git remote add mirror git@github.com:KRITIS-FUB/app-swp25.git && git config core.hooksPath .githooks && cd js && pnpm install && cd ../python && pip install -r requirements.txt || true"
+}

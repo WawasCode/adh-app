@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adh-app-dev
+    command: >
+      sh -c "
+        cd python &&
+        pip install -r requirements.txt &&
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    volumes:
+      - ./:/workspace:cached
+    ports:
+      - "8000:8000" # Django
+      - "5173:5173" # Vite / React dev‑server
+    environment:
+      DATABASE_URL: postgres://django:password@db:5432/adh
+      DJANGO_SETTINGS_MODULE: adh_app.settings
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: adh
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
