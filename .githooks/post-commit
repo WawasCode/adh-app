@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-# Push to origin (default) and the mirror after every commit
-git push origin HEAD
-git push mirror HEAD
+git push origin
+git push mirror
