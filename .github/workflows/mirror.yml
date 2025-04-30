@@ -1,0 +1,20 @@
+name: Mirror to KRITIS-FUB
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    types: [opened, closed, synchronized]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Mirror to KRITIS-FUB
+        run: |
+          git remote add mirror https://x-access-token:${{ secrets.MIRROR_PAT }}@github.com/KRITIS-FUB/app-swp25.git
+          git push --force mirror --all
+          git push --force mirror --tags

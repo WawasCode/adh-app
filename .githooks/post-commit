@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
+set -e
+
+# Always push to primary repo (origin)
 git push origin
-git push mirror
+
+# Only mirror commits on main branch to KRITIS repo
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "master" ]; then
+  echo "On main branch - mirroring to KRITIS-FUB repo"
+  git push mirror
+fi
