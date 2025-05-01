@@ -21,5 +21,5 @@
       ]
     }
   },
-  "postCreateCommand": "git remote get-url origin 2>/dev/null || git remote add origin https://github.com/WawasCode/adh-app.git && git remote get-url mirror 2>/dev/null || git remote add mirror https://github.com/KRITIS-FUB/app-swp25.git && git config core.hooksPath .githooks && cd js && pnpm install && cd ../python && pip install -r requirements.txt || true"
+  "postCreateCommand": "git remote get-url origin 2>/dev/null || git remote add origin https://github.com/WawasCode/adh-app.git && cd js && pnpm install && cd ../python && pip install -r requirements.txt || true"
 }
