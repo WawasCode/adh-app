@@ -1,7 +1,7 @@
 {
   "name": "adh-app-devcontainer",
   "dockerComposeFile": [
-    "docker-compose.yml"
+    "../docker-compose.yml"
   ],
   "service": "web",
   "workspaceFolder": "/workspace",
