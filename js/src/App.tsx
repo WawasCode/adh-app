@@ -1,8 +1,9 @@
 import "./App.css";
-import { RemoteMapView } from "./RemoteMapView";
+import { RemoteMapView } from "./map/RemoteMapView";
 
-function App() {
+/**
+ * App component that only renders the RemoteMapView.
+ */
+export default function App() {
   return <RemoteMapView />;
 }
-
-export default App;

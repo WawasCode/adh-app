@@ -1,54 +1,26 @@
-# React + TypeScript + Vite
+# UI Components and Tailwind Setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project includes the following reusable UI components, implemented as named function exports with JSDoc comments:
 
-Currently, two official plugins are available:
+- **Card**: A styled container for content, with subcomponents for header, title, description, content, and footer. See `src/components/ui/Card.tsx`.
+- **Input**: A styled input field for forms. See `src/components/ui/Input.tsx`.
+- **Button**: A styled button supporting variants and sizes. See `src/components/ui/Button.tsx`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+All components use Tailwind CSS utility classes and are designed to work with the local Inter font (see `src/index.css`).
 
-## Expanding the ESLint configuration
+### Usage Example
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Import the components you need:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/ui/Card';
+import { Input } from './components/ui/Input';
+import { Button } from './components/ui/Button';
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Tailwind and Fonts
+- Tailwind CSS is configured in `tailwind.config.js` and styles are in `src/index.css`.
+- The Inter font is loaded locally from `src/assets/fonts` and applied globally.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Main View
+The only view rendered in the app is `RemoteMapView` (see `src/map/RemoteMapView.tsx`). All other demo or default views have been removed from `App.tsx`.
