@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import './App.css'
 
 const CENTER: [number, number] = [52.52, 13.405] // Berlin
 const ZOOM = 10
