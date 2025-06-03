@@ -1,0 +1,12 @@
+{% load vite %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React via Django</title>
+    {% vite_hmr_client %} {% vite_asset "src/main.tsx" %}
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

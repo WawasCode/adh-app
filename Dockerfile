@@ -15,3 +15,19 @@ RUN apt-get update && apt-get install -y git-lfs \
 
 # The container is going to be the VS Code workspace
 WORKDIR /workspace
+
+# Python-Requirements installieren
+COPY python/requirements.txt /workspace/python/
+RUN pip install --no-cache-dir -r /workspace/python/requirements.txt
+
+# JavaScript-Abhängigkeiten installieren
+COPY js/pnpm-lock.yaml js/package.json /workspace/js/
+WORKDIR /workspace/js
+RUN pnpm install
+
+# Zurück zur Root-Struktur und den App-Code kopieren
+COPY python /workspace/python
+COPY js /workspace/js
+
+# Zurück ins Hauptverzeichnis
+WORKDIR /workspace

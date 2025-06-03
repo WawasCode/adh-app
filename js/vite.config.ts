@@ -1,7 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  build: {
+    outDir: "dist", // → wichtig für STATICFILES_DIRS in Django
+    manifest: true, // → wichtig für django-vite
+    emptyOutDir: true, // → löscht alten Build vor Neuem
+  },
+});
