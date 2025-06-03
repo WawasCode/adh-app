@@ -116,12 +116,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR.parent / "js" / "dist"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DJANGO_VITE_ASSETS_PATH     = BASE_DIR.parent / "js" / "dist"
 DJANGO_VITE_DEV_MODE        = DEBUG
 DJANGO_VITE_DEV_SERVER_PORT = 5173
+DJANGO_VITE_USE_STATIC_URL = False
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
