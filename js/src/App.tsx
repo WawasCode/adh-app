@@ -1,9 +1,10 @@
-import './App.css';
-import { RemoteMapView } from "./map/RemoteMapView";
+import "@/App.css";
+import MobileLayout from "@/MobileUI";
 
 /**
- * App component that only renders the RemoteMapView.
+ * App component that renders the main application layout,
+ * which is responsive and handles mobile/desktop views.
  */
 export default function App() {
-  return <RemoteMapView />;
+  return <MobileLayout />;
 }
