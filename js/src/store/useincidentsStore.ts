@@ -1,51 +1,152 @@
 import { create } from "zustand";
-import type { Incident } from "@/views/IncidentsList";
+import {
+  incidentService,
+  type ApiIncident,
+  calculateDistance,
+  formatDistance,
+} from "../services/incidentService";
+
+export interface Incident {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  reportedAt: Date;
+  distance: string;
+  severity?: string;
+  status?: string;
+  longitude?: number;
+  latitude?: number;
+}
 
 interface IncidentsState {
   incidents: Incident[];
+  loading: boolean;
+  error: string | null;
+  loadIncidents: () => Promise<void>;
+  addIncident: (incident: {
+    title: string;
+    description: string;
+    longitude: number;
+    latitude: number;
+    severity?: string;
+  }) => Promise<void>;
+  setUserLocation: (lat: number, lon: number) => void;
+  userLocation: { lat: number; lon: number } | null;
 }
 
-export const useIncidentsStore = create<IncidentsState>(() => ({
-  incidents: [
-    {
-      id: "1",
-      type: "Feuer",
-      title: "Feuer",
-      description: "Kurze Beschreibung",
-      reportedAt: new Date(Date.now() - 5 * 60 * 1000), // 5 min ago
-      distance: "1.2 km",
-    },
-    {
-      id: "2",
-      type: "Überschwemmung",
-      title: "Überschwemmung",
-      description: "Kurze Beschreibung",
-      reportedAt: new Date(Date.now() - 30 * 60 * 1000), // 30 min ago
-      distance: "3.5 km",
-    },
-    {
-      id: "3",
-      type: "Gasleck",
-      title: "Gasleck",
-      description: "Kurze Beschreibung",
-      reportedAt: new Date(Date.now() - 90 * 60 * 1000), // 1.5 h ago
-      distance: "0.8 km",
-    },
-    {
-      id: "4",
-      type: "Straßensperre",
-      title: "Straßensperre",
-      description: "Kurze Beschreibung",
-      reportedAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 h ago
-      distance: "2.1 km",
-    },
-    {
-      id: "5",
-      type: "Bauunfall",
-      title: "Bauunfall",
-      description: "Kurze Beschreibung",
-      reportedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 h ago
-      distance: "5.0 km",
-    },
-  ],
+// Convert API incident to store format
+function convertApiIncidentToStoreFormat(
+  apiIncident: ApiIncident,
+  userLat?: number,
+  userLon?: number,
+): Incident {
+  // Calculate distance if user location is provided
+  let distance = "-- km";
+  if (userLat !== undefined && userLon !== undefined) {
+    const distanceKm = calculateDistance(
+      userLat,
+      userLon,
+      apiIncident.latitude,
+      apiIncident.longitude,
+    );
+    distance = formatDistance(distanceKm);
+  }
+
+  // Map severity to German incident types for backwards compatibility
+  const severityToType: Record<string, string> = {
+    low: "Hinweis",
+    medium: "Warnung",
+    high: "Alarm",
+    critical: "Notfall",
+  };
+
+  return {
+    id: apiIncident.id.toString(),
+    type: severityToType[apiIncident.severity] || apiIncident.title,
+    title: apiIncident.title,
+    description: apiIncident.description,
+    reportedAt: new Date(apiIncident.created_at),
+    distance: distance,
+    severity: apiIncident.severity,
+    status: apiIncident.status,
+    longitude: apiIncident.longitude,
+    latitude: apiIncident.latitude,
+  };
+}
+
+export const useIncidentsStore = create<IncidentsState>((set, get) => ({
+  incidents: [],
+  loading: false,
+  error: null,
+  userLocation: null,
+
+  setUserLocation: (lat: number, lon: number) => {
+    set({ userLocation: { lat, lon } });
+    // Recalculate distances for existing incidents
+    const { incidents } = get();
+    const updatedIncidents = incidents.map((incident) => {
+      if (incident.longitude && incident.latitude) {
+        const distanceKm = calculateDistance(
+          lat,
+          lon,
+          incident.latitude,
+          incident.longitude,
+        );
+        return {
+          ...incident,
+          distance: formatDistance(distanceKm),
+        };
+      }
+      return incident;
+    });
+    set({ incidents: updatedIncidents });
+  },
+
+  loadIncidents: async () => {
+    set({ loading: true, error: null });
+    try {
+      const apiIncidents = await incidentService.getIncidents();
+      const { userLocation } = get();
+
+      const incidents = apiIncidents.map((apiIncident) =>
+        convertApiIncidentToStoreFormat(
+          apiIncident,
+          userLocation?.lat,
+          userLocation?.lon,
+        ),
+      );
+
+      set({ incidents, loading: false });
+    } catch (error) {
+      set({
+        error: `Failed to load incidents: ${error}`,
+        loading: false,
+      });
+    }
+  },
+
+  addIncident: async (incidentData) => {
+    set({ loading: true, error: null });
+    try {
+      const newApiIncident = await incidentService.createIncident(incidentData);
+      const { userLocation, incidents } = get();
+
+      const newIncident = convertApiIncidentToStoreFormat(
+        newApiIncident,
+        userLocation?.lat,
+        userLocation?.lon,
+      );
+
+      set({
+        incidents: [newIncident, ...incidents],
+        loading: false,
+      });
+    } catch (error) {
+      set({
+        error: `Failed to create incident: ${error}`,
+        loading: false,
+      });
+    }
+  },
 }));

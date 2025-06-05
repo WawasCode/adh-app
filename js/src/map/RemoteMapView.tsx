@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes } from "react";
 import { cn } from "~/lib/utils";
 
-const CENTER: [number, number] = [52.52, 13.405]; // Berlin
+export const CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
 const MAX_ZOOM = 19;
 

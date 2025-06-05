@@ -23,11 +23,13 @@ export interface IncidentsListProps {
  */
 export function IncidentsList({ incidents, title }: IncidentsListProps) {
   return (
-    <div className="w-full bg-white min-h-screen">
+    <div className="w-full bg-white h-screen flex flex-col">
       {title && (
-        <div className="text-center font-bold text-lg py-4">{title}</div>
+        <div className="text-center font-bold text-lg py-4 flex-shrink-0">
+          {title}
+        </div>
       )}
-      <div className="px-2">
+      <div className="px-2 flex-1 overflow-y-auto">
         {incidents.map((incident) => (
           <div
             key={incident.id}

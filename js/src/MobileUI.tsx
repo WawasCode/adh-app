@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { RemoteMapView } from "@/map/RemoteMapView";
+import { CENTER, RemoteMapView } from "@/map/RemoteMapView";
 import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
 import { BottomNav } from "./views/MobileUICommon";
+import { useIncidentsStore } from "@/store/useincidentsStore";
 
 type Page = "main" | "navigation" | "incidents";
 
@@ -16,6 +17,16 @@ type Page = "main" | "navigation" | "incidents";
 export default function MobileLayout() {
   const [isMobile, setIsMobile] = useState(false);
   const [page, setPage] = useState<Page>("main");
+  const loadIncidents = useIncidentsStore((state) => state.loadIncidents);
+  const setUserLocation = useIncidentsStore((state) => state.setUserLocation);
+
+  // Get user location for distance calculations
+  // TODO(Patrik).
+  useEffect(() => {
+    loadIncidents();
+    // Fallback to Berlin coordinates if geolocation not supported
+    setUserLocation(...CENTER);
+  }, [loadIncidents, setUserLocation]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
