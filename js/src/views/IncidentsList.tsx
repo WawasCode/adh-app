@@ -1,14 +1,4 @@
-/**
- * Incident type for the incident list.
- */
-export interface Incident {
-  id: string;
-  type: string;
-  title: string;
-  description: string;
-  reportedAt: Date;
-  distance: string;
-}
+import { Incident } from "@/store/useincidentsStore";
 
 /**
  * Props for the IncidentsList component.

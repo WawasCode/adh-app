@@ -1,5 +1,13 @@
 import { create } from "zustand";
-import type { Incident } from "@/views/IncidentsList";
+
+export interface Incident {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  reportedAt: Date;
+  distance: string;
+}
 
 interface IncidentsState {
   incidents: Incident[];
