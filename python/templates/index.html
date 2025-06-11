@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADH App</title>
+    {% load static %}
+    {% if vite_dev_server %}
+        <script type="module" src="http://localhost:5173/@vite/client"></script>
+        <script type="module" src="http://localhost:5173/src/main.tsx"></script>
+    {% else %}
+        {% for css_file in css_files %}
+            <link rel="stylesheet" href="{% static css_file %}">
+        {% endfor %}
+    {% endif %}
+</head>
+<body>
+    <div id="root"></div>
+    {% if not vite_dev_server %}
+        {% for js_file in js_files %}
+            <script type="module" src="{% static js_file %}"></script>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

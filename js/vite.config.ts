@@ -5,6 +5,11 @@ import path from "path"; // Added import for path
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true, // Allow external connections
+    port: 5173,
+    strictPort: true, // Fail if port is already in use
+  },
   resolve: {
     // Added resolve configuration
     alias: {
