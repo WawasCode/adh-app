@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocationStore } from "@/store/useLocationStore";
 import { useEffect, useState, useMemo } from "react";
 import { RemoteMapView } from "@/map/RemoteMapView";
 import { MobileMainOverlay } from "@/views/MobileMainOverlay";
@@ -30,6 +31,28 @@ export default function MobileLayout() {
       mediaQuery.removeEventListener("change", updateMobileStatus);
     };
   }, []);
+
+  const setPosition = useLocationStore((state) => state.setPosition);
+
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        setPosition([lat, lng]);
+      },
+      (err) => {
+        console.error("GPS error:", err);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 5000,
+      },
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [setPosition]);
 
   function handleNav(targetPage: Page) {
     setPage(targetPage);
