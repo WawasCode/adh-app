@@ -8,8 +8,7 @@ export function UserMarker() {
 
   useEffect(() => {
     if (position) {
-      // Optional: Zoom zur Position, wenn du willst
-      // map.setView(position, 16);
+      map.setView(position, 13);
     }
   }, [position, map]);
 
