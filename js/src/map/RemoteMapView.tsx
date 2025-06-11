@@ -1,3 +1,4 @@
+import { UserMarker } from "./UserMarker";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes } from "react";
@@ -36,6 +37,7 @@ export function RemoteMapView({
           attribution="&copy; OpenStreetMap contributors"
           maxZoom={MAX_ZOOM}
         />
+        <UserMarker />
       </MapContainer>
     </div>
   );
