@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
 
 // Export Page type for consistent usage
 export type Page = "main" | "navigation" | "incidents";
@@ -77,10 +79,23 @@ export function MapIconButton({
   label,
   onClick,
 }: MapIconButtonProps) {
+  const map = useMapStore((s) => s.map);
+  const position = useLocationStore((s) => s.position);
+
+  function handleInternalClick() {
+    console.log("MAP INSTANCE:", map);
+    console.log("POSITION:", position);
+    if (label === "Center" && map && position) {
+      map.flyTo(position, 15); // Zoom 15 für gute User-Zentrierung
+    } else if (onClick) {
+      onClick();
+    }
+  }
+
   return (
     <Button
       aria-label={label}
-      onClick={onClick}
+      onClick={handleInternalClick}
       variant="ghost"
       className="w-12 h-12 bg-white rounded-md shadow flex items-center justify-center p-0"
     >

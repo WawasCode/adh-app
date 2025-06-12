@@ -1,3 +1,6 @@
+import { useMapStore } from "@/store/useMapStore";
+import { useEffect } from "react";
+import { useMap } from "react-leaflet";
 import { UserMarker } from "./UserMarker";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -12,6 +15,16 @@ const BOUNDS: [[number, number], [number, number]] = [
   [47.26543, 5.864417],
   [55.14777, 15.05078],
 ];
+function MapSetter() {
+  const map = useMap();
+  const setMap = useMapStore((s) => s.setMap);
+
+  useEffect(() => {
+    setMap(map);
+  }, [map, setMap]);
+
+  return null;
+}
 
 /*
  * MapView component renders a Leaflet map using remote raster tiles.
@@ -38,6 +51,7 @@ export function RemoteMapView({
           maxZoom={MAX_ZOOM}
         />
         <UserMarker />
+        <MapSetter />
       </MapContainer>
     </div>
   );
