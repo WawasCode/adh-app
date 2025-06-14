@@ -83,10 +83,8 @@ export function MapIconButton({
   const position = useLocationStore((s) => s.position);
 
   function handleInternalClick() {
-    console.log("MAP INSTANCE:", map);
-    console.log("POSITION:", position);
     if (label === "Center" && map && position) {
-      map.flyTo(position, 15); // Zoom 15 für gute User-Zentrierung
+      map.flyTo(position, 15);
     } else if (onClick) {
       onClick();
     }
