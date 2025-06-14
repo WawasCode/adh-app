@@ -34,12 +34,16 @@ export default function MobileLayout() {
 
   const setPosition = useLocationStore((state) => state.setPosition);
 
+  const setShowMarker = useLocationStore((state) => state.setShowMarker);
+
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         setPosition([lat, lng]);
+
+        setTimeout(() => setShowMarker(true), 1000);
       },
       (err) => {
         console.error("GPS error:", err);
@@ -52,7 +56,7 @@ export default function MobileLayout() {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [setPosition]);
+  }, [setPosition, setShowMarker]);
 
   function handleNav(targetPage: Page) {
     setPage(targetPage);

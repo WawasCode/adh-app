@@ -4,12 +4,9 @@ import { useEffect, useState } from "react";
 
 export function UserMarker() {
   const position = useLocationStore((s) => s.position);
+  const showMarker = useLocationStore((s) => s.showMarker);
   const map = useMap();
   const [radius, setRadius] = useState(30);
-
-  useEffect(() => {
-    if (position) void map.setView(position, 13);
-  }, [position, map]);
 
   useEffect(() => {
     const updateRadius = () => {
@@ -26,12 +23,12 @@ export function UserMarker() {
     };
   }, [map]);
 
-  if (!position) return null;
+  if (!position || !showMarker) return null;
 
   return (
     <CircleMarker
       center={position}
-      radius={radius} // in Pixeln
+      radius={radius}
       pathOptions={{
         color: "blue",
         fillColor: "blue",

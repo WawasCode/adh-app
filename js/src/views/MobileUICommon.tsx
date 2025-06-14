@@ -84,7 +84,17 @@ export function MapIconButton({
 
   function handleInternalClick() {
     if (label === "Center" && map && position) {
-      map.flyTo(position, 15);
+      // Verstecke Marker
+      useLocationStore.getState().setShowMarker(false);
+
+      // Füge Listener hinzu, der Marker nach FlyTo wieder zeigt
+      const showAfterFly = () => {
+        useLocationStore.getState().setShowMarker(true);
+        map.off("moveend", showAfterFly); // saubere Aufräumung
+      };
+
+      map.on("moveend", showAfterFly);
+      map.flyTo(position, 15); // Startet den Flug
     } else if (onClick) {
       onClick();
     }
