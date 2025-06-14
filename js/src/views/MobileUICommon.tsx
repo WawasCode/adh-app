@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
 
 // Export Page type for consistent usage
 export type Page = "main" | "navigation" | "incidents";
@@ -77,10 +79,31 @@ export function MapIconButton({
   label,
   onClick,
 }: MapIconButtonProps) {
+  const map = useMapStore((s) => s.map);
+  const position = useLocationStore((s) => s.position);
+
+  function handleInternalClick() {
+    if (label === "Center" && map && position) {
+      // Verstecke Marker
+      useLocationStore.getState().setShowMarker(false);
+
+      // Füge Listener hinzu, der Marker nach FlyTo wieder zeigt
+      const showAfterFly = () => {
+        useLocationStore.getState().setShowMarker(true);
+        map.off("moveend", showAfterFly); // saubere Aufräumung
+      };
+
+      map.on("moveend", showAfterFly);
+      map.flyTo(position, 15); // Startet den Flug
+    } else if (onClick) {
+      onClick();
+    }
+  }
+
   return (
     <Button
       aria-label={label}
-      onClick={onClick}
+      onClick={handleInternalClick}
       variant="ghost"
       className="w-12 h-12 bg-white rounded-md shadow flex items-center justify-center p-0"
     >
