@@ -13,14 +13,20 @@ import {
 export function MobileMainOverlay({
   openNavigation,
   BottomNavComponent,
+  onLocationSelect,
 }: {
   openNavigation: () => void;
   BottomNavComponent: React.ReactNode;
+  onLocationSelect?: (location: {
+    lat: number;
+    lon: number;
+    name: string;
+  }) => void;
 }) {
   return (
     <div className="absolute inset-0 z-10 pointer-events-none">
       <div className="absolute inset-x-4 top-[calc(1.5rem+env(safe-area-inset-top))] pointer-events-auto">
-        <SearchBar />
+        <SearchBar onLocationSelect={onLocationSelect} />
       </div>
       <div className="absolute left-4 top-[calc(5.25rem+env(safe-area-inset-top))] pointer-events-auto">
         <FilterButton />
