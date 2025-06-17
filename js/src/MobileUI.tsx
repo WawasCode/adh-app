@@ -7,7 +7,9 @@ import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
 import { BottomNav } from "./views/MobileUICommon";
-
+const MARKER_DISPLAY_DELAY_MS = 1000;
+const LOCATION_MAX_AGE_MS = 10000;
+const LOCATION_TIMEOUT_MS = 5000;
 type Page = "main" | "navigation" | "incidents";
 
 /**
@@ -43,15 +45,15 @@ export default function MobileLayout() {
         const lng = pos.coords.longitude;
         setPosition([lat, lng]);
 
-        setTimeout(() => setShowMarker(true), 1000);
+        setTimeout(() => setShowMarker(true), MARKER_DISPLAY_DELAY_MS);
       },
       (err) => {
         console.error("GPS error:", err);
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 5000,
+        maximumAge: LOCATION_MAX_AGE_MS,
+        timeout: LOCATION_TIMEOUT_MS,
       },
     );
 

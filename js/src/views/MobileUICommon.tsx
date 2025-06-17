@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useMapStore } from "@/store/useMapStore";
 import { useLocationStore } from "@/store/useLocationStore";
+// Zoom level to use when flying to the user's current location.
+const FLY_TO_ZOOM_LEVEL = 15;
 
 // Export Page type for consistent usage
 export type Page = "main" | "navigation" | "incidents";
@@ -84,17 +86,19 @@ export function MapIconButton({
 
   function handleInternalClick() {
     if (label === "Center" && map && position) {
-      // Verstecke Marker
+      // Hide Marker during flyTo animation.
       useLocationStore.getState().setShowMarker(false);
 
-      // Füge Listener hinzu, der Marker nach FlyTo wieder zeigt
+      // Add listener to show marker again after flyTo finishes.
       const showAfterFly = () => {
         useLocationStore.getState().setShowMarker(true);
-        map.off("moveend", showAfterFly); // saubere Aufräumung
+        // Clean up listener.
+        map.off("moveend", showAfterFly);
       };
 
       map.on("moveend", showAfterFly);
-      map.flyTo(position, 15); // Startet den Flug
+      // Fly to the current position at FLY_TO_ZOOM_LEVEL.
+      map.flyTo(position, FLY_TO_ZOOM_LEVEL);
     } else if (onClick) {
       onClick();
     }

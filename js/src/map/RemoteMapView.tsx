@@ -15,6 +15,10 @@ const BOUNDS: [[number, number], [number, number]] = [
   [47.26543, 5.864417],
   [55.14777, 15.05078],
 ];
+/**
+ * MapSetter registers the Leaflet map instance in the Zustand store
+ * so that it can be accessed throughout the application.
+ */
 function MapSetter() {
   const map = useMap();
   const setMap = useMapStore((s) => s.setMap);
@@ -29,6 +33,7 @@ function MapSetter() {
 /*
  * MapView component renders a Leaflet map using remote raster tiles.
  * The tiles are served from OpenStreetMap.
+ * It includes a user marker and sets the map instance in the store via MapSetter.
  */
 export function RemoteMapView({
   className,
