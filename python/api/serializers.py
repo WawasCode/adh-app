@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Incident, Waypoint
+from .models import Incident, Waypoint, Hazard_Zone
+
 
 class IncidentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,6 +9,10 @@ class IncidentSerializer(serializers.ModelSerializer):
 
 class WaypointSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Incident  # Assuming Waypoint is similar to Incident
+        model = Waypoint
         fields = '__all__'
 
+class HazardZoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hazard_Zone
+        fields = '__all__'
