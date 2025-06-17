@@ -1,6 +1,6 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { CircleMarker } from "react-leaflet";
-import { theme } from "../../styles/theme";
+import { theme } from "~/styles/theme";
 
 /**
  * UserMarker component displays the user's current GPS location
