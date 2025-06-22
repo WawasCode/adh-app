@@ -10,9 +10,9 @@ export default function AddPlaceView() {
   const [name, setName] = useState("");
 
   return (
-    <div className="flex flex-col justify-between h-full px-4 pt-6 pb-6 bg-white">
+    <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div>
+      <div className="pt-4 pb-2">
         <button className="text-blue-600 text-sm">&larr; Karte</button>
         <h1 className="text-center font-semibold text-lg mt-2">
           Ort hinzufügen
@@ -20,7 +20,7 @@ export default function AddPlaceView() {
       </div>
 
       {/* Form fields */}
-      <div className="flex flex-col gap-4 mt-6">
+      <div className="flex flex-col gap-4 mt-4">
         <Input
           placeholder="Name"
           value={name}
@@ -44,13 +44,13 @@ export default function AddPlaceView() {
       </div>
 
       {/* Footer Buttons */}
-      <div className="flex justify-between mt-8 gap-4">
+      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
         <Button variant="outline" className="flex-1 rounded-full py-3 text-sm">
           Abbrechen
         </Button>
         <Button
           variant="outline"
-          className="flex-1 rounded-full py-3 text-sm text-gray-400 border-gray-300"
+          className="flex-1 rounded-full py-3 text-sm text-gray-400 border-gray-300 opacity-50"
           disabled
         >
           Senden
