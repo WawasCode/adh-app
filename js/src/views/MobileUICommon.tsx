@@ -15,7 +15,7 @@ import { useLocationStore } from "@/store/useLocationStore";
 const FLY_TO_ZOOM_LEVEL = 15;
 
 // Export Page type for consistent usage
-export type Page = "main" | "navigation" | "incidents";
+export type Page = "main" | "navigation" | "incidents" | "addPlace";
 
 /**
  * SearchBar component with a leading search icon.

@@ -17,9 +17,11 @@ import {
  */
 export function MobileMainOverlay({
   openNavigation,
+  openAddPlace,
   BottomNavComponent,
 }: {
   openNavigation: () => void;
+  openAddPlace: () => void;
   BottomNavComponent: React.ReactNode;
 }) {
   return (
@@ -34,7 +36,7 @@ export function MobileMainOverlay({
         <CompassButton />
       </div>
       <div className="absolute right-4 bottom-[calc(10rem+env(safe-area-inset-bottom))] flex flex-col gap-3 pointer-events-auto">
-        <MapIconButton icon={Plus} label="Zoom in" />
+        <MapIconButton icon={Plus} label="Add Place" onClick={openAddPlace} />
         <MapIconButton
           icon={NavigationIcon}
           label="Navigate"

@@ -7,10 +7,12 @@ import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
 import { BottomNav } from "./views/MobileUICommon";
+import AddPlaceView from "./views/AddPlaceView";
+import { Page } from "@/views/MobileUICommon";
+
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
 const LOCATION_TIMEOUT_MS = 5000;
-type Page = "main" | "navigation" | "incidents";
 
 /**
  * MobileLayout component that decides between mobile and desktop layouts.
@@ -64,6 +66,10 @@ export default function MobileLayout() {
     setPage(targetPage);
   }
 
+  function openAddPlace() {
+    setPage("addPlace");
+  }
+
   // Memoize the current page content to avoid re-renders from string comparisons in JSX.
   const currentPageContent = useMemo(() => {
     const navProps = {
@@ -74,6 +80,7 @@ export default function MobileLayout() {
       return (
         <MobileMainOverlay
           openNavigation={() => handleNav("navigation")}
+          openAddPlace={openAddPlace}
           BottomNavComponent={navProps.BottomNavComponent}
         />
       );
@@ -85,6 +92,17 @@ export default function MobileLayout() {
           goBack={() => handleNav("main")}
           BottomNavComponent={navProps.BottomNavComponent}
         />
+      );
+    }
+
+    if (page === "addPlace") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <AddPlaceView />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {navProps.BottomNavComponent}
+          </div>
+        </div>
       );
     }
 
