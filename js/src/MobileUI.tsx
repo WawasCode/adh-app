@@ -8,6 +8,9 @@ import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
 import { BottomNav } from "./views/MobileUICommon";
 import AddPlaceView from "./views/AddPlaceView";
+import SelectTypeView from "./views/SelectTypeViews";
+import SelectZoneView from "./views/SelectZoneView";
+import SelectCircleDetailsView from "./views/SelectCircleDetailsView";
 import { Page } from "@/views/MobileUICommon";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
@@ -69,6 +72,17 @@ export default function MobileLayout() {
   function openAddPlace() {
     setPage("addPlace");
   }
+  function goToTypeSelection() {
+    setPage("selectType");
+  }
+
+  function goToZoneSelection() {
+    setPage("selectZone");
+  }
+
+  function goToCircleDetails() {
+    setPage("circleDetails");
+  }
 
   // Memoize the current page content to avoid re-renders from string comparisons in JSX.
   const currentPageContent = useMemo(() => {
@@ -98,10 +112,44 @@ export default function MobileLayout() {
     if (page === "addPlace") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <AddPlaceView />
+          <AddPlaceView onTypeClick={goToTypeSelection} />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {navProps.BottomNavComponent}
           </div>
+        </div>
+      );
+    }
+
+    if (page === "selectType") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectTypeView
+            goBack={() => handleNav("addPlace")}
+            onSelectZones={goToZoneSelection}
+            onSelectAddress={() => handleNav("addPlace")} // vorerst zurück
+          />
+        </div>
+      );
+    }
+
+    if (page === "selectZone") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectZoneView
+            goBack={goToTypeSelection}
+            onSelectCircle={goToCircleDetails}
+            onSelectPolygon={() => {}}
+            onSelectRectangle={() => {}}
+            onSelectOtherZone={() => {}}
+          />
+        </div>
+      );
+    }
+
+    if (page === "circleDetails") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectCircleDetailsView goBack={goToZoneSelection} />
         </div>
       );
     }

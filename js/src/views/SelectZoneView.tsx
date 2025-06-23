@@ -8,7 +8,7 @@ interface SelectZoneViewProps {
   onSelectCircle: () => void;
   onSelectPolygon: () => void;
   onSelectRectangle: () => void;
-  onSelectCustom: () => void;
+  onSelectOtherZone: () => void;
 }
 
 /**
@@ -19,7 +19,7 @@ export default function SelectZoneView({
   onSelectCircle,
   onSelectPolygon,
   onSelectRectangle,
-  onSelectCustom,
+  onSelectOtherZone,
 }: SelectZoneViewProps) {
   return (
     <div className="flex flex-col h-full px-4 pt-4 pb-[7rem]">
@@ -64,7 +64,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={onSelectCustom}
+          onClick={onSelectOtherZone}
         >
           Weitere Zone <ChevronRight className="w-4 h-4 text-gray-400" />
         </Button>

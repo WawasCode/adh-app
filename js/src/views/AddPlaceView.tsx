@@ -2,11 +2,15 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 
+interface AddPlaceViewProps {
+  onTypeClick: () => void;
+}
+
 /**
  * AddPlaceView component renders a form for creating a new place (hazard or address).
  * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
  */
-export default function AddPlaceView() {
+export default function AddPlaceView({ onTypeClick }: AddPlaceViewProps) {
   const [name, setName] = useState("");
 
   return (
@@ -36,6 +40,7 @@ export default function AddPlaceView() {
         </Button>
 
         <Button
+          onClick={onTypeClick}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
