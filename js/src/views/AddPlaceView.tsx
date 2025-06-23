@@ -13,8 +13,8 @@ export default function AddPlaceView() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button className="text-blue-600 text-sm">&larr; Karte</button>
-        <h1 className="text-center font-semibold text-lg mt-2">
+        <button className="text-blue-600 text-base">&larr; Karte</button>
+        <h1 className="text-center font-semibold text-xl mt-2">
           Ort hinzufügen
         </h1>
       </div>
@@ -25,19 +25,19 @@ export default function AddPlaceView() {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="rounded-xl py-3 px-4 text-sm"
+          className="rounded-xl py-4 px-5 text-base"
         />
 
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
           Kategorie <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
           Typ <span className="text-gray-400">&rsaquo;</span>
         </Button>
@@ -45,12 +45,15 @@ export default function AddPlaceView() {
 
       {/* Footer Buttons */}
       <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button variant="outline" className="flex-1 rounded-full py-3 text-sm">
+        <Button
+          variant="outline"
+          className="flex-1 rounded-full py-4 text-base"
+        >
           Abbrechen
         </Button>
         <Button
           variant="outline"
-          className="flex-1 rounded-full py-3 text-sm text-gray-400 border-gray-300 opacity-50"
+          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
           Senden
