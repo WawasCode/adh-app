@@ -84,6 +84,10 @@ export default function MobileLayout() {
     setPage("circleDetails");
   }
 
+  function handleCancel() {
+    setPage("main");
+  }
+
   // Memoize the current page content to avoid re-renders from string comparisons in JSX.
   const currentPageContent = useMemo(() => {
     const navProps = {
@@ -112,7 +116,10 @@ export default function MobileLayout() {
     if (page === "addPlace") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <AddPlaceView onTypeClick={goToTypeSelection} />
+          <AddPlaceView
+            onTypeClick={goToTypeSelection}
+            goBack={() => handleNav("main")}
+          />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {navProps.BottomNavComponent}
           </div>
@@ -128,6 +135,9 @@ export default function MobileLayout() {
             onSelectZones={goToZoneSelection}
             onSelectAddress={() => handleNav("addPlace")} // vorerst zurück
           />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {navProps.BottomNavComponent}
+          </div>
         </div>
       );
     }
@@ -142,6 +152,9 @@ export default function MobileLayout() {
             onSelectRectangle={() => {}}
             onSelectOtherZone={() => {}}
           />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {navProps.BottomNavComponent}
+          </div>
         </div>
       );
     }
@@ -150,6 +163,9 @@ export default function MobileLayout() {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
           <SelectCircleDetailsView goBack={goToZoneSelection} />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {navProps.BottomNavComponent}
+          </div>
         </div>
       );
     }

@@ -4,20 +4,26 @@ import { useState } from "react";
 
 interface AddPlaceViewProps {
   onTypeClick: () => void;
+  goBack: () => void;
 }
 
 /**
  * AddPlaceView component renders a form for creating a new place (hazard or address).
  * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
  */
-export default function AddPlaceView({ onTypeClick }: AddPlaceViewProps) {
+export default function AddPlaceView({
+  onTypeClick,
+  goBack,
+}: AddPlaceViewProps) {
   const [name, setName] = useState("");
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button className="text-blue-600 text-base">&larr; Karte</button>
+        <button onClick={goBack} className="text-blue-600 text-base">
+          &larr; Karte
+        </button>
         <h1 className="text-center font-semibold text-xl mt-2">
           Ort hinzufügen
         </h1>
