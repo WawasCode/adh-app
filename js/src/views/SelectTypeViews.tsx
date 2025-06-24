@@ -1,40 +1,42 @@
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
+/**
+ * SelectTypeView component allows the user to choose between adding a Zone or an Address.
+ * It's part of the hazard zone creation workflow.
+ */
 export default function SelectTypeView() {
   const { goBack, setPage } = useViewStore();
 
   return (
-    <div className="flex flex-col h-full px-4 pt-4 pb-[7rem]">
+    <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <button
-          onClick={goBack}
-          className="text-blue-600 text-sm flex items-center"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" /> Ort Hinzufügen
+      <div className="pt-4 pb-2">
+        <button onClick={goBack} className="text-blue-600 text-base">
+          &larr; Ort hinzufügen
         </button>
+        <h1 className="text-center font-semibold text-xl mt-2">Typ</h1>
       </div>
 
-      <h1 className="text-center font-semibold text-lg mb-4">Typ</h1>
-
       {/* Auswahlmöglichkeiten */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
-          className="justify-between py-3 px-4 rounded-xl text-sm font-normal"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           onClick={() => setPage("selectZone")}
         >
-          Zonen <ChevronRight className="h-4 w-4 text-gray-400" />
+          Zonen <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
 
         <Button
           variant="outline"
-          className="justify-between py-3 px-4 rounded-xl text-sm font-normal"
-          onClick={() => setPage("addPlace")} // vorerst zurück
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() =>
+            alert("Adresse hinzufügen ist noch nicht implementiert.")
+          }
         >
-          Adresse <ChevronRight className="h-4 w-4 text-gray-400" />
+          Adresse <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
@@ -43,9 +45,9 @@ export default function SelectTypeView() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")} // globaler Abbrechen-Button
+          onClick={goBack}
         >
-          Abbrechen
+          Zurück
         </Button>
         <Button
           variant="outline"

@@ -1,59 +1,53 @@
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectZoneView – zeigt die Auswahl der Zonenarten an.
+ * SelectZoneView component allows the user to choose the geometric shape of the zone.
+ * It is part of the hazard zone creation process.
  */
 export default function SelectZoneView() {
-  const { setPage, goBack } = useViewStore();
+  const { goBack, setPage } = useViewStore();
 
   return (
-    <div className="flex flex-col h-full px-4 pt-4 pb-[7rem]">
+    <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <button
-          onClick={goBack}
-          className="text-blue-600 text-sm flex items-center"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Label
+      <div className="pt-4 pb-2">
+        <button onClick={goBack} className="text-blue-600 text-base">
+          &larr; Typ
         </button>
-        <h1 className="text-center font-semibold text-lg flex-1">Zonen</h1>
+        <h1 className="text-center font-semibold text-xl mt-2">Zonen</h1>
       </div>
 
-      {/* Auswahl-Buttons */}
-      <div className="flex flex-col gap-2">
+      {/* Auswahlmöglichkeiten */}
+      <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           onClick={() => setPage("circleDetails")}
         >
-          Kreis <ChevronRight className="w-4 h-4 text-gray-400" />
+          Kreis <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
-
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={() => alert("Polygon-Auswahl noch nicht implementiert")}
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Polygon ist noch nicht implementiert.")}
         >
-          Polygon <ChevronRight className="w-4 h-4 text-gray-400" />
+          Polygon <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
-
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={() => alert("Rechteck-Auswahl noch nicht implementiert")}
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Rechteck ist noch nicht implementiert.")}
         >
-          Rechteck <ChevronRight className="w-4 h-4 text-gray-400" />
+          Rechteck <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
-
         <Button
           variant="outline"
-          className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={() => alert("Weitere Zone-Auswahl noch nicht implementiert")}
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Weitere Zone ist noch nicht implementiert.")}
         >
-          Weitere Zone <ChevronRight className="w-4 h-4 text-gray-400" />
+          Weitere Zone <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
@@ -62,9 +56,9 @@ export default function SelectZoneView() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={goBack}
         >
-          Abbrechen
+          Zurück
         </Button>
         <Button
           variant="outline"

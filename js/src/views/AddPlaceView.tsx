@@ -9,8 +9,7 @@ import { useViewStore } from "@/store/useViewStore";
  */
 export default function AddPlaceView() {
   const [name, setName] = useState("");
-
-  const { setPage } = useViewStore();
+  const setPage = useViewStore((s) => s.setPage);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -55,9 +54,9 @@ export default function AddPlaceView() {
       {/* Footer Buttons */}
       <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
         <Button
-          onClick={() => setPage("main")}
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
+          onClick={() => setPage("main")}
         >
           Abbrechen
         </Button>
