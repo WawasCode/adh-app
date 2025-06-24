@@ -1,19 +1,10 @@
-// js/src/views/SelectTypeView.tsx
-
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useViewStore } from "@/store/useViewStore";
 
-interface SelectTypeViewProps {
-  goBack: () => void;
-  onSelectZones: () => void;
-  onSelectAddress: () => void;
-}
+export default function SelectTypeView() {
+  const { goBack, setPage } = useViewStore();
 
-export default function SelectTypeView({
-  goBack,
-  onSelectZones,
-  onSelectAddress,
-}: SelectTypeViewProps) {
   return (
     <div className="flex flex-col h-full px-4 pt-4 pb-[7rem]">
       {/* Header */}
@@ -33,7 +24,7 @@ export default function SelectTypeView({
         <Button
           variant="outline"
           className="justify-between py-3 px-4 rounded-xl text-sm font-normal"
-          onClick={onSelectZones}
+          onClick={() => setPage("selectZone")}
         >
           Zonen <ChevronRight className="h-4 w-4 text-gray-400" />
         </Button>
@@ -41,7 +32,7 @@ export default function SelectTypeView({
         <Button
           variant="outline"
           className="justify-between py-3 px-4 rounded-xl text-sm font-normal"
-          onClick={onSelectAddress}
+          onClick={() => setPage("addPlace")} // vorerst zurück
         >
           Adresse <ChevronRight className="h-4 w-4 text-gray-400" />
         </Button>
@@ -52,6 +43,7 @@ export default function SelectTypeView({
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
+          onClick={() => setPage("main")} // globaler Abbrechen-Button
         >
           Abbrechen
         </Button>

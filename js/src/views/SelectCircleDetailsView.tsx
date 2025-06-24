@@ -1,17 +1,11 @@
-// js/src/views/SelectCircleDetailsView.tsx
-
 import { ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
+import { useViewStore } from "@/store/useViewStore";
 
-interface SelectCircleDetailsViewProps {
-  goBack: () => void;
-}
-
-export default function SelectCircleDetailsView({
-  goBack,
-}: SelectCircleDetailsViewProps) {
+export default function SelectCircleDetailsView() {
+  const { goBack, setPage } = useViewStore();
   const [coordinates, setCoordinates] = useState("");
   const [radius, setRadius] = useState("");
 
@@ -50,23 +44,24 @@ export default function SelectCircleDetailsView({
         <div className="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-sm text-gray-600">
           [Karte folgt]
         </div>
+      </div>
 
-        {/* Footer Buttons */}
-        <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-          <Button
-            variant="outline"
-            className="flex-1 rounded-full py-4 text-base"
-          >
-            Abbrechen
-          </Button>
-          <Button
-            variant="outline"
-            className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-            disabled
-          >
-            Senden
-          </Button>
-        </div>
+      {/* Footer Buttons */}
+      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
+        <Button
+          onClick={() => setPage("main")}
+          variant="outline"
+          className="flex-1 rounded-full py-4 text-base"
+        >
+          Abbrechen
+        </Button>
+        <Button
+          variant="outline"
+          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
+          disabled
+        >
+          Senden
+        </Button>
       </div>
     </div>
   );

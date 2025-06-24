@@ -1,27 +1,25 @@
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
-
-interface AddPlaceViewProps {
-  onTypeClick: () => void;
-  goBack: () => void;
-}
+import { useViewStore } from "@/store/useViewStore";
 
 /**
  * AddPlaceView component renders a form for creating a new place (hazard or address).
  * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
  */
-export default function AddPlaceView({
-  onTypeClick,
-  goBack,
-}: AddPlaceViewProps) {
+export default function AddPlaceView() {
   const [name, setName] = useState("");
+
+  const { setPage } = useViewStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button onClick={goBack} className="text-blue-600 text-base">
+        <button
+          onClick={() => setPage("main")}
+          className="text-blue-600 text-base"
+        >
           &larr; Karte
         </button>
         <h1 className="text-center font-semibold text-xl mt-2">
@@ -46,7 +44,7 @@ export default function AddPlaceView({
         </Button>
 
         <Button
-          onClick={onTypeClick}
+          onClick={() => setPage("selectType")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
@@ -57,6 +55,7 @@ export default function AddPlaceView({
       {/* Footer Buttons */}
       <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
         <Button
+          onClick={() => setPage("main")}
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
         >

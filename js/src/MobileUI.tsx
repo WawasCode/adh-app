@@ -1,17 +1,17 @@
 "use client";
 
-import { useLocationStore } from "@/store/useLocationStore";
 import { useEffect, useState, useMemo } from "react";
+import { useLocationStore } from "@/store/useLocationStore";
+import { useViewStore } from "@/store/useViewStore";
 import { RemoteMapView } from "@/map/RemoteMapView";
+import { BottomNav } from "@/views/MobileUICommon";
 import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
-import { BottomNav } from "./views/MobileUICommon";
-import AddPlaceView from "./views/AddPlaceView";
-import SelectTypeView from "./views/SelectTypeViews";
-import SelectZoneView from "./views/SelectZoneView";
-import SelectCircleDetailsView from "./views/SelectCircleDetailsView";
-import { Page } from "@/views/MobileUICommon";
+import AddPlaceView from "@/views/AddPlaceView";
+import SelectTypeView from "@/views/SelectTypeViews";
+import SelectZoneView from "@/views/SelectZoneView";
+import SelectCircleDetailsView from "@/views/SelectCircleDetailsView";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -23,7 +23,10 @@ const LOCATION_TIMEOUT_MS = 5000;
  */
 export default function MobileLayout() {
   const [isMobile, setIsMobile] = useState(false);
-  const [page, setPage] = useState<Page>("main");
+  const { currentPage, setPage, goBack } = useViewStore();
+
+  const setPosition = useLocationStore((s) => s.setPosition);
+  const setShowMarker = useLocationStore((s) => s.setShowMarker);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -39,17 +42,12 @@ export default function MobileLayout() {
     };
   }, []);
 
-  const setPosition = useLocationStore((state) => state.setPosition);
-
-  const setShowMarker = useLocationStore((state) => state.setShowMarker);
-
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         setPosition([lat, lng]);
-
         setTimeout(() => setShowMarker(true), MARKER_DISPLAY_DELAY_MS);
       },
       (err) => {
@@ -65,120 +63,84 @@ export default function MobileLayout() {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [setPosition, setShowMarker]);
 
-  function handleNav(targetPage: Page) {
-    setPage(targetPage);
-  }
-
-  function openAddPlace() {
-    setPage("addPlace");
-  }
-  function goToTypeSelection() {
-    setPage("selectType");
-  }
-
-  function goToZoneSelection() {
-    setPage("selectZone");
-  }
-
-  function goToCircleDetails() {
-    setPage("circleDetails");
-  }
-
-  function handleCancel() {
-    setPage("main");
-  }
-
-  // Memoize the current page content to avoid re-renders from string comparisons in JSX.
   const currentPageContent = useMemo(() => {
-    const navProps = {
-      BottomNavComponent: <BottomNav active={page} onNavigate={handleNav} />,
-    };
+    const BottomNavComponent = (
+      <BottomNav active={currentPage} onNavigate={setPage} />
+    );
 
-    if (page === "main") {
+    if (currentPage === "main") {
       return (
         <MobileMainOverlay
-          openNavigation={() => handleNav("navigation")}
-          openAddPlace={openAddPlace}
-          BottomNavComponent={navProps.BottomNavComponent}
+          openNavigation={() => setPage("navigation")}
+          openAddPlace={() => setPage("addPlace")}
+          BottomNavComponent={BottomNavComponent}
         />
       );
     }
 
-    if (page === "navigation") {
+    if (currentPage === "navigation") {
       return (
         <MobileNavigationOverlay
-          goBack={() => handleNav("main")}
-          BottomNavComponent={navProps.BottomNavComponent}
+          goBack={goBack}
+          BottomNavComponent={BottomNavComponent}
         />
       );
     }
 
-    if (page === "addPlace") {
+    if (currentPage === "addPlace") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <AddPlaceView
-            onTypeClick={goToTypeSelection}
-            goBack={() => handleNav("main")}
-          />
+          <AddPlaceView />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {navProps.BottomNavComponent}
+            {BottomNavComponent}
           </div>
         </div>
       );
     }
 
-    if (page === "selectType") {
+    if (currentPage === "selectType") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectTypeView
-            goBack={() => handleNav("addPlace")}
-            onSelectZones={goToZoneSelection}
-            onSelectAddress={() => handleNav("addPlace")} // vorerst zurück
-          />
+          <SelectTypeView />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {navProps.BottomNavComponent}
+            {BottomNavComponent}
           </div>
         </div>
       );
     }
 
-    if (page === "selectZone") {
+    if (currentPage === "selectZone") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectZoneView
-            goBack={goToTypeSelection}
-            onSelectCircle={goToCircleDetails}
-            onSelectPolygon={() => {}}
-            onSelectRectangle={() => {}}
-            onSelectOtherZone={() => {}}
-          />
+          <SelectZoneView />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {navProps.BottomNavComponent}
+            {BottomNavComponent}
           </div>
         </div>
       );
     }
 
-    if (page === "circleDetails") {
+    if (currentPage === "circleDetails") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectCircleDetailsView goBack={goToZoneSelection} />
+          <SelectCircleDetailsView />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {navProps.BottomNavComponent}
+            {BottomNavComponent}
           </div>
         </div>
       );
     }
 
+    // Fallback
     return (
       <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
         <IncidentsPage />
         <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-          {navProps.BottomNavComponent}
+          {BottomNavComponent}
         </div>
       </div>
     );
-  }, [page]);
+  }, [currentPage, setPage, goBack]);
 
   if (!isMobile) return <RemoteMapView />;
 

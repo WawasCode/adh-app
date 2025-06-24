@@ -1,26 +1,13 @@
-// js/src/views/SelectZoneView.tsx
-
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-
-interface SelectZoneViewProps {
-  goBack: () => void;
-  onSelectCircle: () => void;
-  onSelectPolygon: () => void;
-  onSelectRectangle: () => void;
-  onSelectOtherZone: () => void;
-}
+import { useViewStore } from "@/store/useViewStore";
 
 /**
  * SelectZoneView – zeigt die Auswahl der Zonenarten an.
  */
-export default function SelectZoneView({
-  goBack,
-  onSelectCircle,
-  onSelectPolygon,
-  onSelectRectangle,
-  onSelectOtherZone,
-}: SelectZoneViewProps) {
+export default function SelectZoneView() {
+  const { setPage, goBack } = useViewStore();
+
   return (
     <div className="flex flex-col h-full px-4 pt-4 pb-[7rem]">
       {/* Header */}
@@ -40,7 +27,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={onSelectCircle}
+          onClick={() => setPage("circleDetails")}
         >
           Kreis <ChevronRight className="w-4 h-4 text-gray-400" />
         </Button>
@@ -48,7 +35,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={onSelectPolygon}
+          onClick={() => alert("Polygon-Auswahl noch nicht implementiert")}
         >
           Polygon <ChevronRight className="w-4 h-4 text-gray-400" />
         </Button>
@@ -56,7 +43,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={onSelectRectangle}
+          onClick={() => alert("Rechteck-Auswahl noch nicht implementiert")}
         >
           Rechteck <ChevronRight className="w-4 h-4 text-gray-400" />
         </Button>
@@ -64,7 +51,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="justify-between text-sm font-normal py-3 px-4 rounded-xl"
-          onClick={onSelectOtherZone}
+          onClick={() => alert("Weitere Zone-Auswahl noch nicht implementiert")}
         >
           Weitere Zone <ChevronRight className="w-4 h-4 text-gray-400" />
         </Button>
@@ -75,6 +62,7 @@ export default function SelectZoneView({
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
+          onClick={() => setPage("main")}
         >
           Abbrechen
         </Button>
