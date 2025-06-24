@@ -32,14 +32,16 @@ export default function SelectCategoryView() {
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Polygon ist noch nicht implementiert.")}
+          onClick={() => alert("Institutionen ist noch nicht implementiert.")}
         >
           Institutionen <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Rechteck ist noch nicht implementiert.")}
+          onClick={() =>
+            alert("Weitere Kategorie ist noch nicht implementiert.")
+          }
         >
           Weitere Kategorie <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
