@@ -12,6 +12,7 @@ import AddPlaceView from "@/views/AddPlaceView";
 import SelectTypeView from "@/views/SelectTypeViews";
 import SelectZoneView from "@/views/SelectZoneView";
 import SelectCircleDetailsView from "@/views/SelectCircleDetailsView";
+import SelectCategoryView from "@/views/SelectCategoryView";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -124,6 +125,17 @@ export default function MobileLayout() {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
           <SelectCircleDetailsView />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentPage === "selectCategory") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectCategoryView />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {BottomNavComponent}
           </div>

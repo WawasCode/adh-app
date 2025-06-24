@@ -22,7 +22,9 @@ export type Page =
   | "addPlace"
   | "selectType"
   | "selectZone"
-  | "circleDetails";
+  | "circleDetails"
+  | "selectCategory"
+  | "subCategory";
 
 /**
  * SearchBar component with a leading search icon.

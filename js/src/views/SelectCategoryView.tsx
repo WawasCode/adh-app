@@ -1,54 +1,47 @@
-import { Input } from "@/components/ui/Input";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * AddPlaceView component renders a form for creating a new place (hazard or address).
- * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
+ * SelectCategoryView component renders a list of available top-level categories
+ * for a new place. These include hazards, institutions, etc.
+ * It is part of the hazard zone creation process.
  */
-export default function AddPlaceView() {
-  const [name, setName] = useState("");
-  const setPage = useViewStore((s) => s.setPage);
+export default function SelectCategoryView() {
+  const { goBack } = useViewStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button
-          onClick={() => setPage("main")}
-          className="text-blue-600 text-base"
-        >
-          &larr; Karte
+        <button onClick={goBack} className="text-blue-600 text-base">
+          &larr; Ort hinzufügen
         </button>
-        <h1 className="text-center font-semibold text-xl mt-2">
-          Ort hinzufügen
-        </h1>
+        <h1 className="text-center font-semibold text-xl mt-2">Kategorie</h1>
       </div>
 
-      {/* Form fields */}
+      {/* Auswahlmöglichkeiten */}
       <div className="flex flex-col gap-4 mt-4">
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="rounded-xl py-4 px-5 text-base"
-        />
-
         <Button
-          onClick={() => setPage("selectCategory")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Gefährdungen ist noch nicht implementiert.")}
         >
-          Kategorie <span className="text-gray-400">&rsaquo;</span>
+          Gefährdungen <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
-
         <Button
-          onClick={() => setPage("selectType")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Polygon ist noch nicht implementiert.")}
         >
-          Typ <span className="text-gray-400">&rsaquo;</span>
+          Institutionen <ChevronRight className="h-5 w-5 text-gray-400" />
+        </Button>
+        <Button
+          variant="outline"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+          onClick={() => alert("Rechteck ist noch nicht implementiert.")}
+        >
+          Weitere Kategorie <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
@@ -57,9 +50,9 @@ export default function AddPlaceView() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={goBack}
         >
-          Abbrechen
+          Zurück
         </Button>
         <Button
           variant="outline"
