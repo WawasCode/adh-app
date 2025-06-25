@@ -10,7 +10,9 @@ import { useViewStore } from "@/store/useViewStore";
 export default function AddPlaceView() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [telephone, setTelephone] = useState("");
   const setPage = useViewStore((s) => s.setPage);
+  const [waypointIsActive, setWaypointIsActive] = useState(true);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -44,7 +46,7 @@ export default function AddPlaceView() {
         />
 
         <Button
-          onClick={() => setPage("selectLocation")}
+          onClick={() => alert("Location ist noch nicht implementiert.")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
@@ -52,11 +54,38 @@ export default function AddPlaceView() {
         </Button>
 
         <Button
-          onClick={() => setPage("selectSeverity")}
+          onClick={() => setPage("waypointType")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          Severity <span className="text-gray-400">&rsaquo;</span>
+          Type <span className="text-gray-400">&rsaquo;</span>
+        </Button>
+
+        <Input
+          placeholder="+49 123 456789"
+          value={telephone}
+          onChange={(e) => setTelephone(e.target.value)}
+          className="rounded-xl py-4 px-5 text-base"
+        />
+
+        <Button
+          onClick={() => setWaypointIsActive(!waypointIsActive)}
+          variant="outline"
+          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
+        >
+          Is available <span className="text-gray-400"></span>
+          <div
+            onClick={() => setWaypointIsActive(!waypointIsActive)}
+            className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out ${
+              waypointIsActive ? "bg-green-500" : "bg-gray-300"
+            }`}
+          >
+            <div
+              className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
+                waypointIsActive ? "translate-x-6" : "translate-x-0"
+              }`}
+            />
+          </div>
         </Button>
       </div>
 

@@ -27,6 +27,7 @@ export type Page =
   | "selectCategory"
   | "subCategory"
   | "configureWaypoint"
+  | "waypointType"
   | "addPlace1";
 
 /**

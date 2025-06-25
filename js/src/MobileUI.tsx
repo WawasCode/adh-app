@@ -11,6 +11,7 @@ import { IncidentsPage } from "@/views/IncidentsPage";
 import ConfigureHazard from "@/views/ConfigureHazard";
 import ConfigureWaypoint from "@/views/ConfigureWaypoint";
 import AddPlaceView1 from "@/views/AddPlaceView1";
+import WaypointType from "@/views/WaypointType";
 import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
 import SelectZoneView from "@/views/SelectZoneView";
@@ -139,6 +140,17 @@ export default function MobileLayout() {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
           <SelectLocation />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentPage === "waypointType") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <WaypointType />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {BottomNavComponent}
           </div>
