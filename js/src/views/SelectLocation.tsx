@@ -14,9 +14,11 @@ export default function SelectTypeView() {
       {/* Header */}
       <div className="pt-4 pb-2">
         <button onClick={goBack} className="text-blue-600 text-base">
-          &larr; Ort hinzufügen
+          &larr; Back
         </button>
-        <h1 className="text-center font-semibold text-xl mt-2">Typ</h1>
+        <h1 className="text-center font-semibold text-xl mt-2">
+          Select Location Type
+        </h1>
       </div>
 
       {/* Auswahlmöglichkeiten */}
@@ -26,7 +28,7 @@ export default function SelectTypeView() {
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           onClick={() => setPage("selectZone")}
         >
-          Zonen <ChevronRight className="h-5 w-5 text-gray-400" />
+          Zone <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
 
         <Button
@@ -36,7 +38,7 @@ export default function SelectTypeView() {
             alert("Adresse hinzufügen ist noch nicht implementiert.")
           }
         >
-          Adresse <ChevronRight className="h-5 w-5 text-gray-400" />
+          Address <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
@@ -47,14 +49,14 @@ export default function SelectTypeView() {
           className="flex-1 rounded-full py-4 text-base"
           onClick={goBack}
         >
-          Zurück
+          Cancel
         </Button>
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Senden
+          Safe
         </Button>
       </div>
     </div>

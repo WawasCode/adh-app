@@ -8,8 +8,11 @@ import { BottomNav } from "@/views/MobileUICommon";
 import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
-import AddPlaceView from "@/views/AddPlaceView";
-import SelectTypeView from "@/views/SelectTypeViews";
+import ConfigureHazard from "@/views/ConfigureHazard";
+import ConfigureWaypoint from "@/views/ConfigureWaypoint";
+import AddPlaceView1 from "@/views/AddPlaceView1";
+import SelectSeverity from "@/views/SelectSeverity";
+import SelectLocation from "@/views/SelectLocation";
 import SelectZoneView from "@/views/SelectZoneView";
 import SelectCircleDetailsView from "@/views/SelectCircleDetailsView";
 import SelectCategoryView from "@/views/SelectCategoryView";
@@ -73,7 +76,7 @@ export default function MobileLayout() {
       return (
         <MobileMainOverlay
           openNavigation={() => setPage("navigation")}
-          openAddPlace={() => setPage("addPlace")}
+          openAddPlace1={() => setPage("addPlace1")}
           BottomNavComponent={BottomNavComponent}
         />
       );
@@ -88,10 +91,10 @@ export default function MobileLayout() {
       );
     }
 
-    if (currentPage === "addPlace") {
+    if (currentPage === "configureHazard") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <AddPlaceView />
+          <ConfigureHazard />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {BottomNavComponent}
           </div>
@@ -99,10 +102,43 @@ export default function MobileLayout() {
       );
     }
 
-    if (currentPage === "selectType") {
+    if (currentPage === "configureWaypoint") {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectTypeView />
+          <ConfigureWaypoint />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentPage === "selectSeverity") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectSeverity />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentPage === "addPlace1") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <AddPlaceView1 />
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
+
+    if (currentPage === "selectLocation") {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          <SelectLocation />
           <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
             {BottomNavComponent}
           </div>

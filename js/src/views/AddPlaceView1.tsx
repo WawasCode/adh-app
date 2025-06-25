@@ -3,36 +3,38 @@ import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectCategoryView component renders a list of available top-level categories
- * for a new place. These include hazards, institutions, etc.
- * It is part of the hazard zone creation process.
+ * AddPlaceView component renders a form for creating a new place (hazard or address).
+ * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
  */
-export default function SelectCategoryView() {
-  const { goBack } = useViewStore();
+export default function AddPlaceView() {
+  const setPage = useViewStore((s) => s.setPage);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button onClick={goBack} className="text-blue-600 text-base">
-          &larr; Ort hinzufügen
+        <button
+          onClick={() => setPage("main")}
+          className="text-blue-600 text-base"
+        >
+          &larr; Map
         </button>
-        <h1 className="text-center font-semibold text-xl mt-2">Kategorie</h1>
+        <h1 className="text-center font-semibold text-xl mt-2">Choose Type</h1>
       </div>
 
-      {/* Auswahlmöglichkeiten */}
+      {/* Form fields */}
       <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Gefährdungen ist noch nicht implementiert.")}
+          onClick={() => setPage("configureHazard")}
         >
           Hazard <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Institutionen ist noch nicht implementiert.")}
+          onClick={() => setPage("configureWaypoint")}
         >
           Waypoint <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
@@ -43,16 +45,16 @@ export default function SelectCategoryView() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={goBack}
+          onClick={() => setPage("main")}
         >
-          Zurück
+          Cancel
         </Button>
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Senden
+          Safe
         </Button>
       </div>
     </div>

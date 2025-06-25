@@ -19,12 +19,15 @@ export type Page =
   | "main"
   | "navigation"
   | "incidents"
-  | "addPlace"
-  | "selectType"
+  | "configureHazard"
+  | "selectLocation"
   | "selectZone"
   | "circleDetails"
+  | "selectSeverity"
   | "selectCategory"
-  | "subCategory";
+  | "subCategory"
+  | "configureWaypoint"
+  | "addPlace1";
 
 /**
  * SearchBar component with a leading search icon.
