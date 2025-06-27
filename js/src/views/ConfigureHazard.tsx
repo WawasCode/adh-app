@@ -1,17 +1,16 @@
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
  * It includes fields for name, description, location, and severity.
- * Navigation between views is handled via Zustand.
+ * It uses global state (usePlaceStore) to persist the input values between views.
  */
 export default function ConfigureHazard() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const setPage = useViewStore((s) => s.setPage);
+  const { name, setName, description, setDescription } = usePlaceStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
