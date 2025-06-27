@@ -6,9 +6,14 @@ import {
   SearchBar,
 } from "@/views/MobileUICommon";
 
+// Top search and filter controls
+// Right-side action buttons (zoom, navigate, center)
+// Bottom persistent navigation
+
 /**
  * Overlay for the main mobile map view.
  * @param openNavigation – handler to open the navigation planner.
+ * @param BottomNavComponent - Bottom navigation bar component to display.
  */
 export function MobileMainOverlay({
   openNavigation,

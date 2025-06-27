@@ -12,6 +12,10 @@ import { Input } from "@/components/ui/Input";
 import { cn } from "~/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { searchLocations, PhotonFeature } from "@/services/geocodingService";
+import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
+// Zoom level to use when flying to the user's current location.
+const FLY_TO_ZOOM_LEVEL = 15;
 
 // Export Page type for consistent usage
 export type Page = "main" | "navigation" | "incidents";
@@ -219,10 +223,33 @@ export function MapIconButton({
   label,
   onClick,
 }: MapIconButtonProps) {
+  const map = useMapStore((s) => s.map);
+  const position = useLocationStore((s) => s.position);
+
+  function handleInternalClick() {
+    if (label === "Center" && map && position) {
+      // Hide Marker during flyTo animation.
+      useLocationStore.getState().setShowMarker(false);
+
+      // Add listener to show marker again after flyTo finishes.
+      const showAfterFly = () => {
+        useLocationStore.getState().setShowMarker(true);
+        // Clean up listener.
+        map.off("moveend", showAfterFly);
+      };
+
+      map.on("moveend", showAfterFly);
+      // Fly to the current position at FLY_TO_ZOOM_LEVEL.
+      map.flyTo(position, FLY_TO_ZOOM_LEVEL);
+    } else if (onClick) {
+      onClick();
+    }
+  }
+
   return (
     <Button
       aria-label={label}
-      onClick={onClick}
+      onClick={handleInternalClick}
       variant="ghost"
       className="w-12 h-12 bg-white rounded-md shadow flex items-center justify-center p-0"
     >
