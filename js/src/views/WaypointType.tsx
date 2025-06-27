@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
+import type { WaypointType } from "@/store/usePlaceStore";
 
 /**
  * WaypointTypeView allows the user to choose the type of waypoint.
@@ -7,8 +9,18 @@ import { useViewStore } from "@/store/useViewStore";
  */
 export default function WaypointTypeView() {
   const { goBack, setPage } = useViewStore();
+  const setWaypointType = usePlaceStore((s) => s.setWaypointType);
 
-  const waypointTypes = ["Firestation", "Policestation", "Hospital"];
+  const waypointOptions: WaypointType[] = [
+    "firestation",
+    "policestation",
+    "hospital",
+  ];
+
+  const handleSelectType = (type: WaypointType) => {
+    setWaypointType(type);
+    setPage("configureWaypoint");
+  };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -22,14 +34,14 @@ export default function WaypointTypeView() {
 
       {/* Options */}
       <div className="flex flex-col gap-4 mt-4">
-        {waypointTypes.map((label) => (
+        {waypointOptions.map((label) => (
           <Button
             key={label}
             variant="outline"
             className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-            onClick={() => setPage("configureWaypoint")}
+            onClick={() => handleSelectType(label)}
           >
-            {label}
+            {label.charAt(0).toUpperCase() + label.slice(1)}
           </Button>
         ))}
       </div>

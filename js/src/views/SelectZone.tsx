@@ -4,7 +4,7 @@ import { useViewStore } from "@/store/useViewStore";
 
 /**
  * SelectZoneView allows the user to choose the geometric shape of the hazard zone.
- * It is part of the hazard creation workflow.
+ * It is part of the hazard configuration process.
  */
 export default function SelectZone() {
   const { goBack, setPage } = useViewStore();

@@ -11,6 +11,7 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 export default function ConfigureHazard() {
   const setPage = useViewStore((s) => s.setPage);
   const { name, setName, description, setDescription } = usePlaceStore();
+  const severity = usePlaceStore((s) => s.severity);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -56,7 +57,10 @@ export default function ConfigureHazard() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          Severity <span className="text-gray-400">&rsaquo;</span>
+          {severity
+            ? `Severity: ${severity.charAt(0).toUpperCase() + severity.slice(1)}`
+            : "Severity"}
+          <span className="text-gray-400">&rsaquo;</span>
         </Button>
       </div>
 

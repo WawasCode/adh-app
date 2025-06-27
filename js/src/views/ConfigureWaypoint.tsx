@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * ConfigureWaypoint allows the user to input information for a new waypoint.
@@ -12,8 +13,21 @@ export default function ConfigureWaypoint() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [telephone, setTelephone] = useState("");
-  const setPage = useViewStore((s) => s.setPage);
   const [waypointIsActive, setWaypointIsActive] = useState(true);
+
+  const setPage = useViewStore((s) => s.setPage);
+  const waypointType = usePlaceStore((s) => s.waypointType);
+
+  const isFormComplete =
+    name.trim() !== "" &&
+    description.trim() !== "" &&
+    telephone.trim() !== "" &&
+    waypointType;
+
+  // TODO: später: Daten speichern und auf Karte anzeigen
+  const handleSave = () => {
+    alert("Saving not implemented yet, but form is complete!");
+  };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -59,7 +73,10 @@ export default function ConfigureWaypoint() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          Type <span className="text-gray-400">&rsaquo;</span>
+          {waypointType
+            ? `Type – ${waypointType.charAt(0).toUpperCase() + waypointType.slice(1)}`
+            : "Type"}
+          <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
         <Input
@@ -68,6 +85,7 @@ export default function ConfigureWaypoint() {
           onChange={(e) => setTelephone(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
         />
+
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is available</span>
           <div
@@ -95,9 +113,14 @@ export default function ConfigureWaypoint() {
           Cancel
         </Button>
         <Button
+          onClick={handleSave}
           variant="outline"
-          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-          disabled
+          className={`flex-1 rounded-full py-4 text-base ${
+            isFormComplete
+              ? ""
+              : "text-gray-400 border-gray-300 opacity-50 cursor-not-allowed"
+          }`}
+          disabled={!isFormComplete}
         >
           Save
         </Button>

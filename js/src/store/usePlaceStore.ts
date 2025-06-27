@@ -1,9 +1,15 @@
 import { create } from "zustand";
 
 type PlaceType = "hazard" | "waypoint";
+export const hazardSeverities: HazardSeverity[] = [
+  "low",
+  "medium",
+  "high",
+  "critical",
+];
 
-type HazardSeverity = "low" | "medium" | "high" | "critical";
-type WaypointType = "firestation" | "policestation" | "hospital";
+export type HazardSeverity = "low" | "medium" | "high" | "critical";
+export type WaypointType = "firestation" | "policestation" | "hospital";
 
 type PlaceState = {
   type: PlaceType | null;

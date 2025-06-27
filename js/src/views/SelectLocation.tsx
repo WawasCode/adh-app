@@ -4,7 +4,7 @@ import { useViewStore } from "@/store/useViewStore";
 
 /**
  * SelectLocationView lets the user choose between selecting a zone or an address.
- * It's part of the hazard creation flow.
+ * It's part of the hazard configuration flow.
  */
 export default function SelectLocation() {
   const { goBack, setPage } = useViewStore();
@@ -47,7 +47,7 @@ export default function SelectLocation() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={goBack}
+          onClick={() => setPage("main")}
         >
           Cancel
         </Button>
