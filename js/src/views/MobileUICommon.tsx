@@ -11,32 +11,10 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "~/lib/utils";
 import { useEffect, useRef, useState } from "react";
+import { searchLocations, PhotonFeature } from "@/services/geocodingService";
 
 // Export Page type for consistent usage
 export type Page = "main" | "navigation" | "incidents";
-
-interface PhotonFeature {
-  properties: {
-    name: string;
-    street?: string;
-    housenumber?: string;
-    city?: string;
-    postcode?: string;
-    state?: string;
-    country?: string;
-    countrycode?: string;
-    osm_key?: string;
-    osm_value?: string;
-    osm_type?: string;
-    osm_id?: number;
-    extent?: number[];
-  };
-  geometry: {
-    type: string;
-    coordinates: [number, number]; // [longitude, latitude]
-  };
-  type: string;
-}
 
 interface SearchBarProps {
   onLocationSelect?: (location: {
@@ -57,7 +35,6 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Handle outside clicks to close results dropdown
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -73,25 +50,18 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
     };
   }, []);
 
-  // Debounced search function
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
       return;
     }
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       setIsLoading(true);
-      fetch(
-        `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=52.52&lon=13.405&limit=10`,
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setResults(data.features || []);
-          setShowResults(true);
-        })
-        .catch((error) => console.error("Error searching locations:", error))
-        .finally(() => setIsLoading(false));
+      const data = await searchLocations(query);
+      setResults(data);
+      setShowResults(true);
+      setIsLoading(false);
     }, 300);
 
     return () => clearTimeout(timer);
@@ -116,7 +86,6 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
   };
 
   const formatMainLine = (props: PhotonFeature["properties"]) => {
-    // POI name takes priority
     if (props.name) {
       return (
         props.name +
@@ -125,38 +94,28 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
           : ` (${props.street})`)
       );
     }
-
-    // Fallback to street address
     if (props.street) {
       return props.housenumber
         ? `${props.street} ${props.housenumber}`
         : props.street;
     }
-
     return "Unnamed location";
   };
 
   const formatSecondaryLine = (props: PhotonFeature["properties"]) => {
     const parts = [];
-
-    // Add type information
     if (props.osm_value) {
       const type = props.osm_value
         .replace(/_/g, " ")
         .replace(/\b\w/g, (l) => l.toUpperCase());
       parts.push(type);
     }
-
-    // Add city
     if (props.city) {
       parts.push(props.city);
     }
-
-    // Add country
     if (props.country && props.country !== props.name) {
       parts.push(props.country);
     }
-
     return parts.join(", ");
   };
 
