@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * AddPlaceView component renders a form for creating a new place (hazard or address).
- * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
+ * ConfigureHazard allows the user to input information for a new hazard.
+ * It includes fields for name, description, location, and severity.
+ * Navigation between views is handled via Zustand.
  */
-export default function AddPlaceView() {
+export default function ConfigureHazard() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const setPage = useViewStore((s) => s.setPage);
@@ -17,7 +18,7 @@ export default function AddPlaceView() {
       {/* Header */}
       <div className="pt-4 pb-2">
         <button
-          onClick={() => setPage("addPlace1")}
+          onClick={() => setPage("addPlace")}
           className="text-blue-600 text-base"
         >
           &larr; Back
@@ -74,7 +75,7 @@ export default function AddPlaceView() {
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Safe
+          Save
         </Button>
       </div>
     </div>

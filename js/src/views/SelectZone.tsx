@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectZoneView component allows the user to choose the geometric shape of the zone.
- * It is part of the hazard zone creation process.
+ * SelectZoneView allows the user to choose the geometric shape of the hazard zone.
+ * It is part of the hazard creation workflow.
  */
-export default function SelectZoneView() {
+export default function SelectZone() {
   const { goBack, setPage } = useViewStore();
 
   return (
@@ -19,14 +19,14 @@ export default function SelectZoneView() {
         <h1 className="text-center font-semibold text-xl mt-2">Zonen</h1>
       </div>
 
-      {/* Auswahlmöglichkeiten */}
+      {/* Available zone shape options */}
       <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           onClick={() => setPage("circleDetails")}
         >
-          Kreis <ChevronRight className="h-5 w-5 text-gray-400" />
+          Circle <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
         <Button
           variant="outline"
@@ -38,16 +38,16 @@ export default function SelectZoneView() {
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Rechteck ist noch nicht implementiert.")}
+          onClick={() => alert("Rectangle ist noch nicht implementiert.")}
         >
-          Rechteck <ChevronRight className="h-5 w-5 text-gray-400" />
+          Rectangle <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           onClick={() => alert("Weitere Zone ist noch nicht implementiert.")}
         >
-          Weitere Zone <ChevronRight className="h-5 w-5 text-gray-400" />
+          Other zones <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
@@ -58,14 +58,14 @@ export default function SelectZoneView() {
           className="flex-1 rounded-full py-4 text-base"
           onClick={goBack}
         >
-          Zurück
+          Cancel
         </Button>
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Senden
+          Save
         </Button>
       </div>
     </div>

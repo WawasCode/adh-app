@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useViewStore } from "@/store/useViewStore";
 import { RemoteMapView } from "@/map/RemoteMapView";
@@ -8,14 +8,14 @@ import { BottomNav } from "@/views/MobileUICommon";
 import { MobileMainOverlay } from "@/views/MobileMainOverlay";
 import { MobileNavigationOverlay } from "@/views/MobileNavigationOverlay";
 import { IncidentsPage } from "@/views/IncidentsPage";
+import AddPlace from "@/views/AddPlace";
 import ConfigureHazard from "@/views/ConfigureHazard";
 import ConfigureWaypoint from "@/views/ConfigureWaypoint";
-import AddPlaceView1 from "@/views/AddPlaceView1";
 import WaypointType from "@/views/WaypointType";
 import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
-import SelectZoneView from "@/views/SelectZoneView";
-import SelectCircleDetailsView from "@/views/SelectCircleDetailsView";
+import SelectZone from "@/views/SelectZone";
+import SelectCircleDetails from "@/views/SelectCircleDetails";
 import SelectCategoryView from "@/views/SelectCategoryView";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
@@ -72,12 +72,22 @@ export default function MobileLayout() {
     const BottomNavComponent = (
       <BottomNav active={currentPage} onNavigate={setPage} />
     );
+    function renderPage(component: React.ReactElement) {
+      return (
+        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
+          {component}
+          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
+            {BottomNavComponent}
+          </div>
+        </div>
+      );
+    }
 
     if (currentPage === "main") {
       return (
         <MobileMainOverlay
           openNavigation={() => setPage("navigation")}
-          openAddPlace1={() => setPage("addPlace1")}
+          openAddPlace1={() => setPage("addPlace")}
           BottomNavComponent={BottomNavComponent}
         />
       );
@@ -93,102 +103,39 @@ export default function MobileLayout() {
     }
 
     if (currentPage === "configureHazard") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <ConfigureHazard />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<ConfigureHazard />);
     }
 
     if (currentPage === "configureWaypoint") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <ConfigureWaypoint />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<ConfigureWaypoint />);
     }
 
     if (currentPage === "selectSeverity") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectSeverity />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<SelectSeverity />);
     }
 
-    if (currentPage === "addPlace1") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <AddPlaceView1 />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+    if (currentPage === "addPlace") {
+      return renderPage(<AddPlace />);
     }
 
     if (currentPage === "selectLocation") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectLocation />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<SelectLocation />);
     }
 
     if (currentPage === "waypointType") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <WaypointType />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<WaypointType />);
     }
 
     if (currentPage === "selectZone") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectZoneView />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<SelectZone />);
     }
 
     if (currentPage === "circleDetails") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectCircleDetailsView />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<SelectCircleDetails />);
     }
 
     if (currentPage === "selectCategory") {
-      return (
-        <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-          <SelectCategoryView />
-          <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-            {BottomNavComponent}
-          </div>
-        </div>
-      );
+      return renderPage(<SelectCategoryView />);
     }
 
     // Fallback

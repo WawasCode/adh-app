@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectCircleDetailsView component collects additional data for circular hazard zones.
- * It allows the user to enter coordinates and radius information.
+ * SelectCircleDetailsView - noch anpassen
  */
-export default function SelectCircleDetailsView() {
+export default function SelectCircleDetails() {
   const [coordinates, setCoordinates] = useState("");
   const [radius, setRadius] = useState("");
 

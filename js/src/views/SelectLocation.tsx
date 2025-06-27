@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectTypeView component allows the user to choose between adding a Zone or an Address.
- * It's part of the hazard zone creation workflow.
+ * SelectLocationView lets the user choose between selecting a zone or an address.
+ * It's part of the hazard creation flow.
  */
-export default function SelectTypeView() {
+export default function SelectLocation() {
   const { goBack, setPage } = useViewStore();
 
   return (
@@ -21,7 +21,7 @@ export default function SelectTypeView() {
         </h1>
       </div>
 
-      {/* Auswahlmöglichkeiten */}
+      {/* Selection Buttons */}
       <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
@@ -56,7 +56,7 @@ export default function SelectTypeView() {
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Safe
+          Save
         </Button>
       </div>
     </div>

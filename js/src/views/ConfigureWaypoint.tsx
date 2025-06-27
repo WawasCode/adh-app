@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * AddPlaceView component renders a form for creating a new place (hazard or address).
- * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
+ * ConfigureWaypoint allows the user to input information for a new waypoint.
+ * It includes fields for name, description, location, type, phone number and a toggle to mark if available.
+ * Navigation between views is handled via Zustand.
  */
-export default function AddPlaceView() {
+export default function ConfigureWaypoint() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -19,7 +20,7 @@ export default function AddPlaceView() {
       {/* Header */}
       <div className="pt-4 pb-2">
         <button
-          onClick={() => setPage("addPlace1")}
+          onClick={() => setPage("addPlace")}
           className="text-blue-600 text-base"
         >
           &larr; Back
@@ -67,16 +68,11 @@ export default function AddPlaceView() {
           onChange={(e) => setTelephone(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
         />
-
-        <Button
-          onClick={() => setWaypointIsActive(!waypointIsActive)}
-          variant="outline"
-          className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-        >
-          Is available <span className="text-gray-400"></span>
+        <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
+          <span>Is available</span>
           <div
             onClick={() => setWaypointIsActive(!waypointIsActive)}
-            className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out ${
+            className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
               waypointIsActive ? "bg-green-500" : "bg-gray-300"
             }`}
           >
@@ -86,7 +82,7 @@ export default function AddPlaceView() {
               }`}
             />
           </div>
-        </Button>
+        </div>
       </div>
 
       {/* Footer Buttons */}
@@ -103,7 +99,7 @@ export default function AddPlaceView() {
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Safe
+          Save
         </Button>
       </div>
     </div>

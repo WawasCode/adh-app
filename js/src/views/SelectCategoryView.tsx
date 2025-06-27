@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * SelectCategoryView component renders a list of available top-level categories
- * for a new place. These include hazards, institutions, etc.
- * It is part of the hazard zone creation process.
+ * nicht mehr verwendet
  */
 export default function SelectCategoryView() {
   const { goBack } = useViewStore();

@@ -28,7 +28,7 @@ export type Page =
   | "subCategory"
   | "configureWaypoint"
   | "waypointType"
-  | "addPlace1";
+  | "addPlace";
 
 /**
  * SearchBar component with a leading search icon.

@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 
 /**
- * AddPlaceView component renders a form for creating a new place (hazard or address).
- * It includes input fields for name, category, and type, and buttons to cancel or submit the entry.
+ * AddPlaceView displays the initial selection screen when adding a new place.
+ * Users can choose between creating a hazard or a waypoint.
+ * This view uses Zustand to navigate to the corresponding configuration view.
  */
-export default function AddPlaceView() {
+export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);
 
   return (
@@ -54,7 +55,7 @@ export default function AddPlaceView() {
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Safe
+          Save
         </Button>
       </div>
     </div>
