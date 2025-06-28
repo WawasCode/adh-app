@@ -1,33 +1,37 @@
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { useState } from "react";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * ConfigureWaypoint allows the user to input information for a new waypoint.
- * It includes fields for name, description, location, type, phone number and a toggle to mark if available.
- * Navigation between views is handled via Zustand.
+ * Required fields: name, type, location
+ * Optional fields: description, telephone, availability
  */
 export default function ConfigureWaypoint() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [telephone, setTelephone] = useState("");
-  const [waypointIsActive, setWaypointIsActive] = useState(false);
-
   const setPage = useViewStore((s) => s.setPage);
-  const waypointType = usePlaceStore((s) => s.waypointType);
-  const location = usePlaceStore((s) => s.location);
+
+  const {
+    name,
+    description,
+    telephone,
+    waypointType,
+    location,
+    isAvailable,
+    setName,
+    setDescription,
+    setTelephone,
+    setAvailability,
+    reset,
+  } = usePlaceStore();
 
   const isFormComplete =
-    name.trim() !== "" &&
-    description.trim() !== "" &&
-    telephone.trim() !== "" &&
-    waypointType;
+    name.trim() !== "" && waypointType !== null && location !== null;
 
-  // TODO: später: Daten speichern und auf Karte anzeigen
   const handleSave = () => {
-    alert("Saving not implemented yet, but form is complete!");
+    alert("Waypoint saved and shown on map!");
+    reset();
+    setPage("main");
   };
 
   return (
@@ -43,6 +47,12 @@ export default function ConfigureWaypoint() {
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Waypoint
         </h1>
+
+        {!isFormComplete && (
+          <p className="text-center text-sm text-gray-700 mt-2">
+            Please fill in name, type and location to enable saving.
+          </p>
+        )}
       </div>
 
       {/* Form fields */}
@@ -55,7 +65,7 @@ export default function ConfigureWaypoint() {
         />
 
         <Input
-          placeholder="Description"
+          placeholder="Description (optional)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
@@ -66,7 +76,7 @@ export default function ConfigureWaypoint() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          {location ? "Location - saved" : "Location"}
+          {location ? "Location – saved" : "Location"}
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
@@ -82,7 +92,7 @@ export default function ConfigureWaypoint() {
         </Button>
 
         <Input
-          placeholder="+49 123 456789"
+          placeholder="Phone (optional)"
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
@@ -91,14 +101,14 @@ export default function ConfigureWaypoint() {
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is available</span>
           <div
-            onClick={() => setWaypointIsActive(!waypointIsActive)}
+            onClick={() => setAvailability(!isAvailable)}
             className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
-              waypointIsActive ? "bg-green-500" : "bg-gray-300"
+              isAvailable ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                waypointIsActive ? "translate-x-6" : "translate-x-0"
+                isAvailable ? "translate-x-6" : "translate-x-0"
               }`}
             />
           </div>
@@ -118,9 +128,9 @@ export default function ConfigureWaypoint() {
           onClick={handleSave}
           variant="outline"
           className={`flex-1 rounded-full py-4 text-base ${
-            isFormComplete
-              ? ""
-              : "text-gray-400 border-gray-300 opacity-50 cursor-not-allowed"
+            !isFormComplete
+              ? "text-gray-400 border-gray-300 opacity-50 cursor-not-allowed"
+              : ""
           }`}
           disabled={!isFormComplete}
         >

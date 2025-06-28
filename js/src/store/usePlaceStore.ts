@@ -42,7 +42,7 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   severity: null,
   waypointType: null,
   telephone: "",
-  isAvailable: true,
+  isAvailable: false,
 
   setType: (type) => set({ type }),
   setName: (name) => set({ name }),
@@ -62,6 +62,6 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       severity: null,
       waypointType: null,
       telephone: "",
-      isAvailable: true,
+      isAvailable: false,
     }),
 }));
