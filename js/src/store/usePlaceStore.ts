@@ -11,6 +11,16 @@ export const hazardSeverities: HazardSeverity[] = [
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
 export type WaypointType = "firestation" | "policestation" | "hospital";
 
+type Waypoint = {
+  id: string;
+  name: string;
+  description: string;
+  location: [number, number];
+  telephone: string;
+  isAvailable: boolean;
+  type: WaypointType;
+};
+
 type PlaceState = {
   type: PlaceType | null;
   name: string;
@@ -20,6 +30,8 @@ type PlaceState = {
   waypointType: WaypointType | null;
   telephone: string;
   isAvailable: boolean;
+  savedWaypoints: Waypoint[];
+  addWaypoint: (waypoint: Waypoint) => void;
 
   // Setter
   setType: (type: PlaceType) => void;
@@ -43,6 +55,11 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   waypointType: null,
   telephone: "",
   isAvailable: false,
+  savedWaypoints: [],
+  addWaypoint: (waypoint) =>
+    set((state) => ({
+      savedWaypoints: [...state.savedWaypoints, waypoint],
+    })),
 
   setType: (type) => set({ type }),
   setName: (name) => set({ name }),

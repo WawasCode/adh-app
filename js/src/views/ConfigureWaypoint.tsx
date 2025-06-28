@@ -59,6 +59,7 @@ export default function ConfigureWaypoint() {
       <div className="flex flex-col gap-4 mt-4">
         <Input
           placeholder="Name"
+          autoComplete="off"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
