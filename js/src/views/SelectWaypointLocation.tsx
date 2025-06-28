@@ -1,13 +1,16 @@
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
-import { RemoteMapView } from "@/map/RemoteMapView";
+import { usePlaceStore } from "@/store/usePlaceStore";
+import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
 
 /**
- * SelectWaypointLocation allows the user to mark a location on the map by tapping it.
- * The selected coordinates will be stored and used in the waypoint configuration.
+ * SelectWaypointLocation allows the user to click on the map
+ * to select a location for the waypoint.
+ * The coordinates are stored in Zustand and used when returning to ConfigureWaypoint.
  */
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
+  const location = usePlaceStore((s) => s.location);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -23,13 +26,13 @@ export default function SelectWaypointLocation() {
           Select Waypoint Location
         </h1>
         <p className="text-center text-sm text-gray-600 mt-2">
-          Tap a point on the map to set your waypoint location.
+          Tap a location on the map to place your waypoint.
         </p>
       </div>
 
-      {/* Map View */}
-      <div className="flex-1 rounded-xl overflow-hidden my-4">
-        <RemoteMapView />
+      {/* Karte mit Click-Funktion */}
+      <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
+        <RemoteMapViewWithClick />
       </div>
 
       {/* Footer Buttons */}
@@ -44,6 +47,7 @@ export default function SelectWaypointLocation() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
+          disabled={!location}
           onClick={() => setPage("configureWaypoint")}
         >
           Save

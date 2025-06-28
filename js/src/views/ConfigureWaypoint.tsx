@@ -13,10 +13,11 @@ export default function ConfigureWaypoint() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [telephone, setTelephone] = useState("");
-  const [waypointIsActive, setWaypointIsActive] = useState(true);
+  const [waypointIsActive, setWaypointIsActive] = useState(false);
 
   const setPage = useViewStore((s) => s.setPage);
   const waypointType = usePlaceStore((s) => s.waypointType);
+  const location = usePlaceStore((s) => s.location);
 
   const isFormComplete =
     name.trim() !== "" &&
@@ -65,7 +66,8 @@ export default function ConfigureWaypoint() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          Location <span className="text-gray-400">&rsaquo;</span>
+          {location ? "Location - saved" : "Location"}
+          <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
         <Button
