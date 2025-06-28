@@ -61,7 +61,7 @@ export default function ConfigureWaypoint() {
         />
 
         <Button
-          onClick={() => alert("Location ist noch nicht implementiert.")}
+          onClick={() => setPage("waypointLocation")}
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >

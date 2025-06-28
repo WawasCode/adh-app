@@ -40,7 +40,7 @@ export default function SelectSeverity() {
             variant="outline"
             className="justify-between text-base font-normal py-4 px-5 rounded-xl"
           >
-            {level.charAt(0).toUpperCase() + level.slice(1)} {/* Für Anzeige */}
+            {level.charAt(0).toUpperCase() + level.slice(1)}
           </Button>
         ))}
       </div>

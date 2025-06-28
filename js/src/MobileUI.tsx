@@ -11,7 +11,8 @@ import { IncidentsPage } from "@/views/IncidentsPage";
 import AddPlace from "@/views/AddPlace";
 import ConfigureHazard from "@/views/ConfigureHazard";
 import ConfigureWaypoint from "@/views/ConfigureWaypoint";
-import WaypointType from "@/views/WaypointType";
+import SelectWaypointType from "@/views/SelectWaypointType";
+import SelectWaypointLocation from "@/views/SelectWaypointLocation";
 import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
 import SelectZone from "@/views/SelectZone";
@@ -123,7 +124,7 @@ export default function MobileLayout() {
     }
 
     if (currentPage === "waypointType") {
-      return renderPage(<WaypointType />);
+      return renderPage(<SelectWaypointType />);
     }
 
     if (currentPage === "selectZone") {
@@ -136,6 +137,10 @@ export default function MobileLayout() {
 
     if (currentPage === "selectCategory") {
       return renderPage(<SelectCategoryView />);
+    }
+
+    if (currentPage === "waypointLocation") {
+      return renderPage(<SelectWaypointLocation />);
     }
 
     // Fallback

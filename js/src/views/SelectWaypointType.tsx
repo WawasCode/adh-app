@@ -7,7 +7,7 @@ import type { WaypointType } from "@/store/usePlaceStore";
  * WaypointTypeView allows the user to choose the type of waypoint.
  * Examples include fire stations, police stations, and hospitals.
  */
-export default function WaypointTypeView() {
+export default function SelectWaypointType() {
   const { goBack, setPage } = useViewStore();
   const setWaypointType = usePlaceStore((s) => s.setWaypointType);
 

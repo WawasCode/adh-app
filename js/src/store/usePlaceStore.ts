@@ -15,7 +15,7 @@ type PlaceState = {
   type: PlaceType | null;
   name: string;
   description: string;
-  location: string;
+  location: [number, number] | null;
   severity: HazardSeverity | null;
   waypointType: WaypointType | null;
   telephone: string;
@@ -25,7 +25,7 @@ type PlaceState = {
   setType: (type: PlaceType) => void;
   setName: (name: string) => void;
   setDescription: (desc: string) => void;
-  setLocation: (loc: string) => void;
+  setLocation: (loc: [number, number]) => void;
   setSeverity: (sev: HazardSeverity) => void;
   setWaypointType: (type: WaypointType) => void;
   setTelephone: (tel: string) => void;
@@ -38,7 +38,7 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   type: null,
   name: "",
   description: "",
-  location: "",
+  location: null,
   severity: null,
   waypointType: null,
   telephone: "",
@@ -58,7 +58,7 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       type: null,
       name: "",
       description: "",
-      location: "",
+      location: null,
       severity: null,
       waypointType: null,
       telephone: "",
