@@ -1,6 +1,10 @@
 import { create } from "zustand";
 
-type PlaceType = "hazard" | "waypoint";
+// Types
+export type PlaceType = "hazard" | "waypoint";
+export type HazardSeverity = "low" | "medium" | "high" | "critical";
+export type WaypointType = "firestation" | "policestation" | "hospital";
+
 export const hazardSeverities: HazardSeverity[] = [
   "low",
   "medium",
@@ -8,10 +12,7 @@ export const hazardSeverities: HazardSeverity[] = [
   "critical",
 ];
 
-export type HazardSeverity = "low" | "medium" | "high" | "critical";
-export type WaypointType = "firestation" | "policestation" | "hospital";
-
-type Waypoint = {
+export type Waypoint = {
   id: string;
   name: string;
   description: string;
@@ -22,6 +23,7 @@ type Waypoint = {
 };
 
 type PlaceState = {
+  // Current input data (e.g. for configuration)
   type: PlaceType | null;
   name: string;
   description: string;
@@ -30,8 +32,9 @@ type PlaceState = {
   waypointType: WaypointType | null;
   telephone: string;
   isAvailable: boolean;
+
+  // Saved results
   savedWaypoints: Waypoint[];
-  addWaypoint: (waypoint: Waypoint) => void;
 
   // Setter
   setType: (type: PlaceType) => void;
@@ -43,6 +46,10 @@ type PlaceState = {
   setTelephone: (tel: string) => void;
   setAvailability: (avail: boolean) => void;
 
+  // Save data
+  addWaypoint: (waypoint: Waypoint) => void;
+
+  // reset state
   reset: () => void;
 };
 
@@ -55,6 +62,7 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   waypointType: null,
   telephone: "",
   isAvailable: false,
+
   savedWaypoints: [],
   addWaypoint: (waypoint) =>
     set((state) => ({

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
+// TODO: Replace with real ID from database once backend is connected
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * ConfigureWaypoint allows the user to input information for a new waypoint.
@@ -19,6 +21,7 @@ export default function ConfigureWaypoint() {
     waypointType,
     location,
     isAvailable,
+    addWaypoint,
     setName,
     setDescription,
     setTelephone,
@@ -30,7 +33,19 @@ export default function ConfigureWaypoint() {
     name.trim() !== "" && waypointType !== null && location !== null;
 
   const handleSave = () => {
-    alert("Waypoint saved and shown on map!");
+    if (!isFormComplete) return;
+
+    const waypoint = {
+      id: uuidv4(), // TODO: später durch DB-ID ersetzen
+      name,
+      description,
+      telephone,
+      isAvailable,
+      type: waypointType!,
+      location: location!,
+    };
+
+    addWaypoint(waypoint);
     reset();
     setPage("main");
   };
