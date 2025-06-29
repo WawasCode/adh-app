@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Textarea";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 
@@ -65,7 +66,7 @@ export default function ConfigureWaypoint() {
           className="rounded-xl py-4 px-5 text-base"
         />
 
-        <Input
+        <Textarea
           placeholder="Description (optional)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -123,8 +124,7 @@ export default function ConfigureWaypoint() {
           className="flex-1 rounded-full py-4 text-base"
           onClick={() => {
             setPage("main");
-            setName("");
-            setDescription("");
+            reset();
           }}
         >
           Cancel

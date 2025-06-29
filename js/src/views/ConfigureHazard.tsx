@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
@@ -37,7 +38,7 @@ export default function ConfigureHazard() {
           className="rounded-xl py-4 px-5 text-base"
         />
 
-        <Input
+        <Textarea
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
