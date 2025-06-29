@@ -10,6 +10,7 @@ import type { HazardSeverity } from "@/store/usePlaceStore";
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
   const setSeverity = usePlaceStore((s) => s.setSeverity);
+  const { setName, setDescription } = usePlaceStore();
 
   const handleSelect = (value: HazardSeverity) => {
     setSeverity(value);
@@ -50,7 +51,11 @@ export default function SelectSeverity() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>

@@ -6,6 +6,19 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes } from "react";
 import { cn } from "~/lib/utils";
+import { Polygon, Popup } from "react-leaflet";
+
+// Coordinates for Hazard Zone Example
+// Example polygon coordinates for the hazard zone
+import type { LatLngTuple } from "leaflet";
+
+const hazardZoneCoords: LatLngTuple[] = [
+  [52.486, 13.296],
+  [52.4897, 13.309],
+  [52.484, 13.317],
+  [52.481, 13.308],
+  [52.486, 13.296],
+];
 
 const CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
@@ -55,9 +68,58 @@ export function RemoteMapView({
           attribution="&copy; OpenStreetMap contributors"
           maxZoom={MAX_ZOOM}
         />
+        <Polygon
+          positions={hazardZoneCoords}
+          pathOptions={{ color: "red", fillColor: "red", fillOpacity: 0.4 }}
+        >
+          <Popup>Hazard Zone</Popup>
+        </Polygon>
         <UserMarker />
         <MapSetter />
       </MapContainer>
     </div>
   );
 }
+
+/** 
+ * 
+ * import { useEffect, useState } from "react";
+// ...existing imports...
+
+export function RemoteMapView({ className }: ButtonHTMLAttributes<HTMLButtonElement>) {
+  const base = "map-container";
+  const [hazardZones, setHazardZones] = useState<
+    { id: string; coords: LatLngTuple[]; name: string }[]
+  >([]);
+
+  useEffect(() => {
+    // Replace with your actual API endpoint
+    fetch("/api/hazard-zones")
+      .then((res) => res.json())
+      .then((data) => setHazardZones(data));
+  }, []);
+
+  return (
+    <div className={cn(base, className)}>
+      <MapContainer
+        // ...existing props...
+      >
+        <TileLayer
+          // ...existing props...
+        />
+        {hazardZones.map((zone) => (
+          <Polygon
+            key={zone.id}
+            positions={zone.coords}
+            pathOptions={{ color: "red", fillColor: "red", fillOpacity: 0.4 }}
+          >
+            <Popup>{zone.name}</Popup>
+          </Polygon>
+        ))}
+        <UserMarker />
+        <MapSetter />
+      </MapContainer>
+    </div>
+  );
+}
+*/

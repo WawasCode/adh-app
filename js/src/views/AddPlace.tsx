@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * AddPlaceView displays the initial selection screen when adding a new place.
@@ -9,6 +10,7 @@ import { useViewStore } from "@/store/useViewStore";
  */
 export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);
+  const { setName, setDescription } = usePlaceStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -46,7 +48,11 @@ export default function AddPlace() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>

@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * SelectLocationView lets the user choose between selecting a zone or an address.
@@ -8,6 +9,7 @@ import { useViewStore } from "@/store/useViewStore";
  */
 export default function SelectLocation() {
   const { goBack, setPage } = useViewStore();
+  const { setName, setDescription } = usePlaceStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -47,7 +49,11 @@ export default function SelectLocation() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>

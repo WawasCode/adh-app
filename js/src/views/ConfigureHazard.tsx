@@ -69,7 +69,11 @@ export default function ConfigureHazard() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("main")}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>

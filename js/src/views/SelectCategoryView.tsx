@@ -1,12 +1,15 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
+import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * nicht mehr verwendet
  */
 export default function SelectCategoryView() {
   const { goBack } = useViewStore();
+  const { setName, setDescription } = usePlaceStore();
+  const setPage = useViewStore((s) => s.setPage);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -41,16 +44,20 @@ export default function SelectCategoryView() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={goBack}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
-          Zurück
+          Cancel
         </Button>
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
           disabled
         >
-          Senden
+          Safe
         </Button>
       </div>
     </div>

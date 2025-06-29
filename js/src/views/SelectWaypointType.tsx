@@ -10,6 +10,7 @@ import type { WaypointType } from "@/store/usePlaceStore";
 export default function SelectWaypointType() {
   const { goBack, setPage } = useViewStore();
   const setWaypointType = usePlaceStore((s) => s.setWaypointType);
+  const { setName, setDescription } = usePlaceStore();
 
   const waypointOptions: WaypointType[] = [
     "firestation",
@@ -51,7 +52,11 @@ export default function SelectWaypointType() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={goBack}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>

@@ -11,6 +11,7 @@ import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
   const location = usePlaceStore((s) => s.location);
+  const { setName, setDescription } = usePlaceStore();
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -40,7 +41,11 @@ export default function SelectWaypointLocation() {
         <Button
           variant="outline"
           className="flex-1 rounded-full py-4 text-base"
-          onClick={() => setPage("configureWaypoint")}
+          onClick={() => {
+            setPage("main");
+            setName("");
+            setDescription("");
+          }}
         >
           Cancel
         </Button>
