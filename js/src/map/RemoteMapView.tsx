@@ -9,6 +9,7 @@ import { cn } from "~/lib/utils";
 import { Polygon, Popup } from "react-leaflet";
 import type { LatLngTuple } from "leaflet";
 import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
+import { SavedHazardZones } from "@/map/SavedHazardZones";
 
 const hazardZoneCoords: LatLngTuple[] = [
   [52.486, 13.296],
@@ -73,6 +74,7 @@ export function RemoteMapView({
           <Popup>Hazard Zone</Popup>
         </Polygon>
         <UserMarker />
+        <SavedHazardZones />
         <MapSetter />
         <SavedWaypointMarkers />
       </MapContainer>

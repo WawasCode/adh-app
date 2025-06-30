@@ -9,10 +9,20 @@ import { create } from "zustand";
  */
 export type ZonePoint = [number, number];
 
+export type HazardZone = {
+  id: string;
+  name: string;
+  description: string;
+  severity: string;
+  coordinates: [number, number][];
+};
+
 type ZoneState = {
   points: [number, number][];
   addPoint: (point: [number, number]) => void;
-  reset: () => void; // ✅ HIER HINZUGEFÜGT
+  reset: () => void;
+  savedHazardZones: HazardZone[];
+  addHazardZone: (zone: HazardZone) => void;
 };
 
 export const useZoneStore = create<ZoneState>((set) => ({
@@ -21,5 +31,11 @@ export const useZoneStore = create<ZoneState>((set) => ({
     set((state) =>
       state.points.length < 8 ? { points: [...state.points, point] } : state,
     ),
-  reset: () => set({ points: [] }), // ✅ IMPLEMENTIERT
+  reset: () => set({ points: [] }),
+
+  savedHazardZones: [],
+  addHazardZone: (zone) =>
+    set((state) => ({
+      savedHazardZones: [...state.savedHazardZones, zone],
+    })),
 }));
