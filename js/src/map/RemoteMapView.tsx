@@ -1,6 +1,4 @@
 import { useMapStore } from "@/store/useMapStore";
-import { useEffect } from "react";
-import { useMap } from "react-leaflet";
 import { UserMarker } from "./UserMarker";
 import {
   MapContainer,
@@ -16,6 +14,7 @@ import { cn } from "~/lib/utils";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { theme } from "~/styles/theme";
 import L from "leaflet";
 
 // Leaflet Marker is bugged
@@ -23,10 +22,13 @@ const customMarkerIcon = new L.Icon({
   iconUrl: markerIcon,
   iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+  iconSize: [theme.mapMarker.iconSize.width, theme.mapMarker.iconSize.height],
+  iconAnchor: [theme.mapMarker.iconAnchor.x, theme.mapMarker.iconAnchor.y],
+  popupAnchor: [theme.mapMarker.popupAnchor.x, theme.mapMarker.popupAnchor.y],
+  shadowSize: [
+    theme.mapMarker.shadowSize.width,
+    theme.mapMarker.shadowSize.height,
+  ],
 });
 
 const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin should be the users location
