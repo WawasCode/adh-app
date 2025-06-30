@@ -3,9 +3,9 @@ from .views import hello_world, IncidentViewSet, WaypointViewSet, HazardZoneView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'incident', IncidentViewSet)
-router.register(r'waypoint', WaypointViewSet)
-router.register(r'hazard-zone', HazardZoneViewSet)
+router.register(r'incidents', IncidentViewSet)
+router.register(r'waypoints', WaypointViewSet)
+router.register(r'hazard-zones', HazardZoneViewSet)
 
 urlpatterns = [
     path('hello/', hello_world, name='hello_world'),

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { create } from "zustand";
 
 export interface Location {
@@ -9,66 +10,133 @@ export interface Incident {
   id: number;
   location: Location | null;
   name: string;
-  // type: string;
-  // description: string;
-  // reportedAt: Date;
-  // distance: string;
+  type: string;
+  description: string;
+  reportedAt: Date;
+  distance: string;
+}
+
+export function InitUserLocation() {
+  const setUserLocation = useIncidentStore.getState().setUserLocation;
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setUserLocation(pos.coords.latitude, pos.coords.longitude);
+      });
+    }
+  }, [setUserLocation]);
+  return null;
+}
+// Berechnung der Entfernung vom User zum Incident über Haversine-Formel in KM
+function getDinstanceUserIncident(
+  latUser: number,
+  lonUser: number,
+  latIncident: number,
+  lonIncident: number,
+): string {
+  const R = 6371; // Radius of the Earth in km
+  const dLat = (latIncident - latUser) * (Math.PI / 180);
+  const dLon = (lonIncident - lonUser) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(latUser * (Math.PI / 180)) *
+      Math.cos(latIncident * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in km
+  return `${distance.toFixed(1)} km`;
+}
+
+// Typ für Backend-Response (ohne reportedAt, mit created_at)
+interface IncidentApiResponse {
+  id: number;
+  incident_id: number;
+  name: string;
+  location: Location | null;
+  description: string;
+  severity: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface IncidentState {
   incidents: Incident[];
   fetchIncidents: () => Promise<void>;
+  userLocation: { lat: number; lon: number } | null;
+  setUserLocation: (lat: number, lon: number) => void;
 }
 
-export const useIncidentStore = create<IncidentState>((set) => ({
+export const useIncidentStore = create<IncidentState>((set, get) => ({
   incidents: [],
-  fetchIncidents: async () => {
-    const response = await fetch("/python/api/incidents");
-    const data = await response.json();
-    set({ incidents: data });
+  userLocation: null,
+  setUserLocation: (lat, lon) => {
+    set({ userLocation: { lat, lon } });
   },
+  fetchIncidents: async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || "/api/incidents";
+      const response = await fetch(`${apiUrl}/incidents/`);
+      if (!response.ok) {
+        console.error(
+          "Fehler beim Laden der Incidents:",
+          response.status,
+          response.statusText,
+        );
+        set({ incidents: [] });
+        return;
+      }
+      const data = await response.json();
+      const { userLocation } = get();
+      const incidentsWithDistance = (data as IncidentApiResponse[]).map(
+        (incident) => {
+          const incidentLocation = incident.location
+            ? incident.location.coordinates
+            : null;
+          let distance = "unbekannt";
 
-  // export const useIncidentsStore = create<IncidentsState>(() => ({
-  //   incidents: [
-  //     {
-  //       id: "1",
-  //       type: "Feuer",
-  //       title: "Feuer",
-  //       description: "Kurze Beschreibung",
-  //       reportedAt: new Date(Date.now() - 5 * 60 * 1000), // 5 min ago
-  //       distance: "1.2 km",
-  //     },
-  //     {
-  //       id: "2",
-  //       type: "Überschwemmung",
-  //       title: "Überschwemmung",
-  //       description: "Kurze Beschreibung",
-  //       reportedAt: new Date(Date.now() - 30 * 60 * 1000), // 30 min ago
-  //       distance: "3.5 km",
-  //     },
-  //     {
-  //       id: "3",
-  //       type: "Gasleck",
-  //       title: "Gasleck",
-  //       description: "Kurze Beschreibung",
-  //       reportedAt: new Date(Date.now() - 90 * 60 * 1000), // 1.5 h ago
-  //       distance: "0.8 km",
-  //     },
-  //     {
-  //       id: "4",
-  //       type: "Straßensperre",
-  //       title: "Straßensperre",
-  //       description: "Kurze Beschreibung",
-  //       reportedAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 h ago
-  //       distance: "2.1 km",
-  //     },
-  //     {
-  //       id: "5",
-  //       type: "Bauunfall",
-  //       title: "Bauunfall",
-  //       description: "Kurze Beschreibung",
-  //       reportedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 h ago
-  //       distance: "5.0 km",
-  //     },
-  //   ],
+          if (
+            userLocation &&
+            incidentLocation &&
+            typeof incidentLocation[0] === "number" &&
+            typeof incidentLocation[1] === "number"
+          ) {
+            const [lonIncident, latIncident] = incidentLocation;
+            distance = getDinstanceUserIncident(
+              userLocation.lat,
+              userLocation.lon,
+              latIncident,
+              lonIncident,
+            );
+          }
+
+          return {
+            id: incident.id,
+            location: incident.location,
+            name: incident.name,
+            type: "incident", // oder passe dies an, falls du einen Typ im Backend hast
+            description: incident.description,
+            reportedAt: new Date(incident.created_at),
+            distance,
+          } as Incident;
+        },
+      );
+
+      set({ incidents: incidentsWithDistance });
+    } catch (error) {
+      console.error("Fehler beim Parsen der Incidents:", error);
+      set({ incidents: [] });
+    }
+  },
 }));
+
+// Hook, der Incidents nachlädt, sobald die User-Location gesetzt ist
+export function useIncidentsWithLocation() {
+  const userLocation = useIncidentStore((s) => s.userLocation);
+  const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
+  useEffect(() => {
+    if (userLocation) {
+      fetchIncidents();
+    }
+  }, [userLocation, fetchIncidents]);
+}

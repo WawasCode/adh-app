@@ -6,6 +6,9 @@ import { Incident } from "@/store/useIncidentStore.ts";
 export interface IncidentsListProps {
   incidents: Incident[];
   name: string;
+  // description: string;
+  // reportedAt: Date;
+  // type: string;
 }
 
 /**
@@ -16,22 +19,22 @@ export function IncidentsList({ incidents, name }: IncidentsListProps) {
     <div className="w-full bg-white min-h-screen">
       {name && <div className="text-center font-bold text-lg py-4">{name}</div>}
       <div className="px-2">
-        {incidents.map((incident) => (
+        {incidents.map((incident, idx) => (
           <div
-            key={incident.id}
+            key={incident.id ?? idx}
             className="border-b last:border-b-0 py-3 flex flex-row items-start justify-between"
           >
             <div>
               <div className="font-bold text-xl">{incident.name}</div>
-              {/* <div className="text-base">{incident.description}</div>
+              <div className="text-base">{incident.description}</div>
               <div className="text-xs text-muted-foreground mt-1">
-                {incident.type} · {formatTimeAgo(incident.reportedAt)} ·{" "}
+                {incident.type} · {getTimeSincePosting(incident.reportedAt)} ·{" "}
                 {formatTime(incident.reportedAt)}
-              </div> */}
+              </div>
             </div>
-            {/* <div className="text-sm text-right min-w-[5rem] pl-2 pt-1">
+            <div className="text-sm text-right min-w-[5rem] pl-2 pt-1">
               {incident.distance}
-            </div> */}
+            </div>
           </div>
         ))}
       </div>
@@ -39,21 +42,18 @@ export function IncidentsList({ incidents, name }: IncidentsListProps) {
   );
 }
 
-/**
- * Format the time since the incident was reported (e.g., "vor 2 Min.").
- */
-// function formatTimeAgo(date: Date) {
-//   const now = new Date();
-//   const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-//   if (diff < 60) return `vor ${diff} Sek.`;
-//   if (diff < 3600) return `vor ${Math.floor(diff / 60)} Min.`;
-//   if (diff < 86400) return `vor ${Math.floor(diff / 3600)} Std.`;
-//   return `vor ${Math.floor(diff / 86400)} Tg.`;
-// }
+function getTimeSincePosting(date: Date): string {
+  const now = new Date();
+  const difference = Math.floor((now.getTime() - date.getTime()) / 1000);
+  if (difference < 60) return `vor ${difference} Sek.`;
+  if (difference < 3600) return `vor ${Math.floor(difference / 60)} Min.`;
+  if (difference < 86400) return `vor ${Math.floor(difference / 3600)} Std.`;
+  return `vor ${Math.floor(difference / 86400)} Tg.`;
+}
 
 /**
  * Format the time as clock time (e.g., "14:23").
  */
-// function formatTime(date: Date) {
-//   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-// }
+function formatTime(date: Date) {
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
