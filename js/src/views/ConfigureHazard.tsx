@@ -4,26 +4,50 @@ import { Button } from "@/components/ui/Button";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
+import { useZoneStore } from "@/store/useZoneStore";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
- * The input is stored in global state and includes name, description, location and severity.
- * Navigation is controlled via useViewStore.
+ * The input is stored in Zustand and includes name, description, zone (points) and severity.
+ * The zone is saved to global store when all required fields are filled.
  */
 export default function ConfigureHazard() {
   const setPage = useViewStore((s) => s.setPage);
-  const { name, setName, description, setDescription, severity, reset } =
-    usePlaceStore();
+  const {
+    name,
+    setName,
+    description,
+    setDescription,
+    severity,
+    reset: resetPlace,
+  } = usePlaceStore();
 
-  const isFormComplete = name.trim() !== "" && severity !== null;
+  const { points, reset: resetZone, addHazardZone } = useZoneStore();
+
+  const isFormComplete =
+    name.trim() !== "" && severity !== null && points.length >= 3;
 
   const handleCancel = () => {
-    reset();
+    resetPlace();
+    resetZone();
     setPage("main");
   };
 
   const handleSave = () => {
-    alert("Saving hazards is not implemented yet.");
+    if (!isFormComplete) return;
+
+    addHazardZone({
+      id: uuidv4(),
+      name,
+      description,
+      severity: severity!,
+      coordinates: points,
+    });
+
+    resetPlace();
+    resetZone();
+    setPage("main");
   };
 
   return (
@@ -41,7 +65,7 @@ export default function ConfigureHazard() {
         </h1>
         {!isFormComplete && (
           <p className="text-center text-sm text-gray-700 mt-2">
-            Please fill in name and severity to enable saving.
+            Please fill in name, severity and zone to enable saving.
           </p>
         )}
       </div>
@@ -67,7 +91,8 @@ export default function ConfigureHazard() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          Location <span className="text-gray-400">&rsaquo;</span>
+          {points.length >= 3 ? "Location – saved" : "Location"}
+          <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
         <Button
