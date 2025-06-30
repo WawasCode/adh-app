@@ -17,7 +17,6 @@ import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
 import SelectZone from "@/views/SelectZone";
 import SelectCircleDetails from "@/views/SelectCircleDetails";
-import SelectCategoryView from "@/views/SelectCategoryView";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -73,6 +72,9 @@ export default function MobileLayout() {
     const BottomNavComponent = (
       <BottomNav active={currentPage} onNavigate={setPage} />
     );
+    /**
+     * Helper to wrap a page component with consistent layout styling and bottom nav
+     */
     function renderPage(component: React.ReactElement) {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
@@ -135,23 +137,12 @@ export default function MobileLayout() {
       return renderPage(<SelectCircleDetails />);
     }
 
-    if (currentPage === "selectCategory") {
-      return renderPage(<SelectCategoryView />);
-    }
-
     if (currentPage === "waypointLocation") {
       return renderPage(<SelectWaypointLocation />);
     }
 
     // Fallback
-    return (
-      <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
-        <IncidentsPage />
-        <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))]">
-          {BottomNavComponent}
-        </div>
-      </div>
-    );
+    return renderPage(<IncidentsPage />);
   }, [currentPage, setPage, goBack]);
 
   if (!isMobile) return <RemoteMapView />;

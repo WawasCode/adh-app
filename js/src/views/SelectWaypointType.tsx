@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/Button";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import type { WaypointType } from "@/store/usePlaceStore";
 
 /**
- * WaypointTypeView allows the user to choose the type of waypoint.
- * Examples include fire stations, police stations, and hospitals.
+ * SelectWaypointType allows the user to choose a category for the waypoint.
+ * Options include Firestation, Policestation, and Hospital.
  */
 export default function SelectWaypointType() {
   const { goBack, setPage } = useViewStore();
   const setWaypointType = usePlaceStore((s) => s.setWaypointType);
-  const { setName, setDescription } = usePlaceStore();
+  const reset = usePlaceStore((s) => s.reset);
 
   const waypointOptions: WaypointType[] = [
     "firestation",
@@ -23,6 +24,11 @@ export default function SelectWaypointType() {
     setPage("configureWaypoint");
   };
 
+  const handleCancel = () => {
+    reset();
+    setPage("main");
+  };
+
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
@@ -33,7 +39,7 @@ export default function SelectWaypointType() {
         <h1 className="text-center font-semibold text-xl mt-2">Select Type</h1>
       </div>
 
-      {/* Options */}
+      {/* Type Options */}
       <div className="flex flex-col gap-4 mt-4">
         {waypointOptions.map((label) => (
           <Button
@@ -47,27 +53,8 @@ export default function SelectWaypointType() {
         ))}
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            setName("");
-            setDescription("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-          disabled
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared Footer */}
+      <ViewFooter onCancel={handleCancel} />
     </div>
   );
 }

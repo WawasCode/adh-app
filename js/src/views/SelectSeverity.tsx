@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/Button";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
-import { hazardSeverities, usePlaceStore } from "@/store/usePlaceStore";
+import { usePlaceStore, hazardSeverities } from "@/store/usePlaceStore";
 import type { HazardSeverity } from "@/store/usePlaceStore";
 
 /**
- * SelectSeverityView lets the user choose the severity level for the hazard.
- * This view is part of the hazard configuration process.
+ * SelectSeverity allows the user to choose the severity level for a hazard.
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
   const setSeverity = usePlaceStore((s) => s.setSeverity);
-  const { setName, setDescription } = usePlaceStore();
+  const reset = usePlaceStore((s) => s.reset);
 
   const handleSelect = (value: HazardSeverity) => {
     setSeverity(value);
@@ -32,7 +32,7 @@ export default function SelectSeverity() {
         </h1>
       </div>
 
-      {/* Selection Buttons */}
+      {/* Severity options */}
       <div className="flex flex-col gap-4 mt-4">
         {hazardSeverities.map((level) => (
           <Button
@@ -46,27 +46,15 @@ export default function SelectSeverity() {
         ))}
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            setName("");
-            setDescription("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-          disabled
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared footer */}
+      <ViewFooter
+        onCancel={() => {
+          reset();
+          setPage("main");
+        }}
+        onSave={() => {}}
+        saveDisabled
+      />
     </div>
   );
 }

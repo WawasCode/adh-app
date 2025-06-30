@@ -1,6 +1,9 @@
 import { create } from "zustand";
 
-// Types
+// --------------------
+// Type Definitions
+// --------------------
+
 export type PlaceType = "hazard" | "waypoint";
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
 export type WaypointType = "firestation" | "policestation" | "hospital";
@@ -22,8 +25,12 @@ export type Waypoint = {
   type: WaypointType;
 };
 
+// --------------------
+// Zustand Store
+// --------------------
+
 type PlaceState = {
-  // Current input data (e.g. for configuration)
+  // Input state
   type: PlaceType | null;
   name: string;
   description: string;
@@ -33,10 +40,10 @@ type PlaceState = {
   telephone: string;
   isAvailable: boolean;
 
-  // Saved results
+  // Saved data
   savedWaypoints: Waypoint[];
 
-  // Setter
+  // Setters
   setType: (type: PlaceType) => void;
   setName: (name: string) => void;
   setDescription: (desc: string) => void;
@@ -46,14 +53,13 @@ type PlaceState = {
   setTelephone: (tel: string) => void;
   setAvailability: (avail: boolean) => void;
 
-  // Save data
+  // Actions
   addWaypoint: (waypoint: Waypoint) => void;
-
-  // reset state
   reset: () => void;
 };
 
 export const usePlaceStore = create<PlaceState>((set) => ({
+  // Initial state
   type: null,
   name: "",
   description: "",
@@ -64,11 +70,14 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   isAvailable: false,
 
   savedWaypoints: [],
+
+  // Save new waypoint
   addWaypoint: (waypoint) =>
     set((state) => ({
       savedWaypoints: [...state.savedWaypoints, waypoint],
     })),
 
+  // Setter methods
   setType: (type) => set({ type }),
   setName: (name) => set({ name }),
   setDescription: (description) => set({ description }),
@@ -78,6 +87,7 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   setTelephone: (telephone) => set({ telephone }),
   setAvailability: (isAvailable) => set({ isAvailable }),
 
+  // Reset all input fields
   reset: () =>
     set({
       type: null,

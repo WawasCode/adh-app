@@ -1,15 +1,15 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * SelectLocationView lets the user choose between selecting a zone or an address.
- * It's part of the hazard configuration flow.
  */
 export default function SelectLocation() {
   const { goBack, setPage } = useViewStore();
-  const { setName, setDescription } = usePlaceStore();
+  const reset = usePlaceStore((s) => s.reset);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -36,35 +36,21 @@ export default function SelectLocation() {
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() =>
-            alert("Adresse hinzufügen ist noch nicht implementiert.")
-          }
+          onClick={() => alert("Address selection is not implemented yet.")}
         >
           Address <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            setName("");
-            setDescription("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-          disabled
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared footer */}
+      <ViewFooter
+        onCancel={() => {
+          reset();
+          setPage("main");
+        }}
+        onSave={() => {}}
+        saveDisabled
+      />
     </div>
   );
 }

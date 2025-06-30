@@ -1,17 +1,25 @@
-import { Button } from "@/components/ui/Button";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
 
 /**
- * SelectWaypointLocation allows the user to click on the map
- * to select a location for the waypoint.
- * The coordinates are stored in Zustand and used when returning to ConfigureWaypoint.
+ * SelectWaypointLocation allows the user to place a marker on the map
+ * to define the waypoint's coordinates. These are stored in Zustand.
  */
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
   const location = usePlaceStore((s) => s.location);
-  const { setName, setDescription } = usePlaceStore();
+  const reset = usePlaceStore((s) => s.reset);
+
+  const handleCancel = () => {
+    reset();
+    setPage("main");
+  };
+
+  const handleSave = () => {
+    setPage("configureWaypoint");
+  };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -31,33 +39,17 @@ export default function SelectWaypointLocation() {
         </p>
       </div>
 
-      {/* Karte mit Click-Funktion */}
+      {/* Map for selecting location */}
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
         <RemoteMapViewWithClick />
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            setName("");
-            setDescription("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          disabled={!location}
-          onClick={() => setPage("configureWaypoint")}
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared Footer */}
+      <ViewFooter
+        onCancel={handleCancel}
+        onSave={handleSave}
+        saveDisabled={!location}
+      />
     </div>
   );
 }

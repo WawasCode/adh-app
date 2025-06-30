@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 // TODO: Replace with real ID from database once backend is connected
 import { v4 as uuidv4 } from "uuid";
 
@@ -132,31 +133,15 @@ export default function ConfigureWaypoint() {
         </div>
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            reset();
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          variant="outline"
-          className={`flex-1 rounded-full py-4 text-base ${
-            !isFormComplete
-              ? "text-gray-400 border-gray-300 opacity-50 cursor-not-allowed"
-              : ""
-          }`}
-          disabled={!isFormComplete}
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared Footer */}
+      <ViewFooter
+        onCancel={() => {
+          reset();
+          setPage("main");
+        }}
+        onSave={handleSave}
+        saveDisabled={!isFormComplete}
+      />
     </div>
   );
 }

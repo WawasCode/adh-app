@@ -1,18 +1,30 @@
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
- * It includes fields for name, description, location, and severity.
- * It uses global state (usePlaceStore) to persist the input values between views.
+ * The input is stored in global state and includes name, description, location and severity.
+ * Navigation is controlled via useViewStore.
  */
 export default function ConfigureHazard() {
   const setPage = useViewStore((s) => s.setPage);
-  const { name, setName, description, setDescription } = usePlaceStore();
-  const severity = usePlaceStore((s) => s.severity);
+  const { name, setName, description, setDescription, severity, reset } =
+    usePlaceStore();
+
+  const isFormComplete = name.trim() !== "" && severity !== null;
+
+  const handleCancel = () => {
+    reset();
+    setPage("main");
+  };
+
+  const handleSave = () => {
+    alert("Saving hazards is not implemented yet.");
+  };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -27,6 +39,11 @@ export default function ConfigureHazard() {
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Hazard
         </h1>
+        {!isFormComplete && (
+          <p className="text-center text-sm text-gray-700 mt-2">
+            Please fill in name and severity to enable saving.
+          </p>
+        )}
       </div>
 
       {/* Form fields */}
@@ -65,27 +82,12 @@ export default function ConfigureHazard() {
         </Button>
       </div>
 
-      {/* Footer Buttons */}
-      <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base"
-          onClick={() => {
-            setPage("main");
-            setName("");
-            setDescription("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 rounded-full py-4 text-base text-gray-400 border-gray-300 opacity-50"
-          disabled
-        >
-          Save
-        </Button>
-      </div>
+      {/* Shared Footer */}
+      <ViewFooter
+        onCancel={handleCancel}
+        onSave={handleSave}
+        saveDisabled={!isFormComplete}
+      />
     </div>
   );
 }
