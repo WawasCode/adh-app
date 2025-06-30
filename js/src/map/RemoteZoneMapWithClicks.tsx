@@ -9,6 +9,7 @@ import { useZoneStore } from "@/store/useZoneStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { UserMarker } from "@/map/UserMarker";
 
 // Marker-Icon
 const customIcon = new L.Icon({
@@ -55,6 +56,7 @@ export default function RemoteZoneMapWithClicks() {
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <UserMarker />
       <MapClickHandler />
       {points.map((pos, i) => (
         <Marker key={i} position={pos} icon={customIcon} />

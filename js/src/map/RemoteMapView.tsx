@@ -6,18 +6,8 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes } from "react";
 import { cn } from "~/lib/utils";
-import { Polygon, Popup } from "react-leaflet";
-import type { LatLngTuple } from "leaflet";
 import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
 import { SavedHazardZones } from "@/map/SavedHazardZones";
-
-const hazardZoneCoords: LatLngTuple[] = [
-  [52.486, 13.296],
-  [52.4897, 13.309],
-  [52.484, 13.317],
-  [52.481, 13.308],
-  [52.486, 13.296],
-];
 
 const CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
@@ -42,10 +32,9 @@ function MapSetter() {
   return null;
 }
 
-/*
- * MapView component renders a Leaflet map using remote raster tiles.
- * The tiles are served from OpenStreetMap.
- * It includes a user marker and sets the map instance in the store via MapSetter.
+/**
+ * RemoteMapView renders the main map background.
+ * It includes saved waypoints, hazard zones, and the user's location.
  */
 export function RemoteMapView({
   className,
@@ -67,16 +56,10 @@ export function RemoteMapView({
           attribution="&copy; OpenStreetMap contributors"
           maxZoom={MAX_ZOOM}
         />
-        <Polygon
-          positions={hazardZoneCoords}
-          pathOptions={{ color: "red", fillColor: "red", fillOpacity: 0.4 }}
-        >
-          <Popup>Hazard Zone</Popup>
-        </Polygon>
         <UserMarker />
         <SavedHazardZones />
-        <MapSetter />
         <SavedWaypointMarkers />
+        <MapSetter />
       </MapContainer>
     </div>
   );
