@@ -3,9 +3,8 @@ import { CircleMarker } from "react-leaflet";
 import { theme } from "~/styles/theme";
 
 /**
- * UserMarker component displays the user's current GPS location
- * as a blue CircleMarker on the map.
- * The marker has a fixed pixel radius and appears only when enabled.
+ * Displays a circular marker at the user's GPS location.
+ * Only shown if location tracking is active (`showMarker`).
  */
 export function UserMarker() {
   const position = useLocationStore((s) => s.position);
@@ -13,12 +12,12 @@ export function UserMarker() {
 
   if (!position || !showMarker) return null;
 
-  const MARKER_RADIUS = 20;
+  const DEFAULT_MARKER_RADIUS = 20;
 
   return (
     <CircleMarker
       center={position}
-      radius={MARKER_RADIUS}
+      radius={DEFAULT_MARKER_RADIUS}
       pathOptions={{
         color: theme.colors.primary[500],
         fillColor: theme.colors.primary[500],

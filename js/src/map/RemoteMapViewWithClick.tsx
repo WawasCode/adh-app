@@ -1,21 +1,27 @@
 import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
 import { usePlaceStore } from "@/store/usePlaceStore";
+import { useLocationStore } from "@/store/useLocationStore";
+import { UserMarker } from "@/map/UserMarker";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { UserMarker } from "@/map/UserMarker";
-import { useLocationStore } from "@/store/useLocationStore";
 
-// Marker-Icon
+/**
+ * Default Leaflet marker icon used for clicked location
+ */
 const customIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
 
-const CENTER: [number, number] = [52.52, 13.405]; // z.B. Berlin
+/**
+ * Default center fallback (Berlin) if GPS is unavailable
+ */
+const CENTER: [number, number] = [52.52, 13.405];
 
 /**
- * MapClickHandler allows user to click on the map and store coordinates in Zustand.
+ * MapClickHandler allows the user to click on the map
+ * and saves the selected coordinates in Zustand.
  */
 function MapClickHandler() {
   const setLocation = usePlaceStore((s) => s.setLocation);
@@ -32,8 +38,9 @@ function MapClickHandler() {
 }
 
 /**
- * RemoteMapViewWithClick renders the map and lets the user place a marker by clicking.
- * The selected location is saved in Zustand (usePlaceStore).
+ * RemoteMapViewWithClick renders a Leaflet map
+ * that lets the user set a location marker by clicking.
+ * The selected location is stored in Zustand (usePlaceStore).
  */
 export default function RemoteMapViewWithClick() {
   const location = usePlaceStore((s) => s.location);
@@ -42,7 +49,7 @@ export default function RemoteMapViewWithClick() {
   return (
     <MapContainer
       center={position ?? CENTER}
-      zoom={13}
+      zoom={13} // Default zoom for selecting locations
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
