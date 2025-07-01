@@ -16,6 +16,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
+import { useLocationStore } from "@/store/useLocationStore";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -31,7 +32,7 @@ const customMarkerIcon = new L.Icon({
   ],
 });
 
-const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin should be the users location
+const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
 const MAX_ZOOM = 19;
 
@@ -96,12 +97,24 @@ export function RemoteMapView({
 }: RemoteMapViewProps) {
   const base = "map-container";
 
+  const position = useLocationStore((s) => s.position);
+
   const [marker, setMarker] = useState<{
     position: [number, number];
     name?: string;
   } | null>(null);
 
-  const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(
+    position || DEFAULT_CENTER,
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(!position);
+
+  useEffect(() => {
+    if (position) {
+      setMapCenter(position);
+      setIsLoading(false);
+    }
+  }, [position]);
 
   const handleLongClick = async (latlng: L.LatLng) => {
     const { lat, lng } = latlng;
@@ -111,19 +124,25 @@ export function RemoteMapView({
     console.log("Long click at:", lat, lng);
   };
 
-  if (
-    selectedLocation &&
-    (mapCenter[0] !== selectedLocation.lat ||
-      mapCenter[1] !== selectedLocation.lon)
-  ) {
-    setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+  useEffect(() => {
+    if (
+      selectedLocation &&
+      (mapCenter[0] !== selectedLocation.lat ||
+        mapCenter[1] !== selectedLocation.lon)
+    ) {
+      setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+    }
+  }, [mapCenter, selectedLocation]);
+
+  if (isLoading) {
+    return <div>Loading map...</div>;
   }
 
   return (
     <div className={cn(base, className)}>
       <MapContainer
         style={{ height: "100%", width: "100%" }}
-        center={DEFAULT_CENTER}
+        center={position || mapCenter}
         zoom={ZOOM}
         maxZoom={MAX_ZOOM}
         maxBounds={BOUNDS}
