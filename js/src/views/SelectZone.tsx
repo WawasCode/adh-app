@@ -33,9 +33,9 @@ export default function SelectZone() {
         <button onClick={goBack} className="text-blue-600 text-base">
           &larr; Back
         </button>
-        <h1 className="text-center font-semibold text-xl mt-2">Define Zone</h1>
+        <h1 className="text-center font-semibold text-xl mt-2">Enter zone</h1>
         <p className="text-center text-sm text-gray-600 mt-2">
-          Tap the map to set 3 to 8 points that will form a hazard zone.
+          Tap 3 to 8 points that will form a hazard zone.
         </p>
       </div>
 

@@ -36,7 +36,7 @@ export default function SelectLocation() {
         <Button
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
-          onClick={() => alert("Address selection is not implemented yet.")}
+          onClick={() => setPage("selectAddress")}
         >
           Address <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>

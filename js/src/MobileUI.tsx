@@ -16,6 +16,7 @@ import SelectWaypointLocation from "@/views/SelectWaypointLocation";
 import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
 import SelectZone from "@/views/SelectZone";
+import SelectAddress from "./views/SelectAddress";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -145,6 +146,10 @@ export default function MobileLayout() {
 
     if (currentPage === "selectZone") {
       return renderPage(<SelectZone />);
+    }
+
+    if (currentPage === "selectAddress") {
+      return renderPage(<SelectAddress />);
     }
 
     if (currentPage === "waypointLocation") {

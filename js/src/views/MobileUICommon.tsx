@@ -25,6 +25,7 @@ export type Page =
   | "configureHazard"
   | "selectLocation"
   | "selectZone"
+  | "selectAddress"
   | "circleDetails"
   | "selectSeverity"
   | "configureWaypoint"
