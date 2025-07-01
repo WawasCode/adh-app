@@ -32,6 +32,11 @@ export default function MobileLayout() {
 
   const setPosition = useLocationStore((s) => s.setPosition);
   const setShowMarker = useLocationStore((s) => s.setShowMarker);
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: number;
+    lon: number;
+    name?: string;
+  } | null>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -68,6 +73,19 @@ export default function MobileLayout() {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [setPosition, setShowMarker]);
 
+  function handleNav(targetPage: Page) {
+    setPage(targetPage);
+  }
+
+  function handleLocationSelect(location: {
+    lat: number;
+    lon: number;
+    name: string;
+  }) {
+    setSelectedLocation(location);
+  }
+
+  // Memoize the current page content to avoid re-renders from string comparisons in JSX.
   const currentPageContent = useMemo(() => {
     const BottomNavComponent = (
       <BottomNav active={currentPage} onNavigate={setPage} />
@@ -92,6 +110,7 @@ export default function MobileLayout() {
           openNavigation={() => setPage("navigation")}
           openAddPlace1={() => setPage("addPlace")}
           BottomNavComponent={BottomNavComponent}
+          onLocationSelect={handleLocationSelect}
         />
       );
     }
@@ -150,7 +169,7 @@ export default function MobileLayout() {
   return (
     <div className="relative w-screen overflow-hidden h-[100svh]">
       <div className="absolute inset-0 z-0">
-        <RemoteMapView />
+        <RemoteMapView selectedLocation={selectedLocation || undefined} />
       </div>
       {currentPageContent}
     </div>

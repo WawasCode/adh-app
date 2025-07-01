@@ -9,6 +9,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { cn } from "~/lib/utils";
+import { useEffect, useRef, useState } from "react";
+import { searchLocations, PhotonFeature } from "@/services/geocodingService";
 import { useMapStore } from "@/store/useMapStore";
 import { useLocationStore } from "@/store/useLocationStore";
 // Zoom level to use when flying to the user's current location.
@@ -31,18 +34,157 @@ export type Page =
   | "waypointLocation"
   | "addPlace";
 
+interface SearchBarProps {
+  onLocationSelect?: (location: {
+    lat: number;
+    lon: number;
+    name: string;
+    description?: string;
+  }) => void;
+}
+
 /**
  * SearchBar component with a leading search icon.
  */
-export function SearchBar() {
+export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<PhotonFeature[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsLoading(true);
+      const data = await searchLocations(query);
+      setResults(data);
+      setShowResults(true);
+      setIsLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const handleResultSelect = (result: PhotonFeature) => {
+    const [lon, lat] = result.geometry.coordinates;
+    const mainLine = formatMainLine(result.properties);
+    const secondaryLine = formatSecondaryLine(result.properties);
+
+    setQuery(mainLine);
+    setShowResults(false);
+
+    if (onLocationSelect) {
+      onLocationSelect({
+        lat,
+        lon,
+        name: mainLine,
+        description: secondaryLine,
+      });
+    }
+  };
+
+  const formatMainLine = (props: PhotonFeature["properties"]) => {
+    if (props.name) {
+      return (
+        props.name +
+        (props.housenumber
+          ? ` (${props.street} ${props.housenumber})`
+          : ` (${props.street})`)
+      );
+    }
+    if (props.street) {
+      return props.housenumber
+        ? `${props.street} ${props.housenumber}`
+        : props.street;
+    }
+    return "Unnamed location";
+  };
+
+  const formatSecondaryLine = (props: PhotonFeature["properties"]) => {
+    const parts = [];
+    if (props.osm_value) {
+      const type = props.osm_value
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+      parts.push(type);
+    }
+    if (props.city) {
+      parts.push(props.city);
+    }
+    if (props.country && props.country !== props.name) {
+      parts.push(props.country);
+    }
+    return parts.join(", ");
+  };
+
   return (
-    <div className="relative">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 h-5 w-5" />
-      <Input
-        type="text"
-        placeholder="Search"
-        className="rounded-xl pl-10 pr-4 py-3 text-sm"
-      />
+    <div ref={searchRef} className="relative w-full">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 h-5 w-5" />
+        <Input
+          type="text"
+          placeholder="Search for a location"
+          className="rounded-xl pl-10 pr-4 py-3 text-sm"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => query.trim() && setShowResults(true)}
+        />
+        {isLoading && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
+          </div>
+        )}
+      </div>
+
+      {showResults && results.length > 0 && (
+        <div className="absolute mt-1 w-full bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+          {results.map((result, index) => {
+            const mainLine = formatMainLine(result.properties);
+            const secondaryLine = formatSecondaryLine(result.properties);
+
+            return (
+              <Button
+                key={index}
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start text-left px-4 py-2",
+                  "hover:bg-gray-100 focus:bg-gray-100",
+                )}
+                onClick={() => handleResultSelect(result)}
+              >
+                <div className="flex flex-col items-start w-full">
+                  <span className="text-sm font-medium line-clamp-1 w-full">
+                    {mainLine}
+                  </span>
+                  <span className="text-xs text-gray-500 line-clamp-1 w-full">
+                    {secondaryLine}
+                  </span>
+                </div>
+              </Button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -36,6 +36,24 @@ export const theme = {
     sidebar: 10,
     modal: 50,
   },
+  mapMarker: {
+    iconSize: {
+      width: 25,
+      height: 41,
+    },
+    iconAnchor: {
+      x: 12,
+      y: 41,
+    },
+    popupAnchor: {
+      x: 1,
+      y: -34,
+    },
+    shadowSize: {
+      width: 41,
+      height: 41,
+    },
+  },
   sizes: {
     xs: {
       iconSize: 12,
