@@ -2,6 +2,7 @@ import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
+import { SearchBar } from "@/views/MobileUICommon";
 
 /**
  * SelectWaypointLocation allows the user to place a marker on the map
@@ -11,6 +12,15 @@ export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
   const location = usePlaceStore((s) => s.location);
   const reset = usePlaceStore((s) => s.reset);
+  const setLocation = usePlaceStore((s) => s.setLocation);
+
+  const handleLocationSelect = (location: {
+    lat: number;
+    lon: number;
+    name: string;
+  }) => {
+    setLocation([location.lat, location.lon]);
+  };
 
   const handleCancel = () => {
     reset();
@@ -35,12 +45,16 @@ export default function SelectWaypointLocation() {
           Select Waypoint Location
         </h1>
         <p className="text-center text-sm text-gray-600 mt-2">
-          Tap a location on the map to place your waypoint.
+          Tap a location on the map or use search to place your waypoint.
         </p>
+      </div>
+      {/* Search Bar */}
+      <div className="mt-2">
+        <SearchBar onLocationSelect={handleLocationSelect} />
       </div>
 
       {/* Map for selecting location */}
-      <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
+      <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4 z-0">
         <RemoteMapViewWithClick />
       </div>
 
