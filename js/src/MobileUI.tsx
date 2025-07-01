@@ -16,7 +16,6 @@ import SelectWaypointLocation from "@/views/SelectWaypointLocation";
 import SelectSeverity from "@/views/SelectSeverity";
 import SelectLocation from "@/views/SelectLocation";
 import SelectZone from "@/views/SelectZone";
-import SelectCircleDetails from "@/views/SelectCircleDetails";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -72,10 +71,6 @@ export default function MobileLayout() {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, [setPosition, setShowMarker]);
-
-  function handleNav(targetPage: Page) {
-    setPage(targetPage);
-  }
 
   function handleLocationSelect(location: {
     lat: number;
@@ -150,10 +145,6 @@ export default function MobileLayout() {
 
     if (currentPage === "selectZone") {
       return renderPage(<SelectZone />);
-    }
-
-    if (currentPage === "circleDetails") {
-      return renderPage(<SelectCircleDetails />);
     }
 
     if (currentPage === "waypointLocation") {

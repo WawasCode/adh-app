@@ -27,8 +27,6 @@ export type Page =
   | "selectZone"
   | "circleDetails"
   | "selectSeverity"
-  | "selectCategory"
-  | "subCategory"
   | "configureWaypoint"
   | "waypointType"
   | "waypointLocation"

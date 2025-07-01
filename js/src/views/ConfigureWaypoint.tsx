@@ -67,7 +67,7 @@ export default function ConfigureWaypoint() {
 
         {!isFormComplete && (
           <p className="text-center text-sm text-gray-700 mt-2">
-            Please fill in name, type and location to enable saving.
+            Please fill in name, location and type to enable saving.
           </p>
         )}
       </div>

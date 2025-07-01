@@ -65,7 +65,7 @@ export default function ConfigureHazard() {
         </h1>
         {!isFormComplete && (
           <p className="text-center text-sm text-gray-700 mt-2">
-            Please fill in name, severity and zone to enable saving.
+            Please fill in name, location and severity to enable saving.
           </p>
         )}
       </div>

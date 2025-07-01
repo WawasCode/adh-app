@@ -62,23 +62,6 @@ interface RemoteMapViewProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selectedLocation?: { lat: number; lon: number; name?: string };
 }
 
-function LongClickHandler({
-  onLongClick,
-}: {
-  onLongClick: (latlng: L.LatLng) => void;
-}) {
-  const map = useMap();
-
-  useMapEvents({
-    contextmenu: (e) => {
-      onLongClick(e.latlng);
-      map.flyTo(e.latlng, 15);
-    },
-  });
-
-  return null;
-}
-
 // Helper component to change map view when location changes
 function ChangeMapView({ center }: { center: [number, number] }) {
   const map = useMap();
@@ -86,11 +69,6 @@ function ChangeMapView({ center }: { center: [number, number] }) {
     map.flyTo(center, 15);
   }, [center, map]);
   return null;
-}
-
-interface RemoteMapViewProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  center?: [number, number];
-  selectedLocation?: { lat: number; lon: number; name?: string };
 }
 
 function LongClickHandler({
@@ -107,15 +85,6 @@ function LongClickHandler({
     },
   });
 
-  return null;
-}
-
-// Helper component to change map view when location changes
-function ChangeMapView({ center }: { center: [number, number] }) {
-  const map = useMap();
-  useEffect(() => {
-    map.flyTo(center, 15);
-  }, [center, map]);
   return null;
 }
 
