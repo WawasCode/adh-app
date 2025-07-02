@@ -27,6 +27,18 @@ export function SavedHazardZones() {
                   {zone.description}
                 </>
               )}
+              {zone.isWalkable !== undefined && (
+                <>
+                  <br />
+                  Walkable: {zone.isWalkable ? "Yes" : "No"}
+                </>
+              )}
+              {zone.isDrivable !== undefined && (
+                <>
+                  <br />
+                  Drivable: {zone.isDrivable ? "Yes" : "No"}
+                </>
+              )}
             </div>
           </Popup>
         </Polygon>

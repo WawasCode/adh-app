@@ -50,6 +50,8 @@ export default function ConfigureHazard() {
       description,
       severity: severity!,
       coordinates: points,
+      isWalkable,
+      isDrivable,
     });
 
     resetPlace();

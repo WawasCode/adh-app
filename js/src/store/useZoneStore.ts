@@ -15,6 +15,8 @@ export type HazardZone = {
   description: string;
   severity: string;
   coordinates: [number, number][];
+  isWalkable?: boolean;
+  isDrivable?: boolean;
 };
 
 type ZoneState = {
