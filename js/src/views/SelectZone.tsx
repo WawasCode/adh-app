@@ -11,7 +11,12 @@ import { Button } from "@/components/ui/Button";
  * The actual saving happens in ConfigureHazard.tsx.
  */
 export default function SelectZone() {
-  const { points, reset: resetZone, removeLastPoint } = useZoneStore();
+  const {
+    points,
+    reset: resetZone,
+    removeLastPoint,
+    setMaxPointsReached,
+  } = useZoneStore();
   const { reset: resetPlace } = usePlaceStore();
   const { goBack, setPage } = useViewStore();
 
@@ -27,6 +32,8 @@ export default function SelectZone() {
     setPage("main");
   };
 
+  const maxPointsReached = useZoneStore((s) => s.maxPointsReached);
+
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
@@ -34,6 +41,7 @@ export default function SelectZone() {
         <button
           onClick={() => {
             resetZone();
+            setMaxPointsReached(false);
             goBack();
           }}
           className="text-blue-600 text-base"
@@ -50,12 +58,20 @@ export default function SelectZone() {
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
         <RemoteZoneMapWithClicks />
       </div>
-
+      {/* Warning if max points reached */}
+      {maxPointsReached && (
+        <p className="text-xl text-red-500 text-center mb-2">
+          You can only place up to 8 points to define a hazard zone.
+        </p>
+      )}
       {/* Undo Button */}
       <Button
         variant="outline"
         className="justify-center text-base font-normal py-2 px-5 rounded-xl text-red-500 border-red-300 mb-2"
-        onClick={removeLastPoint}
+        onClick={() => {
+          removeLastPoint();
+          setMaxPointsReached(false);
+        }}
         disabled={points.length === 0}
       >
         Undo (Last Point)
@@ -63,7 +79,10 @@ export default function SelectZone() {
       <Button
         variant="outline"
         className="justify-center text-base font-normal py-2 px-5 rounded-xl text-red-500 border-red-300 mb-2"
-        onClick={resetZone}
+        onClick={() => {
+          resetZone();
+          setMaxPointsReached(false);
+        }}
         disabled={points.length === 0}
       >
         Undo (Everything)

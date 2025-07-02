@@ -24,10 +24,14 @@ const customIcon = new L.Icon({
 function MapClickHandler() {
   const addPoint = useZoneStore((s) => s.addPoint);
   const points = useZoneStore((s) => s.points);
+  const setMaxPointsReached = useZoneStore((s) => s.setMaxPointsReached);
 
   useMapEvents({
     click(e) {
-      if (points.length >= 8) return;
+      if (points.length >= 8) {
+        setMaxPointsReached(true);
+        return;
+      }
       const { lat, lng } = e.latlng;
       addPoint([lat, lng]);
     },

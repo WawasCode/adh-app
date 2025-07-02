@@ -24,6 +24,8 @@ type ZoneState = {
   reset: () => void;
   savedHazardZones: HazardZone[];
   addHazardZone: (zone: HazardZone) => void;
+  maxPointsReached: boolean;
+  setMaxPointsReached: (v: boolean) => void;
 };
 
 export const useZoneStore = create<ZoneState>((set) => ({
@@ -32,6 +34,10 @@ export const useZoneStore = create<ZoneState>((set) => ({
     set((state) =>
       state.points.length < 8 ? { points: [...state.points, point] } : state,
     ),
+
+  maxPointsReached: false,
+  setMaxPointsReached: (v) => set({ maxPointsReached: v }),
+
   removeLastPoint: () =>
     set((state) => ({ points: state.points.slice(0, -1) })),
   reset: () => set({ points: [] }),
