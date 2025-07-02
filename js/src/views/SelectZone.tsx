@@ -31,7 +31,13 @@ export default function SelectZone() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button onClick={goBack} className="text-blue-600 text-base">
+        <button
+          onClick={() => {
+            resetZone();
+            goBack();
+          }}
+          className="text-blue-600 text-base"
+        >
           &larr; Back
         </button>
         <h1 className="text-center font-semibold text-xl mt-2">Enter zone</h1>

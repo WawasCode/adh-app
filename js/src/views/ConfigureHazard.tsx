@@ -29,8 +29,11 @@ export default function ConfigureHazard() {
   const [isWalkable, setIsWalkable] = useState(false);
   const [isDrivable, setIsDrivable] = useState(false);
 
-  const isFormComplete =
-    name.trim() !== "" && severity !== null && points.length >= 3;
+  const location = usePlaceStore((s) => s.location);
+  const hasLocation =
+    (location !== null && Array.isArray(location)) || points.length >= 3;
+
+  const isFormComplete = name.trim() !== "" && severity !== null && hasLocation;
 
   const handleCancel = () => {
     resetPlace();
@@ -95,7 +98,7 @@ export default function ConfigureHazard() {
           variant="outline"
           className="justify-between text-base font-normal py-4 px-5 rounded-xl"
         >
-          {points.length >= 3 ? "Location – saved" : "Location"}
+          {hasLocation ? "Location – saved" : "Location"}
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 

@@ -1,72 +1,71 @@
-import { useZoneStore } from "@/store/useZoneStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { SearchBar } from "@/views/MobileUICommon";
-import RemoteZoneMapWithAddresses from "@/map/RemoteZoneMapWithAddresses";
+import RemoteMapViewWithSingleClick from "@/map/RemoteMapWithSingleClick";
 
 /**
- * SelectAddressZone allows the user to define a zone by entering 3–8 addresses.
- * Each valid address will be converted into a coordinate and displayed as a point.
- * The points are visualized as a polygon.
+ * SelectAddress allows the user to define a single hazard point
+ * by searching for an address or clicking on the map.
+ * The selected location is stored in Zustand (`usePlaceStore.location`).
  */
 export default function SelectAddress() {
-  const { points, addPoint, reset: resetZone } = useZoneStore();
-  const { reset: resetPlace } = usePlaceStore();
-  const { goBack, setPage } = useViewStore();
-
-  const handleLocationSelect = (location: {
-    lat: number;
-    lon: number;
-    name: string;
-  }) => {
-    if (points.length < 8) {
-      addPoint([location.lat, location.lon]);
-    } else {
-      alert("Maximum of 8 addresses reached.");
-    }
-  };
+  const { setPage } = useViewStore();
+  const location = usePlaceStore((s) => s.location);
+  const reset = usePlaceStore((s) => s.reset);
+  const setLocation = usePlaceStore((s) => s.setLocation);
 
   const handleCancel = () => {
-    resetZone();
-    resetPlace();
+    reset();
     setPage("main");
   };
 
   const handleSave = () => {
-    if (points.length >= 3) {
-      setPage("configureHazard");
-    }
+    setPage("configureHazard");
+  };
+
+  const handleSearchSelect = (location: {
+    lat: number;
+    lon: number;
+    name: string;
+  }) => {
+    setLocation([location.lat, location.lon]);
   };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="pt-4 pb-2 z-10 bg-white">
-        <button onClick={goBack} className="text-blue-600 text-base">
+      <div className="pt-4 pb-2">
+        <button
+          onClick={() => setPage("configureHazard")}
+          className="text-blue-600 text-base"
+        >
           &larr; Back
         </button>
         <h1 className="text-center font-semibold text-xl mt-2">
-          Enter addresses
+          Set Hazard Location
         </h1>
         <p className="text-center text-sm text-gray-600 mt-2">
-          Enter 3 to 8 addresses that will form a hazard zone.
+          Tap a location on the map or search by address to set one hazard
+          point.
         </p>
-        <div className="mt-4">
-          <SearchBar onLocationSelect={handleLocationSelect} />
-        </div>
       </div>
 
-      {/* Karte */}
+      {/* Search */}
+      <div className="mt-2">
+        <SearchBar onLocationSelect={handleSearchSelect} />
+      </div>
+
+      {/* Map */}
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4 z-0">
-        <RemoteZoneMapWithAddresses />
+        <RemoteMapViewWithSingleClick />
       </div>
 
       {/* Footer */}
       <ViewFooter
         onCancel={handleCancel}
         onSave={handleSave}
-        saveDisabled={points.length < 3}
+        saveDisabled={!location}
       />
     </div>
   );
