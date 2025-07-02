@@ -3,6 +3,7 @@ import { useZoneStore } from "@/store/useZoneStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import RemoteZoneMapWithClicks from "@/map/RemoteZoneMapWithClicks";
+import { Button } from "@/components/ui/Button";
 
 /**
  * SelectZone allows the user to place 3–8 points on the map to define a polygon hazard zone.
@@ -10,7 +11,7 @@ import RemoteZoneMapWithClicks from "@/map/RemoteZoneMapWithClicks";
  * The actual saving happens in ConfigureHazard.tsx.
  */
 export default function SelectZone() {
-  const { points, reset: resetZone } = useZoneStore();
+  const { points, reset: resetZone, removeLastPoint } = useZoneStore();
   const { reset: resetPlace } = usePlaceStore();
   const { goBack, setPage } = useViewStore();
 
@@ -43,6 +44,24 @@ export default function SelectZone() {
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
         <RemoteZoneMapWithClicks />
       </div>
+
+      {/* Undo Button */}
+      <Button
+        variant="outline"
+        className="justify-center text-base font-normal py-2 px-5 rounded-xl text-red-500 border-red-300 mb-2"
+        onClick={removeLastPoint}
+        disabled={points.length === 0}
+      >
+        Undo (Last Point)
+      </Button>
+      <Button
+        variant="outline"
+        className="justify-center text-base font-normal py-2 px-5 rounded-xl text-red-500 border-red-300 mb-2"
+        onClick={resetZone}
+        disabled={points.length === 0}
+      >
+        Undo (Everything)
+      </Button>
 
       {/* Footer */}
       <ViewFooter

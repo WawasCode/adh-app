@@ -20,6 +20,7 @@ export type HazardZone = {
 type ZoneState = {
   points: [number, number][];
   addPoint: (point: [number, number]) => void;
+  removeLastPoint: () => void;
   reset: () => void;
   savedHazardZones: HazardZone[];
   addHazardZone: (zone: HazardZone) => void;
@@ -31,6 +32,8 @@ export const useZoneStore = create<ZoneState>((set) => ({
     set((state) =>
       state.points.length < 8 ? { points: [...state.points, point] } : state,
     ),
+  removeLastPoint: () =>
+    set((state) => ({ points: state.points.slice(0, -1) })),
   reset: () => set({ points: [] }),
 
   savedHazardZones: [],

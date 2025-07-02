@@ -1,6 +1,6 @@
-import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Textarea } from "@/components/ui/Textarea";
+import { FloatingLabelTextarea } from "@/components/ui/FloatingLabelTextarea";
+import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
@@ -74,19 +74,18 @@ export default function ConfigureWaypoint() {
 
       {/* Form fields */}
       <div className="flex flex-col gap-4 mt-4">
-        <Input
-          placeholder="Name"
-          autoComplete="off"
+        <FloatingLabelInput
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
+          label="Name"
         />
 
-        <Textarea
-          placeholder="Description (optional)"
+        <FloatingLabelTextarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
+          label="Description"
         />
 
         <Button
@@ -109,11 +108,11 @@ export default function ConfigureWaypoint() {
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
-        <Input
-          placeholder="Phone (optional)"
+        <FloatingLabelInput
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
+          label="Phone (optional)"
         />
 
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
