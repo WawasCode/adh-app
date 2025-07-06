@@ -1,8 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
+import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
 
 /**
  * AddPlaceView displays the initial selection screen when adding a new place.
@@ -20,11 +20,12 @@ export default function AddPlace() {
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="pt-4 pb-2">
-        <button onClick={handleCancel} className="text-blue-600 text-base">
-          &larr; Map
-        </button>
-        <h1 className="text-center font-semibold text-xl mt-2">Choose Type</h1>
+      <div className="pt-4 pb-2 flex justify-between items-center">
+        <ViewHeaderClose onCancel={handleCancel} />
+        <h1 className="text-center font-semibold text-xl flex-1">
+          Choose Type
+        </h1>
+        <div className="w-[28px]" />
       </div>
 
       {/* Type selection */}
@@ -44,9 +45,6 @@ export default function AddPlace() {
           Waypoint <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
-
-      {/* Shared Footer */}
-      <ViewFooter onCancel={handleCancel} />
     </div>
   );
 }
