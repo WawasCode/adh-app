@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import { useViewStore } from "@/store/useViewStore";
 
 interface ViewFooterProps {
-  onCancel: () => void;
   onSave?: () => void;
   saveDisabled?: boolean;
   saveLabel?: string;
@@ -14,19 +14,19 @@ interface ViewFooterProps {
  * Used across views like hazard and waypoint configuration.
  */
 export function ViewFooter({
-  onCancel,
   onSave,
   saveDisabled = true,
   saveLabel = "Save",
 }: ViewFooterProps) {
+  const goBack = useViewStore((s) => s.goBack);
   return (
     <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
       <Button
         variant="outline"
         className="flex-1 rounded-full py-4 text-base"
-        onClick={onCancel}
+        onClick={goBack}
       >
-        Cancel
+        Back
       </Button>
       <Button
         variant="outline"
