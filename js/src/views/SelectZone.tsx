@@ -4,6 +4,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import RemoteZoneMapWithClicks from "@/map/RemoteZoneMapWithClicks";
 import { Button } from "@/components/ui/Button";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
  * SelectZone allows the user to place 3–8 points on the map to define a polygon hazard zone.
@@ -18,7 +19,7 @@ export default function SelectZone() {
     setMaxPointsReached,
   } = useZoneStore();
   const { reset: resetPlace } = usePlaceStore();
-  const { goBack, setPage } = useViewStore();
+  const { setPage } = useViewStore();
 
   const handleSave = () => {
     if (points.length >= 3) {
@@ -29,6 +30,7 @@ export default function SelectZone() {
   const handleCancel = () => {
     resetZone();
     resetPlace();
+    setMaxPointsReached(false);
     setPage("main");
   };
 
@@ -38,16 +40,7 @@ export default function SelectZone() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button
-          onClick={() => {
-            resetZone();
-            setMaxPointsReached(false);
-            goBack();
-          }}
-          className="text-blue-600 text-base"
-        >
-          &larr; Back
-        </button>
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">Enter zone</h1>
         <p className="text-center text-sm text-gray-600 mt-2">
           Tap 3 to 8 points that will form a hazard zone.
@@ -89,11 +82,7 @@ export default function SelectZone() {
       </Button>
 
       {/* Footer */}
-      <ViewFooter
-        onCancel={handleCancel}
-        onSave={handleSave}
-        saveDisabled={points.length < 3}
-      />
+      <ViewFooter onSave={handleSave} saveDisabled={points.length < 3} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { SearchBar } from "@/views/MobileUICommon";
 import RemoteMapViewWithSingleClick from "@/map/RemoteMapWithSingleClick";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
  * SelectAddress allows the user to define a single hazard point
@@ -36,12 +37,7 @@ export default function SelectAddress() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button
-          onClick={() => setPage("configureHazard")}
-          className="text-blue-600 text-base"
-        >
-          &larr; Back
-        </button>
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">
           Set Hazard Location
         </h1>
@@ -62,11 +58,7 @@ export default function SelectAddress() {
       </div>
 
       {/* Footer */}
-      <ViewFooter
-        onCancel={handleCancel}
-        onSave={handleSave}
-        saveDisabled={!location}
-      />
+      <ViewFooter onSave={handleSave} saveDisabled={!location} />
     </div>
   );
 }

@@ -1,20 +1,23 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
  * SelectLocationView lets the user choose between selecting a zone or an address.
  */
 export default function SelectLocation() {
-  const { goBack, setPage } = useViewStore();
+  const { setPage } = useViewStore();
+
+  const handleCancel = () => {
+    setPage("main");
+  };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button onClick={goBack} className="text-blue-600 text-base">
-          &larr; Back
-        </button>
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">
           Select Location Type
         </h1>
