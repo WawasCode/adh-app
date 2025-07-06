@@ -1,4 +1,6 @@
-import { TextareaHTMLAttributes, useState, useRef, useEffect } from "react";
+"use client";
+
+import { TextareaHTMLAttributes, useState, useRef } from "react";
 import { cn } from "~/lib/utils";
 import type { Size } from "~/styles/theme";
 import { sizeClasses } from "~/styles/sizeUtils";
@@ -18,23 +20,9 @@ export function FloatingLabelTextarea({
 }: FloatingLabelTextareaProps) {
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const base =
     "border border-gray-200 bg-white shadow focus:outline-none focus:ring-2 focus:ring-primary-500 w-full text-base rounded-xl resize-none";
-
-  // Auto-resize logic
-  useEffect(() => {
-    const ta = textareaRef.current;
-    if (ta) {
-      ta.style.height = "auto";
-      // Calculate the height for 3 lines as minimum
-      const lineHeight = parseInt(
-        window.getComputedStyle(ta).lineHeight || "20",
-        10,
-      );
-      const minHeight = lineHeight * 3;
-      ta.style.height = Math.max(ta.scrollHeight, minHeight) + "px";
-    }
-  }, [value]);
 
   return (
     <div className="relative">
@@ -45,8 +33,15 @@ export function FloatingLabelTextarea({
         rows={3}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={cn(base, sizeClasses[sizeVariant], "pt-10", className)} // increased pt for more space
-        style={{ fontSize: "16px", ...props.style, minHeight: "0" }}
+        className={cn(
+          base,
+          sizeClasses[sizeVariant],
+          "pt-10",
+          "max-h-[160px]", // ≈ 5 Zeilen @ ~32px
+          "overflow-y-auto", // Scrollbar wenn voll
+          className,
+        )}
+        style={{ fontSize: "16px", ...props.style }}
       />
       <label
         className={cn(

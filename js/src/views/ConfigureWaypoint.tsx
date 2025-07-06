@@ -72,7 +72,6 @@ export default function ConfigureWaypoint() {
           </p>
         )}
       </div>
-
       {/* Form fields */}
       <div className="flex flex-col gap-4 mt-4">
         <FloatingLabelInput
@@ -80,6 +79,7 @@ export default function ConfigureWaypoint() {
           onChange={(e) => setName(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
+          autoComplete="off"
         />
 
         <FloatingLabelTextarea

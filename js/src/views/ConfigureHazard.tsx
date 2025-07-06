@@ -82,6 +82,7 @@ export default function ConfigureHazard() {
           onChange={(e) => setName(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
+          autoComplete="off"
         />
 
         <FloatingLabelTextarea
