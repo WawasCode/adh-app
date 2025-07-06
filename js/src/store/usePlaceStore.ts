@@ -6,7 +6,7 @@ import { create } from "zustand";
 
 export type PlaceType = "hazard" | "waypoint";
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
-export type WaypointType = "firestation" | "policestation" | "hospital";
+export type WaypointType = string;
 
 export const hazardSeverities: HazardSeverity[] = [
   "low",

@@ -3,6 +3,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
 import { SearchBar } from "@/views/MobileUICommon";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
  * SelectWaypointLocation allows the user to place a marker on the map
@@ -35,12 +36,7 @@ export default function SelectWaypointLocation() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button
-          onClick={() => setPage("configureWaypoint")}
-          className="text-blue-600 text-base"
-        >
-          &larr; Back
-        </button>
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">
           Select Waypoint Location
         </h1>
@@ -59,11 +55,7 @@ export default function SelectWaypointLocation() {
       </div>
 
       {/* Shared Footer */}
-      <ViewFooter
-        onCancel={handleCancel}
-        onSave={handleSave}
-        saveDisabled={!location}
-      />
+      <ViewFooter onSave={handleSave} saveDisabled={!location} />
     </div>
   );
 }
