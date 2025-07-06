@@ -82,7 +82,11 @@ export default function SelectZone() {
       </Button>
 
       {/* Footer */}
-      <ViewFooter onSave={handleSave} saveDisabled={points.length < 3} />
+      <ViewFooter
+        goBack={() => setPage("selectLocation")}
+        onSave={handleSave}
+        saveDisabled={points.length < 3}
+      />
     </div>
   );
 }

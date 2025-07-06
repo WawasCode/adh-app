@@ -134,7 +134,11 @@ export default function ConfigureWaypoint() {
       </div>
 
       {/* Shared Footer */}
-      <ViewFooter onSave={handleSave} saveDisabled={!isFormComplete} />
+      <ViewFooter
+        goBack={() => setPage("addPlace")}
+        onSave={handleSave}
+        saveDisabled={!isFormComplete}
+      />
     </div>
   );
 }

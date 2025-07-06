@@ -55,7 +55,11 @@ export default function SelectWaypointLocation() {
       </div>
 
       {/* Shared Footer */}
-      <ViewFooter onSave={handleSave} saveDisabled={!location} />
+      <ViewFooter
+        goBack={() => setPage("configureWaypoint")}
+        onSave={handleSave}
+        saveDisabled={!location}
+      />
     </div>
   );
 }

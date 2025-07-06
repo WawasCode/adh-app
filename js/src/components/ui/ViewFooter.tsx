@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { useViewStore } from "@/store/useViewStore";
 
 interface ViewFooterProps {
+  goBack?: () => void;
   onSave?: () => void;
   saveDisabled?: boolean;
   saveLabel?: string;
@@ -11,14 +11,14 @@ interface ViewFooterProps {
 
 /**
  * ViewFooter renders standardized Cancel and Save buttons.
- * Used across views like hazard and waypoint configuration.
+ * goBack is required and called on Back button click.
  */
 export function ViewFooter({
+  goBack,
   onSave,
   saveDisabled = true,
   saveLabel = "Save",
 }: ViewFooterProps) {
-  const goBack = useViewStore((s) => s.goBack);
   return (
     <div className="mt-auto flex justify-between gap-4 pt-6 pb-[calc(3rem+env(safe-area-inset-bottom)+56px)]">
       <Button

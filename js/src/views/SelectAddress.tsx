@@ -58,7 +58,11 @@ export default function SelectAddress() {
       </div>
 
       {/* Footer */}
-      <ViewFooter onSave={handleSave} saveDisabled={!location} />
+      <ViewFooter
+        goBack={() => setPage("selectLocation")}
+        onSave={handleSave}
+        saveDisabled={!location}
+      />
     </div>
   );
 }
