@@ -7,6 +7,7 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { useZoneStore } from "@/store/useZoneStore";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
@@ -62,13 +63,8 @@ export default function ConfigureHazard() {
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="pt-4 pb-2">
-        <button
-          onClick={() => setPage("addPlace")}
-          className="text-blue-600 text-base"
-        >
-          &larr; Back
-        </button>
+      <div className="pt-4 pb-2 relative">
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Hazard
         </h1>
@@ -150,11 +146,7 @@ export default function ConfigureHazard() {
       </div>
 
       {/* Shared Footer */}
-      <ViewFooter
-        onCancel={handleCancel}
-        onSave={handleSave}
-        saveDisabled={!isFormComplete}
-      />
+      <ViewFooter onSave={handleSave} saveDisabled={!isFormComplete} />
     </div>
   );
 }

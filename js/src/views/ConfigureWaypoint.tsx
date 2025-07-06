@@ -4,6 +4,7 @@ import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
+import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 // TODO: Replace with real ID from database once backend is connected
 import { v4 as uuidv4 } from "uuid";
 
@@ -51,16 +52,16 @@ export default function ConfigureWaypoint() {
     setPage("main");
   };
 
+  const handleCancel = () => {
+    reset();
+    setPage("main");
+  };
+
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <button
-          onClick={() => setPage("addPlace")}
-          className="text-blue-600 text-base"
-        >
-          &larr; Back
-        </button>
+        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Waypoint
         </h1>
@@ -133,14 +134,7 @@ export default function ConfigureWaypoint() {
       </div>
 
       {/* Shared Footer */}
-      <ViewFooter
-        onCancel={() => {
-          reset();
-          setPage("main");
-        }}
-        onSave={handleSave}
-        saveDisabled={!isFormComplete}
-      />
+      <ViewFooter onSave={handleSave} saveDisabled={!isFormComplete} />
     </div>
   );
 }
