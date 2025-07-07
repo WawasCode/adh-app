@@ -80,6 +80,7 @@ export default function ConfigureWaypoint() {
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
           autoComplete="off"
+          maxLength={100} // 100 Value from models.py
         />
 
         <FloatingLabelTextarea
@@ -114,6 +115,7 @@ export default function ConfigureWaypoint() {
           onChange={(e) => setTelephone(e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
           label="Phone (optional)"
+          maxLength={20} // 20 Value from models.py
         />
 
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
