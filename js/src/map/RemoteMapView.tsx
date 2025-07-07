@@ -11,11 +11,14 @@ import {
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
+import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
+import { SavedHazardZones } from "@/map/SavedHazardZones";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
+import { useLocationStore } from "@/store/useLocationStore";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -31,7 +34,7 @@ const customMarkerIcon = new L.Icon({
   ],
 });
 
-const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin should be the users location
+const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
 const MAX_ZOOM = 19;
 
@@ -59,6 +62,15 @@ interface RemoteMapViewProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selectedLocation?: { lat: number; lon: number; name?: string };
 }
 
+// Helper component to change map view when location changes
+function ChangeMapView({ center }: { center: [number, number] }) {
+  const map = useMap();
+  useEffect(() => {
+    map.flyTo(center, 15);
+  }, [center, map]);
+  return null;
+}
+
 function LongClickHandler({
   onLongClick,
 }: {
@@ -76,19 +88,9 @@ function LongClickHandler({
   return null;
 }
 
-// Helper component to change map view when location changes
-function ChangeMapView({ center }: { center: [number, number] }) {
-  const map = useMap();
-  useEffect(() => {
-    map.flyTo(center, 15);
-  }, [center, map]);
-  return null;
-}
-
-/*
- * MapView component renders a Leaflet map using remote raster tiles.
- * The tiles are served from OpenStreetMap.
- * It includes a user marker and sets the map instance in the store via MapSetter.
+/**
+ * RemoteMapView renders the main map background.
+ * It includes saved waypoints, hazard zones, and the user's location.
  */
 export function RemoteMapView({
   className,
@@ -96,12 +98,24 @@ export function RemoteMapView({
 }: RemoteMapViewProps) {
   const base = "map-container";
 
+  const position = useLocationStore((s) => s.position);
+
   const [marker, setMarker] = useState<{
     position: [number, number];
     name?: string;
   } | null>(null);
 
-  const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(
+    position || DEFAULT_CENTER,
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(!position);
+
+  useEffect(() => {
+    if (position) {
+      setMapCenter(position);
+      setIsLoading(false);
+    }
+  }, [position]);
 
   const handleLongClick = async (latlng: L.LatLng) => {
     const { lat, lng } = latlng;
@@ -111,19 +125,25 @@ export function RemoteMapView({
     console.log("Long click at:", lat, lng);
   };
 
-  if (
-    selectedLocation &&
-    (mapCenter[0] !== selectedLocation.lat ||
-      mapCenter[1] !== selectedLocation.lon)
-  ) {
-    setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+  useEffect(() => {
+    if (
+      selectedLocation &&
+      (mapCenter[0] !== selectedLocation.lat ||
+        mapCenter[1] !== selectedLocation.lon)
+    ) {
+      setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+    }
+  }, [mapCenter, selectedLocation]);
+
+  if (isLoading) {
+    return <div>Loading map...</div>;
   }
 
   return (
     <div className={cn(base, className)}>
       <MapContainer
         style={{ height: "100%", width: "100%" }}
-        center={DEFAULT_CENTER}
+        center={position || mapCenter}
         zoom={ZOOM}
         maxZoom={MAX_ZOOM}
         maxBounds={BOUNDS}
@@ -153,8 +173,55 @@ export function RemoteMapView({
           </Marker>
         )}
         <UserMarker />
+        <SavedHazardZones />
+        <SavedWaypointMarkers />
         <MapSetter />
       </MapContainer>
     </div>
   );
 }
+
+/** 
+ * 
+ * import { useEffect, useState } from "react";
+// ...existing imports...
+
+export function RemoteMapView({ className }: ButtonHTMLAttributes<HTMLButtonElement>) {
+  const base = "map-container";
+  const [hazardZones, setHazardZones] = useState<
+    { id: string; coords: LatLngTuple[]; name: string }[]
+  >([]);
+
+  useEffect(() => {
+    // Replace with your actual API endpoint
+    fetch("/api/hazard-zones")
+      .then((res) => res.json())
+      .then((data) => setHazardZones(data));
+  }, []);
+
+  return (
+    <div className={cn(base, className)}>
+      <MapContainer
+        // ...existing props...
+      >
+        <TileLayer
+          // ...existing props...
+        />
+        {hazardZones.map((zone) => (
+          <Polygon
+            key={zone.id}
+            positions={zone.coords}
+            pathOptions={{ color: "red", fillColor: "red", fillOpacity: 0.4 }}
+          >
+            <Popup>{zone.name}</Popup>
+          </Polygon>
+        ))}
+        <UserMarker />
+        <SavedHazardZones />
+        <SavedWaypointMarkers />
+        <MapSetter />
+      </MapContainer>
+    </div>
+  );
+}
+*/
