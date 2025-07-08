@@ -5,6 +5,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { handleSubmit } from "@/components/ui/SubmitDataToDB";
 // TODO: Replace with real ID from database once backend is connected
 import { v4 as uuidv4 } from "uuid";
 
@@ -48,6 +49,9 @@ export default function ConfigureWaypoint() {
     };
 
     addWaypoint(waypoint);
+
+    const success = handleSubmit("waypoints");
+    if (!success) return;
     reset();
     setPage("main");
   };
