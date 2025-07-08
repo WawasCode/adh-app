@@ -30,15 +30,14 @@ class Waypoint(models.Model):
     waypoint_id = models.AutoField(primary_key=True)
     description = models.TextField(null=True, blank=True)
     type = models.CharField(max_length=50, choices=[
-        ('polizei', 'Polizei'),
-        ('feuerwehr', 'Feuerwehr'),
-        ('krankenhaus', 'Krankenhaus'),
-        ('leuchtturm', 'Leuchtturm'),
-        ('kritische_infrastruktur', 'Kritische Infrastruktur'),
-        ('medizinische_einrichtung', 'Medizinische Einrichtung'),
-        ('versogungstelle', 'Versorgungstelle'),
-        ('sonstige', 'Sonstige'),
-    ], default='sonstige')
+        ('policestation', 'Police Station'),
+        ('firestation', 'Fire Station'),
+        ('hospital', 'Hospital'),
+        ('critical infrastructure', 'Critical Infrastructure'),
+        ('medical facility', 'Medical Facility'),
+        ('supply center', 'Supply Center'),
+        ('other', 'Other'),
+    ], default='other')
     telephone_number = models.CharField(max_length=20, null=True, blank=True)
     active = models.BooleanField(default=True)
 
