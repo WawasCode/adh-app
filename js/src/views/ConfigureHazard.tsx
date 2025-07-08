@@ -8,7 +8,7 @@ import { useZoneStore } from "@/store/useZoneStore";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
-
+import { handleSubmit } from "@/components/ui/SubmitDataToDB";
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
  * The input is stored in Zustand and includes name, description, zone (points) and severity.
@@ -42,10 +42,10 @@ export default function ConfigureHazard() {
     setPage("main");
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!isFormComplete) return;
 
-    addHazardZone({
+    const newZone = {
       id: uuidv4(),
       name,
       description,
@@ -53,7 +53,12 @@ export default function ConfigureHazard() {
       coordinates: points,
       isWalkable,
       isDrivable,
-    });
+    };
+
+    addHazardZone(newZone);
+
+    const success = await handleSubmit("hazardZones");
+    if (!success) return;
 
     resetPlace();
     resetZone();
