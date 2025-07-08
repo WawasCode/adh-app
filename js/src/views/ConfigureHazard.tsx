@@ -5,10 +5,8 @@ import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { useZoneStore } from "@/store/useZoneStore";
-import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
-import { handleSubmit } from "@/components/ui/SubmitDataToDB";
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
  * The input is stored in Zustand and includes name, description, zone (points) and severity.
@@ -25,7 +23,7 @@ export default function ConfigureHazard() {
     reset: resetPlace,
   } = usePlaceStore();
 
-  const { points, reset: resetZone, addHazardZone } = useZoneStore();
+  const { points, reset: resetZone } = useZoneStore();
 
   const [isWalkable, setIsWalkable] = useState(false);
   const [isDrivable, setIsDrivable] = useState(false);
@@ -43,26 +41,34 @@ export default function ConfigureHazard() {
   };
 
   const handleSave = async () => {
-    if (!isFormComplete) return;
+    if (!isFormComplete || (!location && points.length < 3)) return;
 
-    const newZone = {
-      id: uuidv4(),
+    const hazard = {
       name,
       description,
       severity: severity!,
-      coordinates: points,
-      isWalkable,
-      isDrivable,
+      location: location
+        ? { type: "Point", coordinates: [location[0], location[1]] }
+        : { type: "Polygon", coordinates: [[...points, points[0]]] },
     };
 
-    addHazardZone(newZone);
+    try {
+      const res = await fetch("/api/hazard-zones/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(hazard),
+      });
 
-    const success = await handleSubmit("hazardZones");
-    if (!success) return;
+      if (!res.ok) throw new Error("Error saving hazard zone");
 
-    resetPlace();
-    resetZone();
-    setPage("main");
+      alert("Hazard zone saved successfully!");
+      resetPlace();
+      resetZone();
+      setPage("main");
+    } catch (error) {
+      console.error("Caught error:", error);
+      alert("Failed to save hazard zone.");
+    }
   };
 
   return (

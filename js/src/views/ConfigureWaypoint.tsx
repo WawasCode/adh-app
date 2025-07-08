@@ -5,9 +5,6 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
-import { handleSubmit } from "@/components/ui/SubmitDataToDB";
-// TODO: Replace with real ID from database once backend is connected
-import { v4 as uuidv4 } from "uuid";
 
 /**
  * ConfigureWaypoint allows the user to input information for a new waypoint.
@@ -24,7 +21,6 @@ export default function ConfigureWaypoint() {
     waypointType,
     location,
     isAvailable,
-    addWaypoint,
     setName,
     setDescription,
     setTelephone,
@@ -35,25 +31,37 @@ export default function ConfigureWaypoint() {
   const isFormComplete =
     name.trim() !== "" && waypointType !== null && location !== null;
 
-  const handleSave = () => {
-    if (!isFormComplete) return;
+  const handleSave = async () => {
+    if (!isFormComplete || !location) return;
 
     const waypoint = {
-      id: uuidv4(), // TODO: später durch DB-ID ersetzen
       name,
       description,
-      telephone,
-      isAvailable,
-      type: waypointType!,
-      location: location!,
+      location: {
+        type: "Point",
+        coordinates: [location[0], location[1]],
+      },
+      type: waypointType,
+      telephone_number: telephone,
+      active: isAvailable,
     };
 
-    addWaypoint(waypoint);
+    try {
+      const res = await fetch("/api/waypoints/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(waypoint),
+      });
 
-    const success = handleSubmit("waypoints");
-    if (!success) return;
-    reset();
-    setPage("main");
+      if (!res.ok) throw new Error("Error while saving");
+
+      alert("Waypoint saved successfully!");
+      reset();
+      setPage("main");
+    } catch (error) {
+      console.error("Caught error:", error);
+      alert("Failed to save hazard zone.");
+    }
   };
 
   const handleCancel = () => {
@@ -76,6 +84,7 @@ export default function ConfigureWaypoint() {
           </p>
         )}
       </div>
+
       {/* Form fields */}
       <div className="flex flex-col gap-4 mt-4">
         <FloatingLabelInput
