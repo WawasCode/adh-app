@@ -94,6 +94,7 @@ export default function ConfigureHazard() {
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
           autoComplete="off"
+          maxLength={255} // 255 Value from models.py
         />
 
         <FloatingLabelTextarea

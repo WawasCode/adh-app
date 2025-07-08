@@ -3,12 +3,10 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import type { WaypointType } from "@/store/usePlaceStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
-import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
-import { useState } from "react";
 
 /**
  * SelectWaypointType allows the user to choose a category for the waypoint.
- * Options include Firestation, Policestation, and Hospital.
+ * Options include predefined categories like Firestation, Hospital, etc.
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
@@ -19,6 +17,10 @@ export default function SelectWaypointType() {
     "firestation",
     "policestation",
     "hospital",
+    "critical infrastructure",
+    "medical facility",
+    "supply center",
+    "other",
   ];
 
   const handleSelectType = (type: WaypointType) => {
@@ -30,8 +32,6 @@ export default function SelectWaypointType() {
     reset();
     setPage("main");
   };
-
-  const [customType, setCustomType] = useState("");
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -54,18 +54,6 @@ export default function SelectWaypointType() {
             {label.charAt(0).toUpperCase() + label.slice(1)}
           </Button>
         ))}
-        <FloatingLabelInput
-          value={customType}
-          onChange={(e) => setCustomType(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && customType.trim()) {
-              setWaypointType(customType.trim());
-              setPage("configureWaypoint");
-            }
-          }}
-          className="rounded-xl py-4 px-5 text-base"
-          label="Other category"
-        />
       </div>
     </div>
   );
