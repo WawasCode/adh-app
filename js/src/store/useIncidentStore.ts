@@ -12,6 +12,7 @@ export interface Incident {
   name: string;
   type: string;
   description: string;
+  severity: string;
   reportedAt: Date;
   distance: string;
 }
@@ -116,6 +117,7 @@ export const useIncidentStore = create<IncidentState>((set, get) => ({
             name: incident.name,
             type: "incident", // oder passe dies an, falls du einen Typ im Backend hast
             description: incident.description,
+            severity: incident.severity,
             reportedAt: new Date(incident.created_at),
             distance,
           } as Incident;

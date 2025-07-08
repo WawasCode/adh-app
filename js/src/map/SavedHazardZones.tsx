@@ -1,27 +1,26 @@
 import { Polygon, Popup } from "react-leaflet";
-import { useZoneStore } from "@/store/useZoneStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneStore";
 
-function getZoneColor(severity: string): string {
+function getZoneColor(severity: string | undefined): string {
   switch (severity) {
     case "low":
-      return "#ca8a04"; // yellow
+      return "#ca8a04";
     case "medium":
-      return "#f97316"; // orange
+      return "#f97316";
     case "high":
-      return "#ef4444"; // red
+      return "#ef4444";
     case "critical":
-      return "#b91c1c"; // red-700
+      return "#b91c1c";
     default:
-      return "#6b7280"; // gray-500 fallback
+      return "#6b7280";
   }
 }
 
 /**
- * SavedHazardZones renders all saved hazard zones as red polygons on the map.
- * It includes a popup with zone details: name, description and severity.
+ * SavedHazardZones renders hazard zones fetched from the backend.
  */
 export function SavedHazardZones() {
-  const hazardZones = useZoneStore((s) => s.savedHazardZones);
+  const hazardZones = useHazardZoneStore((s) => s.savedHazardZones);
 
   return (
     <>
@@ -39,7 +38,7 @@ export function SavedHazardZones() {
             <div className="text-sm leading-tight">
               <strong>{zone.name}</strong>
               <br />
-              Severity: {zone.severity}
+              Severity: {zone.severity || "unknown"}
               {zone.description && (
                 <>
                   <br />

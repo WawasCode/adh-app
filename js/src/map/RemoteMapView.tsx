@@ -19,6 +19,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
+import { useWaypointStore } from "@/store/useWaypointStore";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -97,6 +98,13 @@ export function RemoteMapView({
   selectedLocation,
 }: RemoteMapViewProps) {
   const base = "map-container";
+
+  const fetchWaypoints = useWaypointStore((s) => s.fetchWaypoints);
+
+  useEffect(() => {
+    fetchWaypoints();
+    console.log("✅ fetchWaypoints wurde aufgerufen");
+  }, []);
 
   const position = useLocationStore((s) => s.position);
 
