@@ -6,6 +6,14 @@ from django.contrib.gis.geos import Point, Polygon
 class IncidentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="incident_id", read_only=True)
 
+    def create(self, validated_data):
+        location_data = validated_data.pop("location", None)
+        if isinstance(location_data, dict):
+            coords = location_data.get("coordinates")
+            if coords and len(coords) == 2:
+                validated_data["location"] = Point(coords[0], coords[1])
+        return Incident.objects.create(**validated_data)
+
     class Meta:
         model = Incident
         fields = [
