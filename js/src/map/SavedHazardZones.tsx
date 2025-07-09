@@ -21,46 +21,49 @@ function getZoneColor(severity: string | undefined): string {
  */
 export function SavedHazardZones() {
   const hazardZones = useHazardZoneStore((s) => s.savedHazardZones);
-
+  console.log("Rendering SavedHazardZones:", hazardZones);
   return (
     <>
-      {hazardZones.map((zone) => (
-        <Polygon
-          key={zone.id}
-          positions={zone.coordinates}
-          pathOptions={{
-            color: getZoneColor(zone.severity),
-            fillColor: getZoneColor(zone.severity),
-            fillOpacity: 0.4,
-          }}
-        >
-          <Popup>
-            <div className="text-sm leading-tight">
-              <strong>{zone.name}</strong>
-              <br />
-              Severity: {zone.severity || "unknown"}
-              {zone.description && (
-                <>
-                  <br />
-                  {zone.description}
-                </>
-              )}
-              {zone.isWalkable !== undefined && (
-                <>
-                  <br />
-                  Walkable: {zone.isWalkable ? "Yes" : "No"}
-                </>
-              )}
-              {zone.isDrivable !== undefined && (
-                <>
-                  <br />
-                  Drivable: {zone.isDrivable ? "Yes" : "No"}
-                </>
-              )}
-            </div>
-          </Popup>
-        </Polygon>
-      ))}
+      {hazardZones.map((zone) => {
+        console.log("Zone", zone.name, "Koordinaten:", zone.coordinates);
+        return (
+          <Polygon
+            key={zone.id}
+            positions={zone.coordinates as [number, number][]}
+            pathOptions={{
+              color: getZoneColor(zone.severity),
+              fillColor: getZoneColor(zone.severity),
+              fillOpacity: 0.4,
+            }}
+          >
+            <Popup>
+              <div className="text-sm leading-tight">
+                <strong>{zone.name}</strong>
+                <br />
+                Severity: {zone.severity || "unknown"}
+                {zone.description && (
+                  <>
+                    <br />
+                    {zone.description}
+                  </>
+                )}
+                {zone.isWalkable !== undefined && (
+                  <>
+                    <br />
+                    Walkable: {zone.isWalkable ? "Yes" : "No"}
+                  </>
+                )}
+                {zone.isDrivable !== undefined && (
+                  <>
+                    <br />
+                    Drivable: {zone.isDrivable ? "Yes" : "No"}
+                  </>
+                )}
+              </div>
+            </Popup>
+          </Polygon>
+        );
+      })}
     </>
   );
 }

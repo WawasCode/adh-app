@@ -20,6 +20,9 @@ import { theme } from "~/styles/theme";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useWaypointStore } from "@/store/useWaypointStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneStore";
+import { SavedHazardIncidents } from "./SavedHazardIncidents";
+import { useIncidentStore } from "@/store/useIncidentStore";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -100,10 +103,21 @@ export function RemoteMapView({
   const base = "map-container";
 
   const fetchWaypoints = useWaypointStore((s) => s.fetchWaypoints);
-
   useEffect(() => {
     fetchWaypoints();
   }, [fetchWaypoints]);
+
+  const fetchHazardZones = useHazardZoneStore((s) => s.fetchHazardZones);
+  useEffect(() => {
+    fetchHazardZones();
+    console.log("fetchHazardZones() wurde aufgerufen");
+  }, [fetchHazardZones]);
+
+  const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
+  useEffect(() => {
+    fetchIncidents();
+    console.log("fetchIncidents() wurde aufgerufen");
+  }, [fetchIncidents]);
 
   const position = useLocationStore((s) => s.position);
 
@@ -181,6 +195,7 @@ export function RemoteMapView({
         )}
         <UserMarker />
         <SavedHazardZones />
+        <SavedHazardIncidents />
         <SavedWaypointMarkers />
         <MapSetter />
       </MapContainer>

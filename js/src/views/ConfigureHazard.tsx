@@ -7,6 +7,7 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { useZoneStore } from "@/store/useZoneStore";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+
 /**
  * ConfigureHazard allows the user to input information for a new hazard.
  * The input is stored in Zustand and includes name, description, zone (points) and severity.
@@ -21,6 +22,7 @@ export default function ConfigureHazard() {
     setDescription,
     severity,
     reset: resetPlace,
+    location,
   } = usePlaceStore();
 
   const { points, reset: resetZone } = useZoneStore();
@@ -28,7 +30,6 @@ export default function ConfigureHazard() {
   const [isWalkable, setIsWalkable] = useState(false);
   const [isDrivable, setIsDrivable] = useState(false);
 
-  const location = usePlaceStore((s) => s.location);
   const hasLocation =
     (location !== null && Array.isArray(location)) || points.length >= 3;
 
@@ -43,31 +44,56 @@ export default function ConfigureHazard() {
   const handleSave = async () => {
     if (!isFormComplete || (!location && points.length < 3)) return;
 
-    const hazard = {
+    const isIncident = !!location;
+
+    const payload = {
       name,
       description,
       severity: severity!,
-      location: location
-        ? { type: "Point", coordinates: [location[0], location[1]] }
-        : { type: "Polygon", coordinates: [[...points, points[0]]] },
+      isWalkable,
+      isDrivable,
+      location: isIncident
+        ? {
+            type: "Point",
+            coordinates: [location[1], location[0]], // [lng, lat]!
+          }
+        : {
+            type: "Polygon",
+            coordinates: [
+              [
+                ...points.map(([lat, lng]) => [lng, lat]),
+                [points[0][1], points[0][0]], // Closing the ring
+              ],
+            ],
+          },
     };
 
+    const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";
+
     try {
-      const res = await fetch("/api/hazard-zones/", {
+      console.log("▶️ Sende Incident an Backend:");
+      console.log("Payload:", payload);
+
+      console.log(JSON.stringify(payload, null, 2));
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(hazard),
+        body: JSON.stringify(payload),
       });
+      console.log("Statuscode:", res.status);
+      const text = await res.text();
+      console.log("Antworttext:", text);
 
-      if (!res.ok) throw new Error("Error saving hazard zone");
+      if (!res.ok) throw new Error("Error saving hazard or incident");
 
-      alert("Hazard zone saved successfully!");
+      alert(`${isIncident ? "Incident" : "Hazard"} saved successfully!`);
       resetPlace();
       resetZone();
       setPage("main");
     } catch (error) {
       console.error("Caught error:", error);
-      alert("Failed to save hazard zone.");
+      alert(`Failed to save ${isIncident ? "incident" : "hazard zone"}.`);
     }
   };
 
@@ -94,7 +120,7 @@ export default function ConfigureHazard() {
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
           autoComplete="off"
-          maxLength={255} // 255 Value from models.py
+          maxLength={255}
         />
 
         <FloatingLabelTextarea
@@ -140,6 +166,7 @@ export default function ConfigureHazard() {
             />
           </div>
         </div>
+
         {/* Drivable slider */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is drivable</span>

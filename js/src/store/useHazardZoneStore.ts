@@ -15,6 +15,7 @@ export type HazardZone = {
   description?: string;
   isWalkable?: boolean;
   isDrivable?: boolean;
+  type: "Polygon" | "Point";
 };
 
 type HazardZoneState = {
@@ -26,11 +27,26 @@ type HazardZoneState = {
 type HazardZoneFromBackend = {
   id: number | string;
   name: string;
-  location: {
-    type: "Polygon";
-    coordinates: number[][][];
-  };
+  location: string; // WKT-String z.B. "SRID=4326;POLYGON ((...))"
+  severity?: string;
+  description?: string;
+  isWalkable?: boolean;
+  isDrivable?: boolean;
 };
+
+// Funktion zum Parsen von WKT-POLYGON (auslagern)
+function parseWKTPolygon(wkt: string): [number, number][] {
+  const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
+  const match = cleaned.match(/POLYGON\s*\(\((.+)\)\)/i);
+  if (!match) return [];
+
+  const coords = match[1]
+    .split(",")
+    .map((pair) => pair.trim().split(" ").map(parseFloat))
+    .map(([lat, lng]) => [lat, lng] as [number, number]);
+
+  return coords;
+}
 
 export const useHazardZoneStore = create<HazardZoneState>((set) => ({
   savedHazardZones: [],
@@ -45,18 +61,37 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
       const res = await fetch("/api/hazard-zones/");
       if (!res.ok) throw new Error("Failed to fetch hazard zones");
       const data = await res.json();
+      console.log("Antwort vom Backend:", data);
 
-      // Transformiere das GeoJSON-Format in dein internes Format
-      const zones: HazardZone[] = data.map((zone: HazardZoneFromBackend) => ({
-        id: zone.id.toString(),
-        name: zone.name || "Unnamed Zone",
-        coordinates:
-          (zone.location?.coordinates?.[0] as [number, number][])?.map(
-            (coord) => [coord[1], coord[0]], // [lat, lng]
-          ) || [],
-      }));
+      const zones: HazardZone[] = data.map((zone: HazardZoneFromBackend) => {
+        const wkt = zone.location;
+        const isPoint = wkt.includes("POINT");
+        let coords: LatLngTuple[] = [];
+
+        if (isPoint) {
+          const match = wkt.match(/\(([\d.]+) ([\d.]+)\)/);
+          if (match) {
+            const [, lat, lng] = match;
+            coords = [[parseFloat(lat), parseFloat(lng)]];
+          }
+        } else {
+          coords = parseWKTPolygon(wkt);
+        }
+
+        return {
+          id: zone.id.toString(),
+          name: zone.name || "Unnamed Zone",
+          coordinates: coords,
+          severity: zone.severity,
+          description: zone.description,
+          isWalkable: zone.isWalkable,
+          isDrivable: zone.isDrivable,
+          type: isPoint ? "Point" : "Polygon",
+        };
+      });
 
       set({ savedHazardZones: zones });
+      console.log("Hazard Zones gespeichert im Zustand:", zones);
     } catch (error) {
       console.error("Error fetching hazard zones:", error);
     }

@@ -3,8 +3,8 @@ import L from "leaflet";
 import { useWaypointStore } from "@/store/useWaypointStore";
 import { LatLngTuple } from "leaflet";
 
+// Funktion zum Parsen von WKT-POLYGON (auslagern)
 function parseWKTPoint(wkt: string): [number, number] | null {
-  // Entferne "SRID=xxxx;" falls vorhanden
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
   const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
   if (!match) return null;
