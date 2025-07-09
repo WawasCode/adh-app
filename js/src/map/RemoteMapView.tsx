@@ -103,8 +103,7 @@ export function RemoteMapView({
 
   useEffect(() => {
     fetchWaypoints();
-    console.log("✅ fetchWaypoints wurde aufgerufen");
-  }, []);
+  }, [fetchWaypoints]);
 
   const position = useLocationStore((s) => s.position);
 
