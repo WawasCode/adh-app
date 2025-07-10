@@ -80,11 +80,14 @@ export default function ConfigureHazard() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      <div className="pt-4 pb-2 relative">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+      <div className="pt-4 pb-2">
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Hazard
         </h1>
+
         {!isFormComplete && (
           <p className="text-center text-sm text-gray-700 mt-2">
             Please fill in name, location and severity to enable saving.

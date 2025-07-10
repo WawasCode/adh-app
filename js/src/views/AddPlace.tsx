@@ -22,12 +22,13 @@ export default function AddPlace() {
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
-      <div className="pt-4 pb-2 flex justify-between items-center">
-        <ViewHeaderClose onCancel={handleCancel} />
-        <h1 className="text-center font-semibold text-xl flex-1">
-          Choose Type
+      <div className="pt-4 pb-2">
+        <div className="flex justify-end">
+          <ViewHeaderClose onCancel={handleCancel} />
+        </div>
+        <h1 className="text-center font-semibold text-xl mt-2">
+          Configure Type
         </h1>
-        <div className="w-[28px]" />
       </div>
 
       {/* Type selection */}
