@@ -19,6 +19,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
+import MapClickHandler from "./MapClickHandler";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -141,6 +142,7 @@ export function RemoteMapView({
 
   return (
     <div className={cn(base, className)}>
+      {/* Ensure the map container fills the parent */}
       <MapContainer
         style={{ height: "100%", width: "100%" }}
         center={position || mapCenter}
@@ -176,6 +178,7 @@ export function RemoteMapView({
         <SavedHazardZones />
         <SavedWaypointMarkers />
         <MapSetter />
+        <MapClickHandler />
       </MapContainer>
     </div>
   );
