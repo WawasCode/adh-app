@@ -6,9 +6,13 @@ import RemoteMapViewWithSingleClick from "@/map/MapsForUserInput/RemoteMapWithSi
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**
- * SelectAddress allows the user to define a single hazard point
- * by searching for an address or clicking on the map.
- * The selected location is stored in Zustand (`usePlaceStore.location`).
+ * SelectAddress – View to set a single-point hazard location.
+ *
+ * The user can either search for an address or tap on the map
+ * to select a hazard location. The selected coordinates are stored
+ * in the Zustand slice (`hazardInput.location`).
+ *
+ * @returns JSX.Element – The rendered address selection view.
  */
 export default function SelectAddress() {
   const { setPage } = useViewStore();
@@ -16,15 +20,28 @@ export default function SelectAddress() {
   const setHazardField = usePlaceStore((s) => s.setHazardField);
   const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
 
+  /**
+   * handleCancel – Resets hazard input and navigates back to the main screen.
+   */
   const handleCancel = () => {
     resetHazardInput();
     setPage("main");
   };
 
+  /**
+   * handleSave – Navigates to the hazard configuration screen.
+   * Assumes a valid location has already been selected.
+   */
   const handleSave = () => {
     setPage("configureHazard");
   };
 
+  /**
+   * handleSearchSelect – Called when a user selects a result from the address search.
+   * Updates the hazard location in Zustand state.
+   *
+   * @param location – Object containing `lat`, `lon`, and `name` of selected address
+   */
   const handleSearchSelect = (location: {
     lat: number;
     lon: number;
@@ -35,7 +52,7 @@ export default function SelectAddress() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
+      {/* Header with close button, title and description */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
@@ -49,17 +66,17 @@ export default function SelectAddress() {
         </p>
       </div>
 
-      {/* Search */}
+      {/* Address search bar */}
       <div className="mt-2">
         <SearchBar onLocationSelect={handleSearchSelect} />
       </div>
 
-      {/* Map */}
+      {/* Map view for clicking a point */}
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4 z-0">
         <RemoteMapViewWithSingleClick />
       </div>
 
-      {/* Footer */}
+      {/* Shared Footer */}
       <ViewFooter
         goBack={() => setPage("selectLocation")}
         onSave={handleSave}

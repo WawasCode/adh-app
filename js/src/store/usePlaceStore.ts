@@ -4,7 +4,14 @@ import { create } from "zustand";
 // Type Definitions
 // --------------------
 
+/**
+ * HazardSeverity – Enum-like type representing danger levels for hazards.
+ */
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
+
+/**
+ * hazardSeverities – Ordered array of all severity options.
+ */
 export const hazardSeverities: HazardSeverity[] = [
   "low",
   "medium",
@@ -12,6 +19,9 @@ export const hazardSeverities: HazardSeverity[] = [
   "critical",
 ];
 
+/**
+ * WaypointType – Categorical types for predefined infrastructure points.
+ */
 export type WaypointType =
   | "firestation"
   | "policestation"
@@ -21,6 +31,18 @@ export type WaypointType =
   | "supply center"
   | "other";
 
+/**
+ * Waypoint – A saved point of interest with metadata.
+ *
+ * @property id Unique string identifier
+ * @property name Descriptive name
+ * @property description Text description
+ * @property location Geo coordinates [lat, lon]
+ * @property distance Optional – Distance from user's location
+ * @property telephone Optional – Contact info
+ * @property isAvailable Optional – Availability status
+ * @property type One of the defined WaypointTypes
+ */
 export interface Waypoint {
   id: string;
   name: string;
@@ -36,6 +58,9 @@ export interface Waypoint {
 // Zustand Store
 // --------------------
 
+/**
+ * hazardInput – Temporary input state for creating a hazard.
+ */
 type HazardInput = {
   name: string;
   description: string;
@@ -43,6 +68,9 @@ type HazardInput = {
   severity: HazardSeverity | null;
 };
 
+/**
+ * waypointInput – Temporary input state for creating a waypoint.
+ */
 type WaypointInput = {
   name: string;
   description: string;
@@ -52,6 +80,14 @@ type WaypointInput = {
   waypointType: WaypointType | null;
 };
 
+/**
+ * PlaceState – Zustand store for managing form input and saved waypoints.
+ *
+ * - `hazardInput`, `waypointInput`: hold temporary form data
+ * - `set*Field`: update individual input fields
+ * - `reset*Input`: clear input state
+ * - `savedWaypoints`: stored waypoints for display
+ */
 type PlaceState = {
   hazardInput: HazardInput;
   waypointInput: WaypointInput;
@@ -72,6 +108,10 @@ type PlaceState = {
   addWaypoint: (waypoint: Waypoint) => void;
 };
 
+/**
+ * usePlaceStore – Zustand store for managing temporary hazard/waypoint input
+ * and saving waypoints locally. Used during user data entry.
+ */
 export const usePlaceStore = create<PlaceState>((set) => ({
   hazardInput: {
     name: "",
@@ -88,6 +128,9 @@ export const usePlaceStore = create<PlaceState>((set) => ({
     waypointType: null,
   },
 
+  /**
+   * Updates a single hazard input field.
+   */
   setHazardField: (key, value) =>
     set((state) => ({
       hazardInput: {
@@ -96,6 +139,9 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       },
     })),
 
+  /**
+   * Updates a single waypoint input field.
+   */
   setWaypointField: (key, value) =>
     set((state) => ({
       waypointInput: {
@@ -104,6 +150,9 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       },
     })),
 
+  /**
+   * Clears the hazard input form.
+   */
   resetHazardInput: () =>
     set({
       hazardInput: {
@@ -114,6 +163,9 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       },
     }),
 
+  /**
+   * Clears the waypoint input form.
+   */
   resetWaypointInput: () =>
     set({
       waypointInput: {
@@ -126,6 +178,9 @@ export const usePlaceStore = create<PlaceState>((set) => ({
       },
     }),
 
+  /**
+   * Adds a new waypoint to the local list.
+   */
   savedWaypoints: [],
   addWaypoint: (waypoint) =>
     set((state) => ({

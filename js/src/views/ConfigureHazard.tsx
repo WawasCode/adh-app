@@ -8,6 +8,18 @@ import { useZoneStore } from "@/store/useZoneStore";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
+/**
+ * ConfigureHazard – View for entering hazard details.
+ *
+ * Allows the user to input name, description, severity, and location
+ * for a hazard. Depending on the type of input (point or polygon),
+ * the data is submitted to the appropriate backend endpoint.
+ *
+ * Also includes toggles for 'walkable' and 'drivable' attributes.
+ *
+ * @returns JSX.Element – The rendered hazard configuration view.
+ */
+
 export default function ConfigureHazard() {
   const setPage = useViewStore((s) => s.setPage);
   const {
@@ -24,11 +36,21 @@ export default function ConfigureHazard() {
     (location !== null && Array.isArray(location)) || points.length >= 3;
   const isFormComplete = name.trim() !== "" && severity !== null && hasLocation;
 
+  /**
+   * handleCancel – Resets all hazard inputs and zone points,
+   * then navigates back to the main screen.
+   */
   const handleCancel = () => {
     resetHazardInput();
     resetZone();
     setPage("main");
   };
+
+  /**
+   * handleSave – Validates inputs and sends data to backend.
+   * Sends either a Point (Incident) or Polygon (Hazard Zone),
+   * depending on the available location data.
+   */
 
   const handleSave = async () => {
     if (!isFormComplete || (!location && points.length < 3)) return;
@@ -80,6 +102,7 @@ export default function ConfigureHazard() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      {/* Header with close button and form title */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
@@ -95,6 +118,7 @@ export default function ConfigureHazard() {
         )}
       </div>
 
+      {/* Input fields: name, description, location, severity */}
       <div className="flex flex-col gap-4 mt-4">
         <FloatingLabelInput
           value={name}
@@ -133,7 +157,7 @@ export default function ConfigureHazard() {
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
-        {/* Walkable Toggle */}
+        {/* Walkable toggle switch */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is walkable</span>
           <div
@@ -150,7 +174,7 @@ export default function ConfigureHazard() {
           </div>
         </div>
 
-        {/* Drivable Toggle */}
+        {/* Drivable toggle switch */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is drivable</span>
           <div
@@ -168,6 +192,7 @@ export default function ConfigureHazard() {
         </div>
       </div>
 
+      {/* Shared Footer */}
       <ViewFooter
         goBack={() => setPage("addPlace")}
         onSave={handleSave}

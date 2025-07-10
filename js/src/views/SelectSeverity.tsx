@@ -6,18 +6,33 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
- * SelectSeverity allows the user to choose the severity level for a hazard.
+ * SelectSeverity – View to select a severity level for a hazard.
+ *
+ * The severity level is part of the hazard metadata and influences
+ * styling and priority. Options include "low", "medium", "high", "critical".
+ *
+ * After selection, the user is redirected to ConfigureHazard.
+ * State is managed via Zustand (`usePlaceStore`, `useViewStore`).
+ *
+ * @returns JSX.Element – The rendered severity selection screen.
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
   const setHazardField = usePlaceStore((s) => s.setHazardField);
   const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
 
+  /**
+   * handleSelect – Stores the selected severity and navigates back to ConfigureHazard.
+   * @param value - One of the predefined `HazardSeverity` values.
+   */
   const handleSelect = (value: HazardSeverity) => {
     setHazardField("severity", value);
     setPage("configureHazard");
   };
 
+  /**
+   * handleCancel – Resets the hazard input and returns to the main screen.
+   */
   const handleCancel = () => {
     resetHazardInput();
     setPage("main");
@@ -25,7 +40,7 @@ export default function SelectSeverity() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
+      {/* Header with close button and view title */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
@@ -35,7 +50,7 @@ export default function SelectSeverity() {
         </h1>
       </div>
 
-      {/* Severity options */}
+      {/* Severity level selection buttons – rendered from hazardSeverities array */}
       <div className="flex flex-col gap-4 mt-4">
         {hazardSeverities.map((level) => (
           <Button
@@ -48,6 +63,8 @@ export default function SelectSeverity() {
           </Button>
         ))}
       </div>
+
+      {/* Shared Footer */}
       <ViewFooterOnlyBackButton goBack={() => setPage("configureHazard")} />
     </div>
   );

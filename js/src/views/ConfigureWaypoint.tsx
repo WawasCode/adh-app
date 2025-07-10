@@ -6,6 +6,15 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
+/**
+ * ConfigureWaypoint – View for entering waypoint details.
+ *
+ * Allows the user to input name, description, type, and location
+ * for a waypoint. Optional fields include telephone and availability status.
+ * Data is submitted as GeoJSON Point to the backend.
+ *
+ * @returns JSX.Element – The rendered waypoint configuration view.
+ */
 export default function ConfigureWaypoint() {
   const setPage = useViewStore((s) => s.setPage);
 
@@ -25,6 +34,10 @@ export default function ConfigureWaypoint() {
   const isFormComplete =
     name.trim() !== "" && waypointType !== null && location !== null;
 
+  /**
+   * handleSave – Validates and sends waypoint data to the backend.
+   * Constructs a GeoJSON Point object from location coordinates.
+   */
   const handleSave = async () => {
     if (!isFormComplete || !location) return;
 
@@ -58,6 +71,9 @@ export default function ConfigureWaypoint() {
     }
   };
 
+  /**
+   * handleCancel – Resets all waypoint inputs and navigates back to main screen.
+   */
   const handleCancel = () => {
     resetWaypointInput();
     setPage("main");
@@ -65,6 +81,7 @@ export default function ConfigureWaypoint() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      {/* Header with close button and form title */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
@@ -80,6 +97,7 @@ export default function ConfigureWaypoint() {
         )}
       </div>
 
+      {/* Input fields: name, description */}
       <div className="flex flex-col gap-4 mt-4">
         <FloatingLabelInput
           value={name}
@@ -98,6 +116,7 @@ export default function ConfigureWaypoint() {
           maxLength={250}
         />
 
+        {/* Location selector button */}
         <Button
           onClick={() => setPage("waypointLocation")}
           variant="outline"
@@ -107,6 +126,7 @@ export default function ConfigureWaypoint() {
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
+        {/* Waypoint type selector button */}
         <Button
           onClick={() => setPage("waypointType")}
           variant="outline"
@@ -118,6 +138,7 @@ export default function ConfigureWaypoint() {
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
+        {/* Optional telephone input */}
         <FloatingLabelInput
           value={telephone}
           onChange={(e) => setWaypointField("telephone", e.target.value)}
@@ -126,6 +147,7 @@ export default function ConfigureWaypoint() {
           maxLength={20}
         />
 
+        {/* Toggle switch for 'isAvailable' */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is available</span>
           <div
@@ -143,6 +165,7 @@ export default function ConfigureWaypoint() {
         </div>
       </div>
 
+      {/* Shared Footer */}
       <ViewFooter
         goBack={() => setPage("addPlace")}
         onSave={handleSave}

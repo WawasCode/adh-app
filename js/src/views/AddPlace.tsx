@@ -5,8 +5,13 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
 
 /**
- * AddPlaceView displays the initial selection screen when adding a new place.
- * Users can choose between adding a Hazard or a Waypoint.
+ * AddPlace – Entry screen for adding a new item (Hazard or Waypoint).
+ *
+ * Displays two options: 'Hazard' and 'Waypoint', each leading to their respective
+ * configuration views. Includes a header with a cancel button to reset input state
+ * and return to the main view.
+ *
+ * @returns JSX.Element – The rendered view.
  */
 export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);
@@ -21,7 +26,7 @@ export default function AddPlace() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
+      {/* Header section with close button and title */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderClose onCancel={handleCancel} />
@@ -31,7 +36,7 @@ export default function AddPlace() {
         </h1>
       </div>
 
-      {/* Type selection */}
+      {/* Type selection buttons */}
       <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"

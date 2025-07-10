@@ -6,8 +6,13 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
- * SelectWaypointType allows the user to choose a category for the waypoint.
- * Options include predefined categories like Firestation, Hospital, etc.
+ * SelectWaypointType – View for selecting a category (type) of waypoint.
+ *
+ * Users choose from predefined options like Firestation or Hospital.
+ * The selected type is saved in Zustand (`waypointInput.waypointType`).
+ * After selection, the user is redirected back to ConfigureWaypoint.
+ *
+ * @returns JSX.Element – A simple selection interface for waypoint categories.
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
@@ -24,11 +29,19 @@ export default function SelectWaypointType() {
     "other",
   ];
 
+  /**
+   * handleSelectType – Saves the selected type and navigates back to the waypoint config view.
+   *
+   * @param type - One of the predefined WaypointType values.
+   */
   const handleSelectType = (type: WaypointType) => {
     setWaypointField("waypointType", type);
     setPage("configureWaypoint");
   };
 
+  /**
+   * handleCancel – Resets waypoint input and navigates back to the main view.
+   */
   const handleCancel = () => {
     resetWaypointInput();
     setPage("main");
@@ -36,13 +49,13 @@ export default function SelectWaypointType() {
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
+      {/* Header with close button and title */}
       <div className="pt-4 pb-2">
         <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
         <h1 className="text-center font-semibold text-xl mt-2">Select Type</h1>
       </div>
 
-      {/* Type Options */}
+      {/* List of selectable waypoint types */}
       <div className="flex flex-col gap-4 mt-4">
         {waypointOptions.map((label) => (
           <Button
@@ -55,6 +68,8 @@ export default function SelectWaypointType() {
           </Button>
         ))}
       </div>
+
+      {/* Shared Footer */}
       <ViewFooterOnlyBackButton goBack={() => setPage("configureWaypoint")} />
     </div>
   );

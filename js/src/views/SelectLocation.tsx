@@ -5,18 +5,29 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
- * SelectLocationView lets the user choose between selecting a zone or an address.
+ * SelectLocation – View to choose the method for setting a hazard location.
+ *
+ * Users can decide whether to define a hazard via:
+ * 1. A polygon-shaped zone
+ * 2. A single-point address
+ *
+ * Navigation is handled via Zustand (`useViewStore`).
+ *
+ * @returns JSX.Element – The rendered location selection screen.
  */
 export default function SelectLocation() {
   const { setPage } = useViewStore();
 
+  /**
+   * handleCancel – Navigates back to the main view without saving anything.
+   */
   const handleCancel = () => {
     setPage("main");
   };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
+      {/* Header with close button and title */}
       <div className="pt-4 pb-2">
         <div className="flex justify-end">
           <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
@@ -26,7 +37,7 @@ export default function SelectLocation() {
         </h1>
       </div>
 
-      {/* Selection Buttons */}
+      {/* Buttons for choosing location method: Zone or Address */}
       <div className="flex flex-col gap-4 mt-4">
         <Button
           variant="outline"
@@ -44,6 +55,8 @@ export default function SelectLocation() {
           Address <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
+
+      {/* Shared Footer */}
       <ViewFooterOnlyBackButton goBack={() => setPage("configureHazard")} />
     </div>
   );
