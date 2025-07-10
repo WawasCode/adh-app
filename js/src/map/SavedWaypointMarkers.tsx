@@ -11,7 +11,7 @@ function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
   const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
   if (!match) return null;
-  const [, lng, lat] = match;
+  const [, lat, lng] = match;
   return [parseFloat(lat), parseFloat(lng)];
 }
 
@@ -23,13 +23,13 @@ export function SavedWaypointMarkers() {
   const { setWaypoint } = useSlidingCardStore();
   const currentPosition = useLocationStore((state) => state.position);
 
-  const handleMarkerClick = (wp: Waypoint) => {
+  const handleMarkerClick = (wp: Waypoint, coords: LatLngTuple | null) => {
     console.log("Marker clicked:", wp);
-    if (currentPosition && wp.location) {
-      const distance = calculateDistance(
-        currentPosition,
-        wp.location.coordinates,
-      );
+    if (currentPosition && coords) {
+      const distance = calculateDistance(currentPosition as [number, number], [
+        coords[0],
+        coords[1],
+      ]);
       setWaypoint({ ...wp, distance });
     } else {
       setWaypoint(wp);
@@ -58,7 +58,7 @@ export function SavedWaypointMarkers() {
             position={coords}
             icon={customMarkerIcon}
             eventHandlers={{
-              click: () => handleMarkerClick(wp),
+              click: () => handleMarkerClick(wp, coords),
             }}
           >
             <Popup>

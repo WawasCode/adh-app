@@ -38,7 +38,7 @@ export const useWaypointStore = create<WaypointState>((set) => ({
       if (!response.ok) throw new Error("Failed to fetch waypoints");
 
       const data = await response.json();
-
+      console.log("📦 Waypoints vom Backend:", data);
       set({ waypoints: data as Waypoint[] });
     } catch (error) {
       console.error("Error fetching waypoints:", error);
