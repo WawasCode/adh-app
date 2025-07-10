@@ -8,8 +8,8 @@ function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
   const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
   if (!match) return null;
-  const [, lat, lon] = match;
-  return [parseFloat(lat), parseFloat(lon)];
+  const [, lon, lat] = match; // ← Richtige Reihenfolge!
+  return [parseFloat(lat), parseFloat(lon)]; // ← [lat, lon]
 }
 
 // Custom Marker-Icon
@@ -22,11 +22,10 @@ const customIcon = new L.Icon({
 /**
  * SavedIncidents renders all incidents from the backend on the map.
  */
-export function SavedIncidents() {
+export function SavedHazardIncidents() {
   const incidents = useIncidentStore((s) => s.incidents);
 
-  console.log("INCIDENTS aus Zustand:", incidents);
-
+  console.log("📍 incidents in SavedHazardIncidents:", incidents);
   return (
     <>
       {incidents.map((incident) => {
@@ -42,9 +41,10 @@ export function SavedIncidents() {
 
         if (!coords) return null;
 
-        console.log("incident.name:", incident.name);
-        console.log("incident.location:", incident.location);
-        console.log("coords nach parse:", coords);
+        console.warn(
+          "⚠️ Koordinaten konnten nicht geparst werden für Incident:",
+          incident,
+        );
 
         return (
           <Marker key={incident.id} position={coords} icon={customIcon}>

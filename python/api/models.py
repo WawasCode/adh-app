@@ -3,10 +3,10 @@ from django.contrib.gis.db import models
 
 class Incident(models.Model):
     """A model to store incidents with geographic data"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     location = models.PointField()
     incident_id = models.AutoField(primary_key=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True, max_length=250)
     severity = models.CharField(max_length=50, choices=[
         ('low', 'Low'),
         ('medium', 'Medium'),
@@ -25,10 +25,10 @@ class Incident(models.Model):
 
 class Waypoint(models.Model):
     """A model to store waypoints with geographic data"""
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
     location = models.PointField()
     waypoint_id = models.AutoField(primary_key=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True, max_length= 250)
     type = models.CharField(max_length=50, choices=[
         ('policestation', 'Police Station'),
         ('firestation', 'Fire Station'),
@@ -47,10 +47,10 @@ class Waypoint(models.Model):
 
 class Hazard_Zone(models.Model):
     """A model to store hazard zones with geographic data"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     location = models.PolygonField()
     hazard_zone_id = models.AutoField(primary_key=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True, max_length=250)
     severity = models.CharField(max_length=50, choices=[
         ('low', 'Low'),
         ('medium', 'Medium'),
