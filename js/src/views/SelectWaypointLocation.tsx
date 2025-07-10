@@ -1,7 +1,7 @@
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
-import RemoteMapViewWithClick from "@/map/RemoteMapViewWithClick";
+import RemoteMapViewWithClick from "@/map/MapsForUserInput/RemoteMapViewWithClick";
 import { SearchBar } from "@/views/MobileUICommon";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 

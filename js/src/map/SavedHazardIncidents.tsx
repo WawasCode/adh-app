@@ -1,5 +1,5 @@
 import { Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
 import { useIncidentStore } from "@/store/useIncidentStore";
 import { LatLngTuple } from "leaflet";
 
@@ -11,23 +11,6 @@ function parseWKTPoint(wkt: string): [number, number] | null {
   const [, lon, lat] = match; // ← Richtige Reihenfolge!
   return [parseFloat(lat), parseFloat(lon)]; // ← [lat, lon]
 }
-
-// Custom Marker-Icon
-//const redIcon = new L.Icon({
-//  iconUrl:
-//  "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-//  iconSize: [25, 41],
-//  iconAnchor: [12, 41],
-//});
-const redIcon = new L.Icon({
-  iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
-  shadowSize: [41, 41],
-});
 
 /**
  * SavedIncidents renders all incidents from the backend on the map.
@@ -58,7 +41,7 @@ export function SavedHazardIncidents() {
         }
 
         return (
-          <Marker key={incident.id} position={coords} icon={redIcon}>
+          <Marker key={incident.id} position={coords} icon={incidentMarkerIcon}>
             <Popup>
               <div className="text-sm leading-tight space-y-1">
                 <strong>{incident.name}</strong>

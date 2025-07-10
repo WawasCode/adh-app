@@ -2,7 +2,7 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { SearchBar } from "@/views/MobileUICommon";
-import RemoteMapViewWithSingleClick from "@/map/RemoteMapWithSingleClick";
+import RemoteMapViewWithSingleClick from "@/map/MapsForUserInput/RemoteMapWithSingleClick";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
 /**

@@ -2,7 +2,7 @@ import { usePlaceStore } from "@/store/usePlaceStore";
 import { useZoneStore } from "@/store/useZoneStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
-import RemoteZoneMapWithClicks from "@/map/RemoteZoneMapWithClicks";
+import RemoteZoneMapWithClicks from "@/map/MapsForUserInput/RemoteZoneMapWithClicks";
 import { Button } from "@/components/ui/Button";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 

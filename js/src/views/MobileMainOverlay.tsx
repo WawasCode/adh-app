@@ -11,7 +11,7 @@ import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 
 interface MobileMainOverlayProps {
   openNavigation: () => void;
-  openAddPlace1: () => void;
+  openAddPlace: () => void;
   BottomNavComponent: React.ReactNode;
   onLocationSelect?: (location: {
     lat: number;
@@ -31,7 +31,7 @@ interface MobileMainOverlayProps {
  */
 export function MobileMainOverlay({
   openNavigation,
-  openAddPlace1,
+  openAddPlace,
   BottomNavComponent,
   onLocationSelect,
 }: MobileMainOverlayProps) {
@@ -67,7 +67,7 @@ export function MobileMainOverlay({
             : "calc(10rem + env(safe-area-inset-bottom))",
         }}
       >
-        <MapIconButton icon={Plus} label="Add Place" onClick={openAddPlace1} />
+        <MapIconButton icon={Plus} label="Add Place" onClick={openAddPlace} />
         {!isVisible && (
           <MapIconButton
             icon={NavigationIcon}
