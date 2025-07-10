@@ -3,22 +3,23 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore, hazardSeverities } from "@/store/usePlaceStore";
 import type { HazardSeverity } from "@/store/usePlaceStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
  * SelectSeverity allows the user to choose the severity level for a hazard.
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
-  const setSeverity = usePlaceStore((s) => s.setSeverity);
-  const reset = usePlaceStore((s) => s.reset);
+  const setHazardField = usePlaceStore((s) => s.setHazardField);
+  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
 
   const handleSelect = (value: HazardSeverity) => {
-    setSeverity(value);
+    setHazardField("severity", value);
     setPage("configureHazard");
   };
 
   const handleCancel = () => {
-    reset();
+    resetHazardInput();
     setPage("main");
   };
 
@@ -26,7 +27,9 @@ export default function SelectSeverity() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">
           Select Severity
         </h1>
@@ -45,6 +48,7 @@ export default function SelectSeverity() {
           </Button>
         ))}
       </div>
+      <ViewFooterOnlyBackButton goBack={() => setPage("configureHazard")} />
     </div>
   );
 }

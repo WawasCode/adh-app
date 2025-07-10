@@ -5,69 +5,89 @@ import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { useZoneStore } from "@/store/useZoneStore";
-import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
-/**
- * ConfigureHazard allows the user to input information for a new hazard.
- * The input is stored in Zustand and includes name, description, zone (points) and severity.
- * The zone is saved to global store when all required fields are filled.
- */
 export default function ConfigureHazard() {
   const setPage = useViewStore((s) => s.setPage);
   const {
-    name,
-    setName,
-    description,
-    setDescription,
-    severity,
-    reset: resetPlace,
+    hazardInput: { name, description, severity, location },
+    setHazardField,
+    resetHazardInput,
   } = usePlaceStore();
 
-  const { points, reset: resetZone, addHazardZone } = useZoneStore();
-
+  const { points, reset: resetZone } = useZoneStore();
   const [isWalkable, setIsWalkable] = useState(false);
   const [isDrivable, setIsDrivable] = useState(false);
 
-  const location = usePlaceStore((s) => s.location);
   const hasLocation =
     (location !== null && Array.isArray(location)) || points.length >= 3;
-
   const isFormComplete = name.trim() !== "" && severity !== null && hasLocation;
 
   const handleCancel = () => {
-    resetPlace();
+    resetHazardInput();
     resetZone();
     setPage("main");
   };
 
-  const handleSave = () => {
-    if (!isFormComplete) return;
+  const handleSave = async () => {
+    if (!isFormComplete || (!location && points.length < 3)) return;
 
-    addHazardZone({
-      id: uuidv4(),
+    const isIncident = !!location;
+
+    const payload = {
       name,
       description,
       severity: severity!,
-      coordinates: points,
       isWalkable,
       isDrivable,
-    });
+      location: isIncident
+        ? {
+            type: "Point",
+            coordinates: [location[1], location[0]],
+          }
+        : {
+            type: "Polygon",
+            coordinates: [
+              [
+                ...points.map(([lat, lng]) => [lng, lat]),
+                [points[0][1], points[0][0]],
+              ],
+            ],
+          },
+    };
 
-    resetPlace();
-    resetZone();
-    setPage("main");
+    const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Error saving hazard or incident");
+
+      alert(`${isIncident ? "Incident" : "Hazard"} saved successfully!`);
+      resetHazardInput();
+      resetZone();
+      setPage("main");
+    } catch (error) {
+      console.error("Caught error:", error);
+      alert(`Failed to save ${isIncident ? "incident" : "hazard zone"}.`);
+    }
   };
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-      {/* Header */}
-      <div className="pt-4 pb-2 relative">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+      <div className="pt-4 pb-2">
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">
           Configure Hazard
         </h1>
+
         {!isFormComplete && (
           <p className="text-center text-sm text-gray-700 mt-2">
             Please fill in name, location and severity to enable saving.
@@ -75,22 +95,22 @@ export default function ConfigureHazard() {
         )}
       </div>
 
-      {/* Form fields */}
       <div className="flex flex-col gap-4 mt-4">
         <FloatingLabelInput
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setHazardField("name", e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
           label="Name"
           autoComplete="off"
-          maxLength={255} // 255 Value from models.py
+          maxLength={50}
         />
 
         <FloatingLabelTextarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => setHazardField("description", e.target.value)}
           className="rounded-xl py-4 px-5 text-base"
           label="Description"
+          maxLength={250}
         />
 
         <Button
@@ -113,7 +133,7 @@ export default function ConfigureHazard() {
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
 
-        {/* Walkable slider */}
+        {/* Walkable Toggle */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is walkable</span>
           <div
@@ -129,7 +149,8 @@ export default function ConfigureHazard() {
             />
           </div>
         </div>
-        {/* Drivable slider */}
+
+        {/* Drivable Toggle */}
         <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is drivable</span>
           <div
@@ -147,7 +168,6 @@ export default function ConfigureHazard() {
         </div>
       </div>
 
-      {/* Shared Footer */}
       <ViewFooter
         goBack={() => setPage("addPlace")}
         onSave={handleSave}

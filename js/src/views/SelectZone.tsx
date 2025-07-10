@@ -17,8 +17,10 @@ export default function SelectZone() {
     reset: resetZone,
     removeLastPoint,
     setMaxPointsReached,
+    maxPointsReached,
   } = useZoneStore();
-  const { reset: resetPlace } = usePlaceStore();
+
+  const { resetHazardInput } = usePlaceStore();
   const { setPage } = useViewStore();
 
   const handleSave = () => {
@@ -29,18 +31,18 @@ export default function SelectZone() {
 
   const handleCancel = () => {
     resetZone();
-    resetPlace();
+    resetHazardInput();
     setMaxPointsReached(false);
     setPage("main");
   };
-
-  const maxPointsReached = useZoneStore((s) => s.maxPointsReached);
 
   return (
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header */}
       <div className="pt-4 pb-2">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">Enter zone</h1>
         <p className="text-center text-sm text-gray-600 mt-2">
           Tap 3 to 8 points that will form a hazard zone.
@@ -51,13 +53,15 @@ export default function SelectZone() {
       <div className="flex-1 rounded-xl overflow-hidden mb-4 mt-4">
         <RemoteZoneMapWithClicks />
       </div>
-      {/* Warning if max points reached */}
+
+      {/* Warning */}
       {maxPointsReached && (
         <p className="text-xl text-red-500 text-center mb-2">
           You can only place up to 8 points to define a hazard zone.
         </p>
       )}
-      {/* Undo Button */}
+
+      {/* Undo buttons */}
       <Button
         variant="outline"
         className="justify-center text-base font-normal py-2 px-5 rounded-xl text-red-500 border-red-300 mb-2"
@@ -67,7 +71,7 @@ export default function SelectZone() {
         }}
         disabled={points.length === 0}
       >
-        Undo (Last Point)
+        Undo last point
       </Button>
       <Button
         variant="outline"
@@ -78,7 +82,7 @@ export default function SelectZone() {
         }}
         disabled={points.length === 0}
       >
-        Undo (Everything)
+        Reset zone
       </Button>
 
       {/* Footer */}

@@ -10,7 +10,9 @@ services:
       sh -c "
         cd python &&
         pip install -r requirements.txt &&
+        python manage.py makemigrations &&
         python manage.py migrate &&
+        pg_dump -h db -U django adh > /workspace/db_dump.sql &&
         python manage.py runserver 0.0.0.0:8080
       "
     volumes:

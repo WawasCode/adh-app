@@ -3,6 +3,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import type { WaypointType } from "@/store/usePlaceStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
  * SelectWaypointType allows the user to choose a category for the waypoint.
@@ -10,8 +11,8 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
-  const setWaypointType = usePlaceStore((s) => s.setWaypointType);
-  const reset = usePlaceStore((s) => s.reset);
+  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
+  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
 
   const waypointOptions: WaypointType[] = [
     "firestation",
@@ -24,12 +25,12 @@ export default function SelectWaypointType() {
   ];
 
   const handleSelectType = (type: WaypointType) => {
-    setWaypointType(type);
+    setWaypointField("waypointType", type);
     setPage("configureWaypoint");
   };
 
   const handleCancel = () => {
-    reset();
+    resetWaypointInput();
     setPage("main");
   };
 
@@ -38,7 +39,6 @@ export default function SelectWaypointType() {
       {/* Header */}
       <div className="pt-4 pb-2">
         <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
-        {/* Title */}
         <h1 className="text-center font-semibold text-xl mt-2">Select Type</h1>
       </div>
 
@@ -55,6 +55,7 @@ export default function SelectWaypointType() {
           </Button>
         ))}
       </div>
+      <ViewFooterOnlyBackButton goBack={() => setPage("configureWaypoint")} />
     </div>
   );
 }

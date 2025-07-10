@@ -4,8 +4,14 @@ import { create } from "zustand";
 // Type Definitions
 // --------------------
 
-export type PlaceType = "hazard" | "waypoint";
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
+export const hazardSeverities: HazardSeverity[] = [
+  "low",
+  "medium",
+  "high",
+  "critical",
+];
+
 export type WaypointType =
   | "firestation"
   | "policestation"
@@ -15,14 +21,7 @@ export type WaypointType =
   | "supply center"
   | "other";
 
-export const hazardSeverities: HazardSeverity[] = [
-  "low",
-  "medium",
-  "high",
-  "critical",
-];
-
-export type Waypoint = {
+export interface Waypoint {
   id: string;
   name: string;
   description: string;
@@ -31,80 +30,105 @@ export type Waypoint = {
   telephone: string;
   isAvailable: boolean;
   type: WaypointType;
-};
+}
 
 // --------------------
 // Zustand Store
 // --------------------
 
-type PlaceState = {
-  // Input state
-  type: PlaceType | null;
+type HazardInput = {
   name: string;
   description: string;
   location: [number, number] | null;
   severity: HazardSeverity | null;
-  waypointType: WaypointType | null;
+};
+
+type WaypointInput = {
+  name: string;
+  description: string;
+  location: [number, number] | null;
   telephone: string;
   isAvailable: boolean;
+  waypointType: WaypointType | null;
+};
 
-  // Saved data
+type PlaceState = {
+  hazardInput: HazardInput;
+  waypointInput: WaypointInput;
+
+  setHazardField: <K extends keyof HazardInput>(
+    key: K,
+    value: HazardInput[K],
+  ) => void;
+  setWaypointField: <K extends keyof WaypointInput>(
+    key: K,
+    value: WaypointInput[K],
+  ) => void;
+
+  resetHazardInput: () => void;
+  resetWaypointInput: () => void;
+
   savedWaypoints: Waypoint[];
-
-  // Setters
-  setType: (type: PlaceType) => void;
-  setName: (name: string) => void;
-  setDescription: (desc: string) => void;
-  setLocation: (loc: [number, number]) => void;
-  setSeverity: (sev: HazardSeverity) => void;
-  setWaypointType: (type: WaypointType) => void;
-  setTelephone: (tel: string) => void;
-  setAvailability: (avail: boolean) => void;
-
-  // Actions
   addWaypoint: (waypoint: Waypoint) => void;
-  reset: () => void;
 };
 
 export const usePlaceStore = create<PlaceState>((set) => ({
-  // Initial state
-  type: null,
-  name: "",
-  description: "",
-  location: null,
-  severity: null,
-  waypointType: null,
-  telephone: "",
-  isAvailable: false,
+  hazardInput: {
+    name: "",
+    description: "",
+    location: null,
+    severity: null,
+  },
+  waypointInput: {
+    name: "",
+    description: "",
+    location: null,
+    telephone: "",
+    isAvailable: false,
+    waypointType: null,
+  },
+
+  setHazardField: (key, value) =>
+    set((state) => ({
+      hazardInput: {
+        ...state.hazardInput,
+        [key]: value,
+      },
+    })),
+
+  setWaypointField: (key, value) =>
+    set((state) => ({
+      waypointInput: {
+        ...state.waypointInput,
+        [key]: value,
+      },
+    })),
+
+  resetHazardInput: () =>
+    set({
+      hazardInput: {
+        name: "",
+        description: "",
+        location: null,
+        severity: null,
+      },
+    }),
+
+  resetWaypointInput: () =>
+    set({
+      waypointInput: {
+        name: "",
+        description: "",
+        location: null,
+        telephone: "",
+        isAvailable: false,
+        waypointType: null,
+      },
+    }),
 
   savedWaypoints: [],
-
-  // Save new waypoint
   addWaypoint: (waypoint) =>
     set((state) => ({
       savedWaypoints: [...state.savedWaypoints, waypoint],
     })),
-
-  // Setter methods
-  setType: (type) => set({ type }),
-  setName: (name) => set({ name }),
-  setDescription: (description) => set({ description }),
-  setLocation: (location) => set({ location }),
-  setSeverity: (severity) => set({ severity }),
-  setWaypointType: (waypointType) => set({ waypointType }),
-  setTelephone: (telephone) => set({ telephone }),
-  setAvailability: (isAvailable) => set({ isAvailable }),
-
-  // Reset all input fields
-  reset: () =>
-    set({
-      type: null,
-      name: "",
-      description: "",
-      location: null,
-      severity: null,
-      waypointType: null,
-      telephone: "",
-      isAvailable: false,
-    }),
 }));

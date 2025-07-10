@@ -42,7 +42,7 @@ export const useZoneStore = create<ZoneState>((set) => ({
 
   removeLastPoint: () =>
     set((state) => ({ points: state.points.slice(0, -1) })),
-  reset: () => set({ points: [] }),
+  reset: () => set({ points: [], maxPointsReached: false }),
 
   savedHazardZones: [],
   addHazardZone: (zone) =>
