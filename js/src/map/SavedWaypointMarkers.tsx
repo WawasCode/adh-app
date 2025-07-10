@@ -24,7 +24,6 @@ export function SavedWaypointMarkers() {
   const currentPosition = useLocationStore((state) => state.position);
 
   const handleMarkerClick = (wp: Waypoint, coords: LatLngTuple | null) => {
-    console.log("Marker clicked:", wp);
     if (currentPosition && coords) {
       const distance = calculateDistance(currentPosition as [number, number], [
         coords[0],
@@ -47,10 +46,6 @@ export function SavedWaypointMarkers() {
               : null;
 
         if (!coords) return null;
-
-        console.log("wp.name:", wp.name);
-        console.log("wp.location:", wp.location);
-        console.log("coords nach parse:", coords);
 
         return (
           <Marker

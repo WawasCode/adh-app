@@ -21,11 +21,9 @@ function getZoneColor(severity: string | undefined): string {
  */
 export function SavedHazardZones() {
   const hazardZones = useHazardZoneStore((s) => s.savedHazardZones);
-  console.log("Rendering SavedHazardZones:", hazardZones);
   return (
     <>
       {hazardZones.map((zone) => {
-        console.log("Zone", zone.name, "Koordinaten:", zone.coordinates);
         return (
           <Polygon
             key={zone.id}

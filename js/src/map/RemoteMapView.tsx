@@ -94,13 +94,11 @@ export function RemoteMapView({
   const fetchHazardZones = useHazardZoneStore((s) => s.fetchHazardZones);
   useEffect(() => {
     fetchHazardZones();
-    console.log("fetchHazardZones() wurde aufgerufen");
   }, [fetchHazardZones]);
 
   const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
   useEffect(() => {
     fetchIncidents();
-    console.log("fetchIncidents() wurde aufgerufen");
   }, [fetchIncidents]);
 
   const position = useLocationStore((s) => s.position);

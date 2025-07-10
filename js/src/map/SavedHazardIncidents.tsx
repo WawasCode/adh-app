@@ -18,7 +18,6 @@ function parseWKTPoint(wkt: string): [number, number] | null {
 export function SavedHazardIncidents() {
   const incidents = useIncidentStore((s) => s.incidents);
 
-  console.log("📍 incidents in SavedHazardIncidents:", incidents);
   return (
     <>
       {incidents.map((incident) => {

@@ -43,7 +43,7 @@ function parseWKTPolygon(wkt: string): [number, number][] {
   const coords = match[1]
     .split(",")
     .map((pair) => pair.trim().split(" ").map(parseFloat))
-    .map(([lat, lng]) => [lat, lng] as [number, number]);
+    .map(([lng, lat]) => [lat, lng] as [number, number]);
 
   return coords;
 }
