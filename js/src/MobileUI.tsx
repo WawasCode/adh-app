@@ -104,7 +104,7 @@ export default function MobileLayout() {
       return (
         <MobileMainOverlay
           openNavigation={() => setPage("navigation")}
-          openAddPlace1={() => setPage("addPlace")}
+          openAddPlace={() => setPage("addPlace")}
           BottomNavComponent={BottomNavComponent}
           onLocationSelect={handleLocationSelect}
         />

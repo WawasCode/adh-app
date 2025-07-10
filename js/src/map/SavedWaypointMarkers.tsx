@@ -11,8 +11,8 @@ function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
   const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
   if (!match) return null;
-  const [, lat, lon] = match;
-  return [parseFloat(lat), parseFloat(lon)];
+  const [, lng, lat] = match;
+  return [parseFloat(lat), parseFloat(lng)];
 }
 
 /**

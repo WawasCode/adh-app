@@ -8,8 +8,8 @@ function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
   const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
   if (!match) return null;
-  const [, lon, lat] = match; // ← Richtige Reihenfolge!
-  return [parseFloat(lat), parseFloat(lon)]; // ← [lat, lon]
+  const [, lng, lat] = match; // ← Richtige Reihenfolge!
+  return [parseFloat(lat), parseFloat(lng)]; // ← [lat, lon]
 }
 
 /**

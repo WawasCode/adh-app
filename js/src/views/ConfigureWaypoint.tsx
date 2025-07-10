@@ -28,16 +28,15 @@ export default function ConfigureWaypoint() {
   const handleSave = async () => {
     if (!isFormComplete || !location) return;
 
+    const [lng, lat] = location;
+
     const waypoint = {
       name,
       description,
-      location: {
-        type: "Point",
-        coordinates: [location[0], location[1]],
-      },
+      location: `POINT (${lng} ${lat})`, // WKT-Format für Backend
       type: waypointType,
-      telephone_number: telephone,
-      active: isAvailable,
+      telephone,
+      isAvailable,
     };
 
     try {

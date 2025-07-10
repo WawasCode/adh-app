@@ -15,13 +15,13 @@ const CENTER: [number, number] = [52.52, 13.405];
  * and saves the selected coordinates in Zustand.
  */
 function MapClickHandler() {
-  const setHazardField = usePlaceStore((s) => s.setHazardField);
+  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
 
   useMapEvents({
     click(e) {
       const lat = e.latlng.lat;
       const lng = e.latlng.lng;
-      setHazardField("location", [lat, lng]);
+      setWaypointField("location", [lat, lng]);
     },
   });
 
@@ -34,7 +34,7 @@ function MapClickHandler() {
  * The selected location is stored in Zustand (usePlaceStore).
  */
 export default function RemoteMapViewWithClick() {
-  const location = usePlaceStore((s) => s.hazardInput.location);
+  const location = usePlaceStore((s) => s.waypointInput.location);
   const position = useLocationStore((s) => s.position);
 
   return (

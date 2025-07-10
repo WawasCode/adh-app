@@ -3,7 +3,7 @@ import { theme } from "~/styles/theme";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import markerIconRed from "@/assets/images/marker-icon-red.png";
+import markerIconRed from "@/assets/images/markerIconRed.png";
 
 /**
  * Custom marker icon for Leaflet maps.
