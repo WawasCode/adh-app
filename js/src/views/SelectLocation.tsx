@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
  * SelectLocationView lets the user choose between selecting a zone or an address.
@@ -41,6 +42,7 @@ export default function SelectLocation() {
           Address <ChevronRight className="h-5 w-5 text-gray-400" />
         </Button>
       </div>
+      <ViewFooterOnlyBackButton goBack={() => setPage("configureHazard")} />
     </div>
   );
 }

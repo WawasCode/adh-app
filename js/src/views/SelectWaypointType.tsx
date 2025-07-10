@@ -3,6 +3,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import type { WaypointType } from "@/store/usePlaceStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
  * SelectWaypointType allows the user to choose a category for the waypoint.
@@ -54,6 +55,7 @@ export default function SelectWaypointType() {
           </Button>
         ))}
       </div>
+      <ViewFooterOnlyBackButton goBack={() => setPage("configureWaypoint")} />
     </div>
   );
 }

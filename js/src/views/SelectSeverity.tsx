@@ -3,6 +3,7 @@ import { useViewStore } from "@/store/useViewStore";
 import { usePlaceStore, hazardSeverities } from "@/store/usePlaceStore";
 import type { HazardSeverity } from "@/store/usePlaceStore";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
 /**
  * SelectSeverity allows the user to choose the severity level for a hazard.
@@ -45,6 +46,7 @@ export default function SelectSeverity() {
           </Button>
         ))}
       </div>
+      <ViewFooterOnlyBackButton goBack={() => setPage("configureHazard")} />
     </div>
   );
 }
