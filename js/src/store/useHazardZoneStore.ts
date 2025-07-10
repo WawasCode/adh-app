@@ -61,7 +61,6 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
       const res = await fetch("/api/hazard-zones/");
       if (!res.ok) throw new Error("Failed to fetch hazard zones");
       const data = await res.json();
-      console.log("Antwort vom Backend:", data);
 
       const zones: HazardZone[] = data.map((zone: HazardZoneFromBackend) => {
         const wkt = zone.location;
@@ -91,7 +90,6 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
       });
 
       set({ savedHazardZones: zones });
-      console.log("Hazard Zones gespeichert im Zustand:", zones);
     } catch (error) {
       console.error("Error fetching hazard zones:", error);
     }

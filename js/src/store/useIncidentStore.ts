@@ -78,7 +78,6 @@ export const useIncidentStore = create<IncidentState>((set, get) => ({
     try {
       const apiUrl = import.meta.env.VITE_API_URL || "/api/incidents";
       const response = await fetch(`${apiUrl}/incidents/`);
-      console.log("✅ Backendantwort Incidents:", response);
       if (!response.ok) {
         console.error(
           "Fehler beim Laden der Incidents:",
@@ -123,10 +122,6 @@ export const useIncidentStore = create<IncidentState>((set, get) => ({
             distance,
           } as Incident;
         },
-      );
-      console.log(
-        "📦 Verarbeitete Incidents mit Location & Distanz:",
-        incidentsWithDistance,
       );
       set({ incidents: incidentsWithDistance });
     } catch (error) {
