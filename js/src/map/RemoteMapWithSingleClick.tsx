@@ -13,35 +13,28 @@ const customIcon = new L.Icon({
 
 const CENTER: [number, number] = [52.52, 13.405];
 
-/**
- * MapClickHandler saves the clicked point to Zustand via usePlaceStore
- */
 function MapClickHandler() {
-  const setLocation = usePlaceStore((s) => s.setLocation);
+  const setHazardField = usePlaceStore((s) => s.setHazardField);
 
   useMapEvents({
     click(e) {
       const lat = e.latlng.lat;
       const lon = e.latlng.lng;
-      setLocation([lat, lon]);
+      setHazardField("location", [lat, lon]);
     },
   });
 
   return null;
 }
 
-/**
- * RemoteMapViewWithSingleClick renders a Leaflet map
- * where a single point can be selected and saved into Zustand (usePlaceStore).
- */
 export default function RemoteMapViewWithSingleClick() {
-  const location = usePlaceStore((s) => s.location);
+  const location = usePlaceStore((s) => s.hazardInput.location);
   const position = useLocationStore((s) => s.position);
 
   return (
     <MapContainer
       center={position ?? CENTER}
-      zoom={13} // Default zoom for selecting locations
+      zoom={13}
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >

@@ -9,16 +9,16 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
-  const setSeverity = usePlaceStore((s) => s.setSeverity);
-  const reset = usePlaceStore((s) => s.reset);
+  const setHazardField = usePlaceStore((s) => s.setHazardField);
+  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
 
   const handleSelect = (value: HazardSeverity) => {
-    setSeverity(value);
+    setHazardField("severity", value);
     setPage("configureHazard");
   };
 
   const handleCancel = () => {
-    reset();
+    resetHazardInput();
     setPage("main");
   };
 

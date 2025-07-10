@@ -11,20 +11,20 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
-  const location = usePlaceStore((s) => s.location);
-  const reset = usePlaceStore((s) => s.reset);
-  const setLocation = usePlaceStore((s) => s.setLocation);
+  const location = usePlaceStore((s) => s.waypointInput.location);
+  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
+  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
 
   const handleLocationSelect = (location: {
     lat: number;
     lon: number;
     name: string;
   }) => {
-    setLocation([location.lat, location.lon]);
+    setWaypointField("location", [location.lat, location.lon]);
   };
 
   const handleCancel = () => {
-    reset();
+    resetWaypointInput();
     setPage("main");
   };
 

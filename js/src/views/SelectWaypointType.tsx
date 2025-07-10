@@ -10,8 +10,8 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
-  const setWaypointType = usePlaceStore((s) => s.setWaypointType);
-  const reset = usePlaceStore((s) => s.reset);
+  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
+  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
 
   const waypointOptions: WaypointType[] = [
     "firestation",
@@ -24,12 +24,12 @@ export default function SelectWaypointType() {
   ];
 
   const handleSelectType = (type: WaypointType) => {
-    setWaypointType(type);
+    setWaypointField("waypointType", type);
     setPage("configureWaypoint");
   };
 
   const handleCancel = () => {
-    reset();
+    resetWaypointInput();
     setPage("main");
   };
 
@@ -38,7 +38,6 @@ export default function SelectWaypointType() {
       {/* Header */}
       <div className="pt-4 pb-2">
         <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
-        {/* Title */}
         <h1 className="text-center font-semibold text-xl mt-2">Select Type</h1>
       </div>
 

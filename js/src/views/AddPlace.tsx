@@ -10,10 +10,12 @@ import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
  */
 export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);
-  const reset = usePlaceStore((s) => s.reset);
+  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
+  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
 
   const handleCancel = () => {
-    reset();
+    resetHazardInput();
+    resetWaypointInput();
     setPage("main");
   };
 

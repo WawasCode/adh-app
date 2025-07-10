@@ -12,12 +12,12 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectAddress() {
   const { setPage } = useViewStore();
-  const location = usePlaceStore((s) => s.location);
-  const reset = usePlaceStore((s) => s.reset);
-  const setLocation = usePlaceStore((s) => s.setLocation);
+  const location = usePlaceStore((s) => s.hazardInput.location);
+  const setHazardField = usePlaceStore((s) => s.setHazardField);
+  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
 
   const handleCancel = () => {
-    reset();
+    resetHazardInput();
     setPage("main");
   };
 
@@ -30,7 +30,7 @@ export default function SelectAddress() {
     lon: number;
     name: string;
   }) => {
-    setLocation([location.lat, location.lon]);
+    setHazardField("location", [location.lat, location.lon]);
   };
 
   return (
