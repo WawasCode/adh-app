@@ -8,15 +8,8 @@ import {
 import { useZoneStore } from "@/store/useZoneStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import { UserMarker } from "@/map/UserMarker";
-
-// Marker-Icon
-const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 
 /**
  * MapClickHandler captures click coordinates and stores them in useZoneStore.
@@ -63,7 +56,7 @@ export default function RemoteZoneMapWithClicks() {
       <UserMarker />
       <MapClickHandler />
       {points.map((pos, i) => (
-        <Marker key={i} position={pos} icon={customIcon} />
+        <Marker key={i} position={pos} icon={customMarkerIcon} />
       ))}
       {points.length >= 3 && (
         <Polygon positions={points} pathOptions={{ color: "red" }} />

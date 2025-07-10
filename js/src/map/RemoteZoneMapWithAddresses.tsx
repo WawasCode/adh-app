@@ -3,14 +3,7 @@ import { useZoneStore } from "@/store/useZoneStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-// Marker-Icon
-const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 
 /**
  * RemoteZoneMapWithAddresses renders a map that displays zone points
@@ -34,7 +27,7 @@ export default function RemoteZoneMapWithAddresses() {
       />
       <UserMarker />
       {points.map((pos, i) => (
-        <Marker key={i} position={pos} icon={customIcon} />
+        <Marker key={i} position={pos} icon={customMarkerIcon} />
       ))}
       {points.length >= 3 && (
         <Polygon positions={points} pathOptions={{ color: "red" }} />

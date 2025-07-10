@@ -26,6 +26,7 @@ export interface Waypoint {
   name: string;
   description: string;
   location: [number, number];
+  distance?: number; // Optional distance from current position
   telephone: string;
   isAvailable: boolean;
   type: WaypointType;

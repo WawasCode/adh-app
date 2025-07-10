@@ -2,17 +2,8 @@ import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-/**
- * Default Leaflet marker icon used for clicked location
- */
-const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
 
 /**
  * Default center fallback (Berlin) if GPS is unavailable
@@ -59,7 +50,7 @@ export default function RemoteMapViewWithClick() {
       />
       <UserMarker />
       <MapClickHandler />
-      {location && <Marker position={location} icon={customIcon} />}
+      {location && <Marker position={location} icon={customMarkerIcon} />}
     </MapContainer>
   );
 }

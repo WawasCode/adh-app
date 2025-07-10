@@ -13,30 +13,14 @@ import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
 import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
 import { SavedHazardZones } from "@/map/SavedHazardZones";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import { theme } from "~/styles/theme";
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useWaypointStore } from "@/store/useWaypointStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneStore";
 import { SavedHazardIncidents } from "./SavedHazardIncidents";
 import { useIncidentStore } from "@/store/useIncidentStore";
-
-// Leaflet Marker is bugged
-const customMarkerIcon = new L.Icon({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-  iconSize: [theme.mapMarker.iconSize.width, theme.mapMarker.iconSize.height],
-  iconAnchor: [theme.mapMarker.iconAnchor.x, theme.mapMarker.iconAnchor.y],
-  popupAnchor: [theme.mapMarker.popupAnchor.x, theme.mapMarker.popupAnchor.y],
-  shadowSize: [
-    theme.mapMarker.shadowSize.width,
-    theme.mapMarker.shadowSize.height,
-  ],
-});
+import { MapClickHandler } from "./MapClickHandler";
 
 const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
@@ -162,6 +146,7 @@ export function RemoteMapView({
 
   return (
     <div className={cn(base, className)}>
+      {/* Ensure the map container fills the parent */}
       <MapContainer
         style={{ height: "100%", width: "100%" }}
         center={position || mapCenter}
@@ -198,6 +183,7 @@ export function RemoteMapView({
         <SavedHazardIncidents />
         <SavedWaypointMarkers />
         <MapSetter />
+        <MapClickHandler />
       </MapContainer>
     </div>
   );
