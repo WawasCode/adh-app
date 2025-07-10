@@ -17,6 +17,7 @@ export interface Waypoint {
   id: number;
   name: string;
   location: Location | null;
+  distance?: number;
   type: string;
   description?: string;
   telephone?: string;

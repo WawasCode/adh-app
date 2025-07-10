@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Waypoint } from "@/store/usePlaceStore";
+import { Waypoint } from "@/store/useWaypointStore";
 
 interface SlidingCardState {
   isVisible: boolean;

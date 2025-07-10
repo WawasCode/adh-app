@@ -1,9 +1,6 @@
 import { Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import { useWaypointStore } from "@/store/useWaypointStore";
+import { useWaypointStore, Waypoint } from "@/store/useWaypointStore";
 import { LatLngTuple } from "leaflet";
-import { Marker } from "react-leaflet";
-import { usePlaceStore, Waypoint } from "@/store/usePlaceStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { calculateDistance } from "@/utils/geoUtils";
 import { useLocationStore } from "@/store/useLocationStore";
@@ -28,8 +25,11 @@ export function SavedWaypointMarkers() {
 
   const handleMarkerClick = (wp: Waypoint) => {
     console.log("Marker clicked:", wp);
-    if (currentPosition) {
-      const distance = calculateDistance(currentPosition, wp.location);
+    if (currentPosition && wp.location) {
+      const distance = calculateDistance(
+        currentPosition,
+        wp.location.coordinates,
+      );
       setWaypoint({ ...wp, distance });
     } else {
       setWaypoint(wp);
@@ -53,10 +53,10 @@ export function SavedWaypointMarkers() {
         console.log("coords nach parse:", coords);
 
         return (
-          <Marker 
-            key={wp.id} 
-            position={coords} 
-            icon={customIcon}
+          <Marker
+            key={wp.id}
+            position={coords}
+            icon={customMarkerIcon}
             eventHandlers={{
               click: () => handleMarkerClick(wp),
             }}
