@@ -1,20 +1,14 @@
 import { Marker } from "react-leaflet";
-import L from "leaflet";
 import { usePlaceStore, Waypoint } from "@/store/usePlaceStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { calculateDistance } from "@/utils/geoUtils";
 import { useLocationStore } from "@/store/useLocationStore";
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 
 /**
  * SavedWaypointMarkers renders all saved waypoints from Zustand on the map.
  * Each marker includes a popup with the waypoint's details.
  */
-
-const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
 
 export function SavedWaypointMarkers() {
   console.log("Component rendered");
@@ -38,7 +32,7 @@ export function SavedWaypointMarkers() {
         <Marker
           key={wp.id}
           position={wp.location}
-          icon={customIcon}
+          icon={customMarkerIcon}
           eventHandlers={{
             click: () => handleMarkerClick(wp),
           }}

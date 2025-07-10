@@ -3,13 +3,7 @@ import { UserMarker } from "@/map/UserMarker";
 import { usePlaceStore } from "@/store/usePlaceStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-const customIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+import { customMarkerIcon } from "@/utils/customMarkerIcon";
 
 const CENTER: [number, number] = [52.52, 13.405];
 
@@ -51,7 +45,7 @@ export default function RemoteMapViewWithSingleClick() {
       />
       <UserMarker />
       <MapClickHandler />
-      {location && <Marker position={location} icon={customIcon} />}
+      {location && <Marker position={location} icon={customMarkerIcon} />}
     </MapContainer>
   );
 }

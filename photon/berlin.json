@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "type": "place",
+    "osm_type": "N",
+    "osm_id": 123456789,
+    "name": "Berlin",
+    "country": "Germany",
+    "countrycode": "de",
+    "state": "Berlin",
+    "city": "Berlin",
+    "postcode": "10115",
+    "street": "Unter den Linden",
+    "housenumber": "1",
+    "lat": 52.5170365,
+    "lon": 13.3888599,
+    "rank": 30,
+    "importance": 0.9,
+    "extent": [13.0884, 52.3383, 13.7611, 52.6755],
+    "languages": {
+      "de": {
+        "name": "Berlin"
+      },
+      "en": {
+        "name": "Berlin"
+      }
+    }
+  }
+]

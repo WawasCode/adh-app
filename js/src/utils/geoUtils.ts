@@ -1,3 +1,10 @@
+/**
+ * Calculates the distance between two geographical positions.
+ * @param pos1
+ * @param pos2
+ * @returns The distance in kilometers between two geographical positions.
+ */
+
 export const calculateDistance = (
   pos1: [number, number],
   pos2: [number, number],
