@@ -2,7 +2,6 @@ import { useMapStore } from "@/store/useMapStore";
 import { UserMarker } from "./UserMarker";
 import {
   MapContainer,
-  TileLayer,
   useMap,
   Marker,
   Popup,
@@ -17,6 +16,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
+import VectorTileLayer from "react-leaflet-vector-tile-layer";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -149,10 +149,9 @@ export function RemoteMapView({
         maxBoundsViscosity={1}
         zoomControl={false}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          maxZoom={MAX_ZOOM}
+        <VectorTileLayer
+          styleUrl="http://localhost:8080/api/styles/osm-bright-local.json"
+          maxZoom={14}
         />
         {selectedLocation && (
           <>

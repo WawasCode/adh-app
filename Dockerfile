@@ -13,7 +13,11 @@ RUN apt-get update && apt-get install -y \
     libproj-dev \
     libgdal-dev \
     libpq-dev \
-    python3-dev
+    python3-dev \
+    osm2pgsql \
+    osmium-tool \
+    postgresql-client \
+    wget
 
 # Install Git LFS for font file support
 RUN apt-get update && apt-get install -y git-lfs \
