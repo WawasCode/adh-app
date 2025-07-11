@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
 import { UserMarker } from "@/map/UserMarker";
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import { customMarkerIcon } from "@/utils/customMarkerIcon";
@@ -8,7 +8,7 @@ import { customMarkerIcon } from "@/utils/customMarkerIcon";
 const CENTER: [number, number] = [52.52, 13.405];
 
 function MapClickHandler() {
-  const setHazardField = usePlaceStore((s) => s.setHazardField);
+  const setHazardField = useIncidentStore((s) => s.setHazardField);
 
   useMapEvents({
     click(e) {
@@ -22,7 +22,7 @@ function MapClickHandler() {
 }
 
 export default function RemoteMapViewWithSingleClick() {
-  const location = usePlaceStore((s) => s.hazardInput.location);
+  const location = useIncidentStore((s) => s.hazardInput.location);
   const position = useLocationStore((s) => s.position);
 
   return (

@@ -18,6 +18,7 @@ class IncidentSerializer(serializers.ModelSerializer):
         model = Incident
         fields = [
             "id",
+            "kind",
             "incident_id",
             "name",
             "location",
@@ -43,6 +44,7 @@ class WaypointSerializer(serializers.ModelSerializer):
         model = Waypoint
         fields = [
             "id",
+            "kind",
             "waypoint_id",
             "name",
             "location",
@@ -67,15 +69,23 @@ class HazardZoneSerializer(serializers.ModelSerializer):
                 and isinstance(coords_list[0], list)
             ):
                 validated_data["location"] = Polygon(coords_list[0])
+        center_data = validated_data.pop("center", None)
+        if isinstance(center_data, dict):
+            coords = center_data.get("coordinates")
+            if coords and len(coords) == 2:
+                validated_data["center"] = Point(coords[0], coords[1])
+
         return Hazard_Zone.objects.create(**validated_data)
 
     class Meta:
         model = Hazard_Zone
         fields = [
             "id",
+            "kind",
             "hazard_zone_id",
             "name",
             "location",
+            "center",
             "description",
             "severity",
             "created_at",

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useIncidentStore } from "@/store/useIncidentStore.ts";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 
 export function IncidentsList() {
   const { incidents, fetchIncidents } = useIncidentStore();

@@ -3,10 +3,11 @@ import { FloatingLabelTextarea } from "@/components/ui/FloatingLabelTextarea";
 import { Button } from "@/components/ui/Button";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore } from "@/store/usePlaceStore";
-import { useZoneStore } from "@/store/useZoneStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
+import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { calculateCentroid } from "@/utils/geoUtils";
 
 /**
  * ConfigureHazard – View for entering hazard details.
@@ -26,7 +27,7 @@ export default function ConfigureHazard() {
     hazardInput: { name, description, severity, location },
     setHazardField,
     resetHazardInput,
-  } = usePlaceStore();
+  } = useIncidentStore();
 
   const { points, reset: resetZone } = useZoneStore();
   const [isWalkable, setIsWalkable] = useState(false);
@@ -57,6 +58,12 @@ export default function ConfigureHazard() {
 
     const isIncident = !!location;
 
+    if (!isIncident && points.length < 3) {
+      const center = calculateCentroid(points);
+
+      console.log("Zone center: ", center);
+    }
+
     const payload = {
       name,
       description,
@@ -66,7 +73,7 @@ export default function ConfigureHazard() {
       location: isIncident
         ? {
             type: "Point",
-            coordinates: [location[1], location[0]],
+            coordinates: [location[1], location[0]], // [lon, lat]
           }
         : {
             type: "Polygon",
@@ -77,6 +84,9 @@ export default function ConfigureHazard() {
               ],
             ],
           },
+      ...(!isIncident && {
+        center: { type: "Point", coordinates: calculateCentroid(points) },
+      }), // Include the center field for HazardZone
     };
 
     const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";

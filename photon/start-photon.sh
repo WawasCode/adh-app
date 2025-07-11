@@ -75,7 +75,7 @@ echo "Photon index created successfully."
 
 # Import the JSON data
 echo "Importing data..."
-java -Xmx4G -jar photon.jar -data-dir ./photon_data -import-file ./berlin.json
+java -Xmx4G -jar photon.jar -data-dir ./photon_data
 
 # Keep the container running
 wait

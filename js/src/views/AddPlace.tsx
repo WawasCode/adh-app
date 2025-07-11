@@ -1,7 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useWaypointStore } from "@/store/useWaypointCreationStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
 
 /**
@@ -15,8 +16,8 @@ import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
  */
 export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);
-  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
-  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
+  const resetHazardInput = useIncidentStore((s) => s.resetHazardInput);
+  const resetWaypointInput = useWaypointStore((s) => s.resetWaypointInput);
 
   const handleCancel = () => {
     resetHazardInput();

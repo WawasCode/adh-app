@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { FloatingLabelTextarea } from "@/components/ui/FloatingLabelTextarea";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
@@ -29,7 +29,7 @@ export default function ConfigureWaypoint() {
     },
     setWaypointField,
     resetWaypointInput,
-  } = usePlaceStore();
+  } = useWaypointStore();
 
   const isFormComplete =
     name.trim() !== "" && waypointType !== null && location !== null;
@@ -46,7 +46,7 @@ export default function ConfigureWaypoint() {
       description,
       location: {
         type: "Point",
-        coordinates: [location[0], location[1]], // lng, lat
+        coordinates: [location[1], location[0]], // [lon, lat]
       },
       type: waypointType,
       telephone_number: telephone,

@@ -1,22 +1,34 @@
-import { Marker, Popup } from "react-leaflet";
+import { Marker } from "react-leaflet";
 import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
-import { useIncidentStore } from "@/store/useIncidentStore";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { LatLngTuple } from "leaflet";
-
-// Funktion zum Parsen von WKT-Punkt
-function parseWKTPoint(wkt: string): [number, number] | null {
-  const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
-  const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
-  if (!match) return null;
-  const [, lng, lat] = match; // ← Richtige Reihenfolge!
-  return [parseFloat(lat), parseFloat(lng)]; // ← [lat, lon]
-}
+import { useLocationStore } from "../store/useLocationStore";
+import { Incident } from "@/types/incident";
+import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 
 /**
  * SavedIncidents renders all incidents from the backend on the map.
  */
 export function SavedHazardIncidents() {
   const incidents = useIncidentStore((s) => s.incidents);
+  const { setData } = useSlidingCardStore();
+  const currentPosition = useLocationStore((state) => state.position);
+
+  const handleMarkerClick = (
+    incident: Incident,
+    coords: LatLngTuple | null,
+  ) => {
+    if (currentPosition && coords) {
+      const distance = calculateDistance(currentPosition as [number, number], [
+        coords[0],
+        coords[1],
+      ]);
+      setData({ ...incident, distance });
+    } else {
+      setData(incident);
+    }
+  };
 
   return (
     <>
@@ -40,18 +52,14 @@ export function SavedHazardIncidents() {
         }
 
         return (
-          <Marker key={incident.id} position={coords} icon={incidentMarkerIcon}>
-            <Popup>
-              <div className="text-sm leading-tight space-y-1">
-                <strong>{incident.name}</strong>
-                {incident.severity && <div>Severity: {incident.severity}</div>}
-                {incident.description && (
-                  <div>Description: {incident.description}</div>
-                )}
-                {incident.distance && <div>Distance: {incident.distance}</div>}
-              </div>
-            </Popup>
-          </Marker>
+          <Marker
+            key={incident.id}
+            position={coords}
+            icon={incidentMarkerIcon}
+            eventHandlers={{
+              click: () => handleMarkerClick(incident, coords),
+            }}
+          />
         );
       })}
     </>

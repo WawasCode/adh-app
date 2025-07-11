@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useWaypointStore } from "@/store/useWaypointStore.ts";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 
 export function WaypointList() {
   const { waypoints, fetchWaypoints } = useWaypointStore();

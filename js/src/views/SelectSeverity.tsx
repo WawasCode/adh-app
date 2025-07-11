@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore, hazardSeverities } from "@/store/usePlaceStore";
-import type { HazardSeverity } from "@/store/usePlaceStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
+import { HazardSeverity, hazardSeverities } from "@/types/incident";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
@@ -18,8 +18,8 @@ import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButt
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();
-  const setHazardField = usePlaceStore((s) => s.setHazardField);
-  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
+  const setHazardField = useIncidentStore((s) => s.setHazardField);
+  const resetHazardInput = useIncidentStore((s) => s.resetHazardInput);
 
   /**
    * handleSelect – Stores the selected severity and navigates back to ConfigureHazard.

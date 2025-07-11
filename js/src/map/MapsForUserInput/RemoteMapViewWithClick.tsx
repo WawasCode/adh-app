@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
 import { customMarkerIcon } from "@/utils/customMarkerIcon";
@@ -15,7 +15,7 @@ const CENTER: [number, number] = [52.52, 13.405];
  * and saves the selected coordinates in Zustand.
  */
 function MapClickHandler() {
-  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
+  const setWaypointField = useWaypointStore((s) => s.setWaypointField);
 
   useMapEvents({
     click(e) {
@@ -34,7 +34,7 @@ function MapClickHandler() {
  * The selected location is stored in Zustand (usePlaceStore).
  */
 export default function RemoteMapViewWithClick() {
-  const location = usePlaceStore((s) => s.waypointInput.location);
+  const location = useWaypointStore((s) => s.waypointInput.location);
   const position = useLocationStore((s) => s.position);
 
   return (

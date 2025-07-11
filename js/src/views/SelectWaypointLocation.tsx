@@ -1,6 +1,6 @@
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import RemoteMapViewWithClick from "@/map/MapsForUserInput/RemoteMapViewWithClick";
 import { SearchBar } from "@/views/MobileUICommon";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
@@ -16,9 +16,9 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
-  const location = usePlaceStore((s) => s.waypointInput.location);
-  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
-  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
+  const location = useWaypointStore((s) => s.waypointInput.location);
+  const resetWaypointInput = useWaypointStore((s) => s.resetWaypointInput);
+  const setWaypointField = useWaypointStore((s) => s.setWaypointField);
 
   /**
    * handleLocationSelect – Called when a location is selected via search.

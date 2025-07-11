@@ -1,26 +1,18 @@
-import { Marker, Popup } from "react-leaflet";
-import { useWaypointStore, Waypoint } from "@/store/useWaypointStore";
+import { Marker } from "react-leaflet";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
+import { Waypoint } from "@/types/waypoint";
 import { LatLngTuple } from "leaflet";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
-import { calculateDistance } from "@/utils/geoUtils";
+import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 import { useLocationStore } from "@/store/useLocationStore";
 import { customMarkerIcon } from "@/utils/customMarkerIcon";
-
-// Funktion zum Parsen von WKT-POLYGON (auslagern)
-function parseWKTPoint(wkt: string): [number, number] | null {
-  const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
-  const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
-  if (!match) return null;
-  const [, lat, lng] = match;
-  return [parseFloat(lat), parseFloat(lng)];
-}
 
 /**
  * SavedWaypointMarkers renders all saved waypoints from the backend on the map.
  */
 export function SavedWaypointMarkers() {
   const waypoints = useWaypointStore((s) => s.waypoints);
-  const { setWaypoint } = useSlidingCardStore();
+  const { setData } = useSlidingCardStore();
   const currentPosition = useLocationStore((state) => state.position);
 
   const handleMarkerClick = (wp: Waypoint, coords: LatLngTuple | null) => {
@@ -29,9 +21,9 @@ export function SavedWaypointMarkers() {
         coords[0],
         coords[1],
       ]);
-      setWaypoint({ ...wp, distance });
+      setData({ ...wp, distance });
     } else {
-      setWaypoint(wp);
+      setData(wp);
     }
   };
 
@@ -55,19 +47,7 @@ export function SavedWaypointMarkers() {
             eventHandlers={{
               click: () => handleMarkerClick(wp, coords),
             }}
-          >
-            <Popup>
-              <div className="text-sm leading-tight space-y-1">
-                <strong>{wp.name}</strong>
-                {wp.type && <div>Type: {wp.type}</div>}
-                {wp.description && <div>Description: {wp.description}</div>}
-                {wp.telephone && <div>Phone: {wp.telephone}</div>}
-                {typeof wp.isAvailable === "boolean" && (
-                  <div>Available: {wp.isAvailable ? "Yes" : "No"}</div>
-                )}
-              </div>
-            </Popup>
-          </Marker>
+          />
         );
       })}
     </>

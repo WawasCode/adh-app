@@ -1,10 +1,5 @@
+import { LatLngTuple } from "leaflet";
 import { create } from "zustand";
-
-/**
- * ZonePoint – Tuple representing a single point on the map.
- * [latitude, longitude]
- */
-export type ZonePoint = [number, number];
 
 /**
  * HazardZone – Representation of a manually drawn polygon hazard zone.
@@ -20,11 +15,12 @@ export type ZonePoint = [number, number];
 export type HazardZone = {
   id: string;
   name: string;
-  description: string;
+  coordinates: LatLngTuple[];
   severity: string;
-  coordinates: [number, number][];
+  description?: string;
   isWalkable?: boolean;
   isDrivable?: boolean;
+  type: "Polygon" | "Point";
 };
 
 /**

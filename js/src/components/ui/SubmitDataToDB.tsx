@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { useHazardZoneStore } from "@/store/useHazardZoneStore";
-import { useWaypointStore } from "@/store/useWaypointStore";
-import { useIncidentStore } from "@/store/useIncidentStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import React from "react";
 
 async function submitData(
@@ -32,37 +32,37 @@ async function submitData(
 
 export const handleSubmit =
   (dataType: "hazardZones" | "waypoints" | "incidents") =>
-  async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    let data;
-    let endpoint = "";
-    let successMsg = "";
-    let errorMsg = "";
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      let data;
+      let endpoint = "";
+      let successMsg = "";
+      let errorMsg = "";
 
-    if (dataType === "hazardZones") {
-      data = useHazardZoneStore.getState().savedHazardZones;
-      endpoint = "/api/hazard-zones";
-      successMsg = "Hazard zones submitted successfully!";
-      errorMsg = "Failed to submit hazard zones. Please try again.";
-    } else if (dataType === "waypoints") {
-      data = useWaypointStore.getState().waypoints;
-      endpoint = "/api/waypoints";
-      successMsg = "Waypoints submitted successfully!";
-      errorMsg = "Failed to submit waypoints. Please try again.";
-    } else if (dataType === "incidents") {
-      data = useIncidentStore.getState().incidents;
-      endpoint = "/api/incidents";
-      successMsg = "Incidents submitted successfully!";
-      errorMsg = "Failed to submit incidents. Please try again.";
-    } else {
-      alert("Invalid data type specified.");
-      return;
-    }
+      if (dataType === "hazardZones") {
+        data = useHazardZoneStore.getState().savedHazardZones;
+        endpoint = "/api/hazard-zones";
+        successMsg = "Hazard zones submitted successfully!";
+        errorMsg = "Failed to submit hazard zones. Please try again.";
+      } else if (dataType === "waypoints") {
+        data = useWaypointStore.getState().waypoints;
+        endpoint = "/api/waypoints";
+        successMsg = "Waypoints submitted successfully!";
+        errorMsg = "Failed to submit waypoints. Please try again.";
+      } else if (dataType === "incidents") {
+        data = useIncidentStore.getState().incidents;
+        endpoint = "/api/incidents";
+        successMsg = "Incidents submitted successfully!";
+        errorMsg = "Failed to submit incidents. Please try again.";
+      } else {
+        alert("Invalid data type specified.");
+        return;
+      }
 
-    if (!data || data.length === 0) {
-      alert(`No ${dataType} available to submit.`);
-      return;
-    }
+      if (!data || data.length === 0) {
+        alert(`No ${dataType} available to submit.`);
+        return;
+      }
 
-    await submitData(endpoint, data, successMsg, errorMsg);
-  };
+      await submitData(endpoint, data, successMsg, errorMsg);
+    };

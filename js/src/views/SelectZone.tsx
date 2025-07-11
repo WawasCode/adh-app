@@ -1,5 +1,5 @@
-import { usePlaceStore } from "@/store/usePlaceStore";
-import { useZoneStore } from "@/store/useZoneStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
+import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import RemoteZoneMapWithClicks from "@/map/MapsForUserInput/RemoteZoneMapWithClicks";
@@ -25,7 +25,7 @@ export default function SelectZone() {
     maxPointsReached,
   } = useZoneStore();
 
-  const { resetHazardInput } = usePlaceStore();
+  const { resetHazardInput } = useIncidentStore();
   const { setPage } = useViewStore();
 
   /**

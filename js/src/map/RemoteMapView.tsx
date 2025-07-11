@@ -16,11 +16,11 @@ import { SavedHazardZones } from "@/map/SavedHazardZones";
 import { customMarkerIcon } from "@/utils/customMarkerIcon";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
-import { useWaypointStore } from "@/store/useWaypointStore";
-import { useHazardZoneStore } from "@/store/useHazardZoneStore";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
 import { SavedHazardIncidents } from "./SavedHazardIncidents";
-import { useIncidentStore } from "@/store/useIncidentStore";
-import { MapClickHandler } from "./MapClickHandler";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 
 const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
@@ -59,6 +59,11 @@ function ChangeMapView({ center }: { center: [number, number] }) {
   return null;
 }
 
+/**
+ * LongClickHandler listens for long clicks on the map
+ * and triggers a callback with the clicked coordinates.
+ * @param onLongClick Callback function to handle long clicks.
+ */
 function LongClickHandler({
   onLongClick,
 }: {
@@ -75,6 +80,27 @@ function LongClickHandler({
 
   return null;
 }
+
+/**
+ * MapClickHandler clears the selected waypoint when the map is clicked.
+ */
+const MapClickHandler = () => {
+  const { clearData } = useSlidingCardStore();
+
+  useMapEvents({
+    click: (e) => {
+      const target = e.originalEvent.target;
+
+      if (target instanceof HTMLElement) {
+        if (!target.classList.contains("leaflet-interactive")) {
+          clearData();
+        }
+      }
+    },
+  });
+
+  return null;
+};
 
 /**
  * RemoteMapView renders the main map background.

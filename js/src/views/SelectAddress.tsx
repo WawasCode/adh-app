@@ -1,4 +1,4 @@
-import { usePlaceStore } from "@/store/usePlaceStore";
+import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useViewStore } from "@/store/useViewStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { SearchBar } from "@/views/MobileUICommon";
@@ -16,9 +16,9 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  */
 export default function SelectAddress() {
   const { setPage } = useViewStore();
-  const location = usePlaceStore((s) => s.hazardInput.location);
-  const setHazardField = usePlaceStore((s) => s.setHazardField);
-  const resetHazardInput = usePlaceStore((s) => s.resetHazardInput);
+  const location = useIncidentStore((s) => s.hazardInput.location);
+  const setHazardField = useIncidentStore((s) => s.setHazardField);
+  const resetHazardInput = useIncidentStore((s) => s.resetHazardInput);
 
   /**
    * handleCancel – Resets hazard input and navigates back to the main screen.

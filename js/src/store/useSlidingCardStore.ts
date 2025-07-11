@@ -1,43 +1,43 @@
 import { create } from "zustand";
-import { Waypoint } from "@/store/useWaypointStore";
+import { Waypoint } from "@/types/waypoint";
+import { HazardZone } from "@/types/hazardZone";
+import { Incident } from "@/types/incident";
+
+export type SlidingCardData = Waypoint | HazardZone | Incident;
 
 /**
  * SlidingCardState – Zustand store for managing the visibility and content
- * of a sliding detail card for a selected waypoint.
+ * of a sliding detail card for a selected item.
  *
  * @property isVisible Indicates whether the sliding card is shown
- * @property waypoint The currently selected waypoint for display
- * @property setWaypoint Opens the card with a given waypoint
- * @property clearWaypoint Closes the card and clears the state
+ * @property data The currently selected item for display
+ * @property setData Opens the card with a given item
+ * @property clearData Closes the card and clears the state
  */
 interface SlidingCardState {
   isVisible: boolean;
-  waypoint: Waypoint | null;
-  setWaypoint: (waypoint: Waypoint) => void;
-  clearWaypoint: () => void;
+  data: SlidingCardData | null;
+  setData: (data: SlidingCardData) => void;
+  clearData: () => void;
 }
 
 /**
  * useSlidingCardStore – Zustand store that controls the sliding detail card
- * used to show information about a selected waypoint.
- *
- * Usage:
- * - `setWaypoint(wp)`: Show the card with `wp` as its content
- * - `clearWaypoint()`: Hide the card and remove the waypoint
+ * used to show information about a selected item.
  */
 export const useSlidingCardStore = create<SlidingCardState>((set) => ({
   isVisible: false,
-  waypoint: null,
+  data: null,
 
   /**
-   * setWaypoint – Displays the sliding card with the selected waypoint.
+   * setData – Displays the sliding card with the selected item.
    *
-   * @param waypoint A waypoint object to show in the card
+   * @param data An item object to show in the card
    */
-  setWaypoint: (waypoint) => set({ isVisible: true, waypoint }),
+  setData: (data) => set({ isVisible: true, data }),
 
   /**
-   * clearWaypoint – Hides the sliding card and clears its content.
+   * clearData – Hides the sliding card and clears the content.
    */
-  clearWaypoint: () => set({ isVisible: false, waypoint: null }),
+  clearData: () => set({ isVisible: false, data: null }),
 }));

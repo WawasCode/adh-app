@@ -1,5 +1,10 @@
-import { Polygon, Popup } from "react-leaflet";
-import { useHazardZoneStore } from "@/store/useHazardZoneStore";
+import { Polygon } from "react-leaflet";
+import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
+import { HazardZone } from "../types/hazardZone";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { useLocationStore } from "@/store/useLocationStore";
+import { LatLngTuple } from "leaflet";
+import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 
 function getZoneColor(severity: string | undefined): string {
   switch (severity) {
@@ -21,9 +26,36 @@ function getZoneColor(severity: string | undefined): string {
  */
 export function SavedHazardZones() {
   const hazardZones = useHazardZoneStore((s) => s.savedHazardZones);
+  const { setData } = useSlidingCardStore();
+  const currentPosition = useLocationStore((state) => state.position);
+
+  const handleMarkerClick = (
+    hazardZone: HazardZone,
+    center: LatLngTuple | null,
+  ) => {
+    if (currentPosition && center) {
+      const distance = calculateDistance(currentPosition as [number, number], [
+        center[0],
+        center[1],
+      ]);
+      setData({ ...hazardZone, distance });
+    } else {
+      setData(hazardZone);
+    }
+  };
+
   return (
     <>
       {hazardZones.map((zone) => {
+        const centerCoords: LatLngTuple | null =
+          typeof zone.center === "string"
+            ? parseWKTPoint(zone.center)
+            : zone.center?.coordinates
+              ? [zone.center.coordinates[1], zone.center.coordinates[0]]
+              : null;
+
+        if (!centerCoords) return null;
+
         return (
           <Polygon
             key={zone.id}
@@ -33,33 +65,10 @@ export function SavedHazardZones() {
               fillColor: getZoneColor(zone.severity),
               fillOpacity: 0.4,
             }}
-          >
-            <Popup>
-              <div className="text-sm leading-tight">
-                <strong>{zone.name}</strong>
-                <br />
-                Severity: {zone.severity || "unknown"}
-                {zone.description && (
-                  <>
-                    <br />
-                    {zone.description}
-                  </>
-                )}
-                {zone.isWalkable !== undefined && (
-                  <>
-                    <br />
-                    Walkable: {zone.isWalkable ? "Yes" : "No"}
-                  </>
-                )}
-                {zone.isDrivable !== undefined && (
-                  <>
-                    <br />
-                    Drivable: {zone.isDrivable ? "Yes" : "No"}
-                  </>
-                )}
-              </div>
-            </Popup>
-          </Polygon>
+            eventHandlers={{
+              click: () => handleMarkerClick(zone, centerCoords),
+            }}
+          />
         );
       })}
     </>

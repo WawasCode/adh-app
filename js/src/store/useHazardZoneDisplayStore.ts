@@ -1,30 +1,6 @@
 import { create } from "zustand";
-import type { LatLngTuple } from "leaflet";
-
-/**
- * HazardZone – Local representation of a hazard zone.
- *
- * Used on the map to display a polygon or a point.
- *
- * @property id Unique identifier (stringified)
- * @property name Human-readable name
- * @property coordinates Array of LatLng tuples
- * @property severity Optional severity string
- * @property description Optional text description
- * @property isWalkable Optional boolean flag
- * @property isDrivable Optional boolean flag
- * @property type "Polygon" or "Point"
- */
-export type HazardZone = {
-  id: string;
-  name: string;
-  coordinates: LatLngTuple[];
-  severity?: string;
-  description?: string;
-  isWalkable?: boolean;
-  isDrivable?: boolean;
-  type: "Polygon" | "Point";
-};
+import { HazardZone, HazardZoneBackend } from "@/types/hazardZone";
+import { LatLngTuple } from "leaflet";
 
 /**
  * HazardZoneState – Zustand store shape for hazard zone management.
@@ -37,21 +13,6 @@ type HazardZoneState = {
   savedHazardZones: HazardZone[];
   addHazardZone: (zone: HazardZone) => void;
   fetchHazardZones: () => Promise<void>;
-};
-
-/**
- * HazardZoneFromBackend – Raw hazard zone object returned from the backend.
- *
- * @property location WKT string (e.g. "SRID=4326;POLYGON ((...))" or "POINT (...)")
- */
-type HazardZoneFromBackend = {
-  id: number | string;
-  name: string;
-  location: string; // WKT-String z.B. "SRID=4326;POLYGON ((...))"
-  severity?: string;
-  description?: string;
-  isWalkable?: boolean;
-  isDrivable?: boolean;
 };
 
 /**
@@ -111,24 +72,26 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
       if (!res.ok) throw new Error("Failed to fetch hazard zones");
       const data = await res.json();
 
-      const zones: HazardZone[] = data.map((zone: HazardZoneFromBackend) => {
-        const wkt = zone.location;
-        const isPoint = wkt.includes("POINT");
+      const zones: HazardZone[] = data.map((zone: HazardZoneBackend) => {
+        const pointsWKT = zone.location;
+        const isPoint = pointsWKT.includes("POINT");
         let coords: LatLngTuple[] = [];
 
         if (isPoint) {
-          const match = wkt.match(/\(([\d.]+) ([\d.]+)\)/);
+          const match = pointsWKT.match(/\(([\d.]+) ([\d.]+)\)/);
           if (match) {
             const [, lat, lng] = match;
             coords = [[parseFloat(lat), parseFloat(lng)]];
           }
         } else {
-          coords = parseWKTPolygon(wkt);
+          coords = parseWKTPolygon(pointsWKT);
         }
 
         return {
           id: zone.id.toString(),
+          kind: zone.kind,
           name: zone.name || "Unnamed Zone",
+          center: zone.center,
           coordinates: coords,
           severity: zone.severity,
           description: zone.description,

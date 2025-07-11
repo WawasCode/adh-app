@@ -1,4 +1,4 @@
-import { Incident } from "@/store/useIncidentStore.ts";
+import { Incident } from "@/types/incident";
 
 /**
  * Props for the IncidentsList component.
@@ -28,7 +28,7 @@ export function IncidentsList({ incidents, name }: IncidentsListProps) {
               <div className="font-bold text-xl">{incident.name}</div>
               <div className="text-base">{incident.description}</div>
               <div className="text-xs text-muted-foreground mt-1">
-                {incident.type} · {getTimeSincePosting(incident.reportedAt)} ·{" "}
+                {incident.kind} · {getTimeSincePosting(incident.reportedAt)} ·{" "}
                 {formatTime(incident.reportedAt)}
               </div>
             </div>

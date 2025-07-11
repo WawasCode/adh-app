@@ -5,7 +5,7 @@ import {
   Polygon,
   Marker,
 } from "react-leaflet";
-import { useZoneStore } from "@/store/useZoneStore";
+import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import { UserMarker } from "@/map/UserMarker";

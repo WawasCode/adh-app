@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button";
 import { useViewStore } from "@/store/useViewStore";
-import { usePlaceStore } from "@/store/usePlaceStore";
-import type { WaypointType } from "@/store/usePlaceStore";
+import { useWaypointStore } from "@/store/useWaypointCreationStore";
+import { WaypointType } from "@/types/waypoint";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
 
@@ -16,8 +16,8 @@ import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButt
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
-  const setWaypointField = usePlaceStore((s) => s.setWaypointField);
-  const resetWaypointInput = usePlaceStore((s) => s.resetWaypointInput);
+  const setWaypointField = useWaypointStore((s) => s.setWaypointField);
+  const resetWaypointInput = useWaypointStore((s) => s.resetWaypointInput);
 
   const waypointOptions: WaypointType[] = [
     "firestation",
