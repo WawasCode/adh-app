@@ -3,6 +3,7 @@ import { FloatingLabelTextarea } from "@/components/ui/FloatingLabelTextarea";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { useViewStore } from "@/store/useViewStore";
 import { useWaypointStore } from "@/store/useWaypointCreationStore";
+import { useWaypointStore as useWaypointDisplayStore } from "@/store/useWaypointDisplayStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 
@@ -61,6 +62,8 @@ export default function ConfigureWaypoint() {
       });
 
       if (!res.ok) throw new Error("Error while saving");
+
+      await useWaypointDisplayStore.getState().fetchWaypoints();
 
       alert("Waypoint saved successfully!");
       resetWaypointInput();

@@ -5,7 +5,7 @@ import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { LatLngTuple } from "leaflet";
 import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
-import { theme } from "styles/theme";
+import { theme } from "~/styles/theme";
 
 /**
  * SavedHazardZones renders hazard zones fetched from the backend.

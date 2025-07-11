@@ -8,6 +8,8 @@ import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { calculateCentroid } from "@/utils/geoUtils";
+import { useIncidentStore as useIncidentDisplayStore } from "@/store/useIncidentDisplayStore";
+import { useHazardZoneStore as useHazardZoneDisplayStore } from "@/store/useHazardZoneDisplayStore";
 
 /**
  * ConfigureHazard – View for entering hazard details.
@@ -99,6 +101,12 @@ export default function ConfigureHazard() {
       });
 
       if (!res.ok) throw new Error("Error saving hazard or incident");
+
+      if (isIncident) {
+        await useIncidentDisplayStore.getState().fetchIncidents();
+      } else {
+        await useHazardZoneDisplayStore.getState().fetchHazardZones();
+      }
 
       alert(`${isIncident ? "Incident" : "Hazard"} saved successfully!`);
       resetHazardInput();
