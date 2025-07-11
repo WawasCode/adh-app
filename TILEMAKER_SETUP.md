@@ -44,9 +44,9 @@ The `prepare-data.sh` script will automatically install required dependencies on
    ```
 
 3. **Access tiles:**
-   - Tiles are available at: `http://localhost:8000/api/tiles/{z}/{x}/{y}.mvt`
-   - Metadata: `http://localhost:8000/api/tiles/metadata.json`
-   - Stats: `http://localhost:8000/api/tiles/stats/`
+   - Tiles are available at: `http://localhost:8080/api/tiles/{z}/{x}/{y}.mvt`
+   - Metadata: `http://localhost:8080/api/tiles/metadata.json`
+   - Stats: `http://localhost:8080/api/tiles/stats/`
 
 ## What's Generated
 
@@ -115,7 +115,7 @@ If tiles don't load:
 1. Verify the MBTiles file exists: `ls -la python/berlin.mbtiles`
 2. Check Django logs for errors
 3. Run the verification script
-4. Ensure the Django server is running on port 8000
+4. Ensure the Django server is running on port 8080
 
 ## Performance Notes
 
