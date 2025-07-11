@@ -1,6 +1,5 @@
 import "@/App.css";
 import MobileLayout from "@/MobileUI";
-import { LocalMapView } from "./map/LocalMapView";
 
 /**
  * App component that renders the main application layout,
@@ -8,5 +7,4 @@ import { LocalMapView } from "./map/LocalMapView";
  */
 export default function App() {
   return <MobileLayout />;
-  return <LocalMapView />;
 }

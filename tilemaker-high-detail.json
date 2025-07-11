@@ -1,0 +1,47 @@
+{
+	"layers": {
+		"place":            { "minzoom":  0, "maxzoom": 18 },
+		"boundary":         { "minzoom":  0, "maxzoom": 18, "simplify_below": 15, "simplify_level": 0.0001, "simplify_ratio": 2, "simplify_algorithm": "visvalingam" },
+
+		"poi":              { "minzoom": 12, "maxzoom": 18 },
+		"poi_detail":       { "minzoom": 16, "maxzoom": 18, "write_to": "poi"},
+
+		"housenumber":      { "minzoom": 16, "maxzoom": 18 },
+
+		"waterway":         { "minzoom":  8,  "maxzoom": 18, "simplify_below": 15, "simplify_level": 0.0001, "simplify_ratio": 2 },
+		"waterway_detail":  { "minzoom": 14,  "maxzoom": 18, "write_to": "waterway" },
+
+		"transportation":             { "minzoom": 4,  "maxzoom": 18, "simplify_below": 16, "simplify_level": 0.0001 },
+		"transportation_name":        { "minzoom": 8,  "maxzoom": 18 },
+
+		"building":          { "minzoom": 13, "maxzoom": 18 },
+
+		"water":             { "minzoom": 6,  "maxzoom": 18, "simplify_below": 15, "simplify_level": 0.0001, "simplify_ratio": 2},
+		"water_name":        { "minzoom": 14, "maxzoom": 18 },
+		"water_name_detail": { "minzoom": 16, "maxzoom": 18, "write_to": "water_name" },
+
+		"aeroway":           { "minzoom": 11, "maxzoom": 18 },
+		"aerodrome_label":   { "minzoom": 10, "maxzoom": 18 },
+		"park":              { "minzoom": 11, "maxzoom": 18 },
+		"landuse":           { "minzoom":  4, "maxzoom": 18, "simplify_below": 16, "simplify_level": 0.0001, "simplify_ratio": 2 },
+		"landcover":         { "minzoom":  0, "maxzoom": 18, "simplify_below": 16, "simplify_level": 0.0001, "simplify_ratio": 2 },
+		"mountain_peak":     { "minzoom": 11, "maxzoom": 18 }
+	},
+	"settings": {
+		"minzoom": 0,
+		"maxzoom": 18,
+		"basezoom": 18,
+		"include_ids": false,
+		"combine_below": 18,
+		"name": "High Detail Berlin Vector Tiles",
+		"version": "3.0",
+		"description": "High detail vector tiles for Berlin with zoom levels 0-18",
+		"compress": "gzip",
+		"filemetadata": {
+			"tilejson": "2.0.0", 
+			"scheme": "xyz", 
+			"type": "baselayer", 
+			"format": "pbf"
+		}
+	}
+}

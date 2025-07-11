@@ -34,7 +34,8 @@ const customMarkerIcon = new L.Icon({
 
 const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
-const MAX_ZOOM = 19;
+const MIN_ZOOM = 0; // Vector tiles start at zoom 0
+const MAX_ZOOM = 18; // High detail vector tiles end at zoom 18
 
 const BOUNDS: [[number, number], [number, number]] = [
   [47.26543, 5.864417],
@@ -144,6 +145,7 @@ export function RemoteMapView({
         style={{ height: "100%", width: "100%" }}
         center={position || mapCenter}
         zoom={ZOOM}
+        minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
         maxBounds={BOUNDS}
         maxBoundsViscosity={1}
@@ -151,7 +153,7 @@ export function RemoteMapView({
       >
         <VectorTileLayer
           styleUrl="http://localhost:8080/api/styles/osm-bright-local.json"
-          maxZoom={14}
+          maxZoom={MAX_ZOOM}
         />
         {selectedLocation && (
           <>
