@@ -68,7 +68,7 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
    */
   fetchHazardZones: async () => {
     try {
-      const res = await fetch("/api/hazard-zones/");
+      const res = await fetch("/api/hazardzones/");
       if (!res.ok) throw new Error("Failed to fetch hazard zones");
       const data = await res.json();
 
@@ -98,6 +98,12 @@ export const useHazardZoneStore = create<HazardZoneState>((set) => ({
           isWalkable: zone.isWalkable,
           isDrivable: zone.isDrivable,
           type: isPoint ? "Point" : "Polygon",
+          reportedAt:
+            typeof zone.created_at === "string" ||
+            typeof zone.created_at === "number" ||
+            zone.created_at instanceof Date
+              ? new Date(zone.created_at)
+              : new Date(),
         };
       });
 

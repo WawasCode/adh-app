@@ -46,6 +46,7 @@ export interface WaypointInput {
  * @property createdAt Optional creation timestamp (ISO string)
  */
 export interface Waypoint {
+  created_at: unknown;
   id: number;
   kind: string;
   name: string;
@@ -56,4 +57,5 @@ export interface Waypoint {
   telephone?: string;
   isAvailable?: boolean;
   createdAt?: string;
+  reportedAt: Date;
 }

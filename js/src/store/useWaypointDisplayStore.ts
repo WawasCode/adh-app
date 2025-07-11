@@ -7,6 +7,7 @@ import { Waypoint } from "@/types/waypoint";
  * @property waypoints Array of loaded waypoints
  * @property fetchWaypoints Function to load waypoints from the backend API
  */
+
 interface WaypointState {
   waypoints: Waypoint[];
   fetchWaypoints: () => Promise<void>;
@@ -27,7 +28,11 @@ export const useWaypointStore = create<WaypointState>((set) => ({
       if (!response.ok) throw new Error("Failed to fetch waypoints");
 
       const data = await response.json();
-      set({ waypoints: data as Waypoint[] });
+      const waypoints = (data as Waypoint[]).map((item) => ({
+        ...item,
+        reportedAt: item.created_at ? new Date(item.created_at) : new Date(),
+      }));
+      set({ waypoints });
     } catch (error) {
       console.error("Error fetching waypoints:", error);
     }

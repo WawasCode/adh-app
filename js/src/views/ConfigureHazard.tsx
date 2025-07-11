@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { FloatingLabelTextarea } from "@/components/ui/FloatingLabelTextarea";
 import { Button } from "@/components/ui/Button";
@@ -91,7 +92,7 @@ export default function ConfigureHazard() {
       }), // Include the center field for HazardZone
     };
 
-    const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";
+    const endpoint = isIncident ? "/api/incidents/" : "/api/hazardzones/";
 
     try {
       const res = await fetch(endpoint, {

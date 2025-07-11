@@ -66,11 +66,6 @@ print_status "Running database migrations..."
 python manage.py migrate
 print_success "Database migrations completed"
 
-# Dump der Datenbank in eine Datei im Projektverzeichnis
-print_status "Dumping database to db_dump.sql..."
-pg_dump -h db -U django adh > /workspace/db_dump.sql
-print_success "Database dump to db_dump.sql completed"
-
 
 # Collect static files (if needed).
 print_status "Collecting static files..."

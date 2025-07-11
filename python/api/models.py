@@ -14,7 +14,7 @@ class Incident(models.Model):
         ('high', 'High'),
         ('critical', 'Critical'),
     ], default='medium')
-    created_at = models.DateTimeField(auto_now_add=True) #, default=None
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -42,6 +42,8 @@ class Waypoint(models.Model):
     ], default='other')
     telephone_number = models.CharField(max_length=20, null=True, blank=True)
     active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -61,7 +63,7 @@ class Hazard_Zone(models.Model):
         ('high', 'High'),
         ('critical', 'Critical'),
     ], default='medium')
-    created_at = models.DateTimeField(auto_now_add=True) #, default=None
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

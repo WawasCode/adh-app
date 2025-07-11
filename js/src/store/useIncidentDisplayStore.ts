@@ -80,7 +80,9 @@ export const useIncidentStore = create<IncidentState>((set) => ({
           kind: incident.kind,
           description: incident.description,
           severity: incident.severity,
-          reportedAt: new Date(incident.created_at),
+          reportedAt: incident.created_at
+            ? new Date(incident.created_at)
+            : new Date(),
         } as Incident;
       });
       set({ incidents: incidents });

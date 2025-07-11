@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'incidents', IncidentViewSet)
 router.register(r'waypoints', WaypointViewSet)
-router.register(r'hazard-zones', HazardZoneViewSet)
+router.register(r'hazardzones', HazardZoneViewSet)
 
 urlpatterns = [
     path('hello/', hello_world, name='hello_world'),

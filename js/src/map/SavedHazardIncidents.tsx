@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Marker } from "react-leaflet";
 import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
