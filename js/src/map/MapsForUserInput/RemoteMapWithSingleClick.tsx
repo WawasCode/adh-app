@@ -3,7 +3,7 @@ import { UserMarker } from "@/map/UserMarker";
 import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
-import { customMarkerIcon } from "@/utils/customMarkerIcon";
+import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
 
 const CENTER: [number, number] = [52.52, 13.405];
 
@@ -38,7 +38,7 @@ export default function RemoteMapViewWithSingleClick() {
       />
       <UserMarker />
       <MapClickHandler />
-      {location && <Marker position={location} icon={customMarkerIcon} />}
+      {location && <Marker position={location} icon={incidentMarkerIcon} />}
     </MapContainer>
   );
 }
