@@ -2,7 +2,6 @@ import { useMapStore } from "@/store/useMapStore";
 import { UserMarker } from "./UserMarker";
 import {
   MapContainer,
-  TileLayer,
   useMap,
   Marker,
   Popup,
@@ -17,6 +16,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { theme } from "~/styles/theme";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
+import VectorTileLayer from "react-leaflet-vector-tile-layer";
 
 // Leaflet Marker is bugged
 const customMarkerIcon = new L.Icon({
@@ -34,7 +34,8 @@ const customMarkerIcon = new L.Icon({
 
 const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
-const MAX_ZOOM = 19;
+const MIN_ZOOM = 0; // Vector tiles start at zoom 0
+const MAX_ZOOM = 18; // High detail vector tiles end at zoom 18
 
 const BOUNDS: [[number, number], [number, number]] = [
   [47.26543, 5.864417],
@@ -144,14 +145,14 @@ export function RemoteMapView({
         style={{ height: "100%", width: "100%" }}
         center={position || mapCenter}
         zoom={ZOOM}
+        minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
         maxBounds={BOUNDS}
         maxBoundsViscosity={1}
         zoomControl={false}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        <VectorTileLayer
+          styleUrl="http://localhost:8080/api/styles/osm-bright-local.json"
           maxZoom={MAX_ZOOM}
         />
         {selectedLocation && (
