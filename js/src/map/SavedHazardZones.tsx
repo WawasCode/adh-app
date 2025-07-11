@@ -5,21 +5,7 @@ import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { LatLngTuple } from "leaflet";
 import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
-
-function getZoneColor(severity: string | undefined): string {
-  switch (severity) {
-    case "low":
-      return "#ca8a04";
-    case "medium":
-      return "#f97316";
-    case "high":
-      return "#ef4444";
-    case "critical":
-      return "#b91c1c";
-    default:
-      return "#6b7280";
-  }
-}
+import { theme } from "styles/theme";
 
 /**
  * SavedHazardZones renders hazard zones fetched from the backend.
@@ -41,6 +27,21 @@ export function SavedHazardZones() {
       setData({ ...hazardZone, distance });
     } else {
       setData(hazardZone);
+    }
+  };
+
+  const getZoneColor = (severity: string | undefined): string => {
+    switch (severity) {
+      case "low":
+        return theme.colors.severity.low;
+      case "medium":
+        return theme.colors.severity.medium;
+      case "high":
+        return theme.colors.severity.high;
+      case "critical":
+        return theme.colors.severity.critical;
+      default:
+        return theme.colors.severity.default;
     }
   };
 
