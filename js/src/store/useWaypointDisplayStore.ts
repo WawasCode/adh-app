@@ -30,7 +30,12 @@ export const useWaypointStore = create<WaypointState>((set) => ({
       const data = await response.json();
       const waypoints = (data as Waypoint[]).map((item) => ({
         ...item,
-        reportedAt: item.created_at ? new Date(item.created_at) : new Date(),
+        reportedAt:
+          typeof item.created_at === "string" ||
+          typeof item.created_at === "number" ||
+          item.created_at instanceof Date
+            ? new Date(item.created_at)
+            : new Date(),
       }));
       set({ waypoints });
     } catch (error) {

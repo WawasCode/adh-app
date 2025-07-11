@@ -27,6 +27,7 @@ export type HazardZone = {
   center: Location;
   severity: string;
   description?: string;
+  reportedAt: Date;
   isWalkable?: boolean;
   isDrivable?: boolean;
   distance?: number;
@@ -38,6 +39,8 @@ export type HazardZone = {
  * @property location WKT string (e.g. "SRID=4326;POLYGON ((...))" or "POINT (...)")
  */
 export type HazardZoneBackend = {
+  created_at: unknown;
+  createdAt: unknown;
   id: number | string;
   kind: string;
   name: string;
