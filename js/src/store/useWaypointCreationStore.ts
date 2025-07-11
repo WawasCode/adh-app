@@ -1,5 +1,3 @@
-// src/stores/useWaypointStore.ts
-
 import { create } from "zustand";
 import { Waypoint, WaypointInput } from "@/types/waypoint";
 

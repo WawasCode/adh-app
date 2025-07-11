@@ -4,6 +4,7 @@ import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import RemoteMapViewWithClick from "@/map/MapsForUserInput/RemoteMapViewWithClick";
 import { SearchBar } from "@/views/MobileUICommon";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import { useMapStore } from "@/store/useMapStore";
 
 /**
  * SelectWaypointLocation – View to define a waypoint's position on the map.
@@ -26,12 +27,16 @@ export default function SelectWaypointLocation() {
    *
    * @param location - Object containing lat/lon and name from the search result.
    */
+  const map = useMapStore((s) => s.map);
   const handleLocationSelect = (location: {
     lat: number;
     lon: number;
     name: string;
   }) => {
     setWaypointField("location", [location.lat, location.lon]);
+    if (map) {
+      map.flyTo([location.lat, location.lon], 15);
+    }
   };
 
   /**

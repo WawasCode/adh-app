@@ -4,11 +4,25 @@ import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
 import { customMarkerIcon } from "@/utils/customMarkerIcon";
 import "leaflet/dist/leaflet.css";
+import { useMap } from "react-leaflet";
+import { useEffect } from "react";
+import { useMapStore } from "@/store/useMapStore";
 
 /**
  * Default center fallback (Berlin) if GPS is unavailable
  */
 const CENTER: [number, number] = [52.52, 13.405];
+
+function StoreMapInZustand() {
+  const map = useMap();
+  const setMap = useMapStore((s) => s.setMap);
+
+  useEffect(() => {
+    setMap(map);
+  }, [map, setMap]);
+
+  return null;
+}
 
 /**
  * MapClickHandler allows the user to click on the map
@@ -48,6 +62,7 @@ export default function RemoteMapViewWithClick() {
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <StoreMapInZustand />
       <UserMarker />
       <MapClickHandler />
       {location && <Marker position={location} icon={customMarkerIcon} />}

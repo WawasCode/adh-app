@@ -4,7 +4,7 @@ import { ViewFooter } from "@/components/ui/ViewFooter";
 import { SearchBar } from "@/views/MobileUICommon";
 import RemoteMapViewWithSingleClick from "@/map/MapsForUserInput/RemoteMapWithSingleClick";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
-
+import { useMapStore } from "@/store/useMapStore";
 /**
  * SelectAddress – View to set a single-point hazard location.
  *
@@ -42,12 +42,16 @@ export default function SelectAddress() {
    *
    * @param location – Object containing `lat`, `lon`, and `name` of selected address
    */
+  const map = useMapStore((s) => s.map);
   const handleSearchSelect = (location: {
     lat: number;
     lon: number;
     name: string;
   }) => {
     setHazardField("location", [location.lat, location.lon]);
+    if (map) {
+      map.flyTo([location.lat, location.lon], 15);
+    }
   };
 
   return (

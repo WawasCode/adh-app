@@ -4,8 +4,22 @@ import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
+import { useMapStore } from "@/store/useMapStore";
+import { useMap } from "react-leaflet";
+import { useEffect } from "react";
 
 const CENTER: [number, number] = [52.52, 13.405];
+
+function StoreMapInZustand() {
+  const map = useMap();
+  const setMap = useMapStore((s) => s.setMap);
+
+  useEffect(() => {
+    setMap(map);
+  }, [map, setMap]);
+
+  return null;
+}
 
 function MapClickHandler() {
   const setHazardField = useIncidentStore((s) => s.setHazardField);
@@ -38,6 +52,7 @@ export default function RemoteMapViewWithSingleClick() {
       />
       <UserMarker />
       <MapClickHandler />
+      <StoreMapInZustand />
       {location && <Marker position={location} icon={incidentMarkerIcon} />}
     </MapContainer>
   );
