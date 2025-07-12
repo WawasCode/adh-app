@@ -57,7 +57,6 @@ export interface Incident {
 export interface IncidentApiResponse {
   id: number;
   kind: string;
-  incident_id: number;
   name: string;
   location: Location | null;
   description: string;

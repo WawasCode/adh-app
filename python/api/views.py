@@ -21,9 +21,6 @@ class HazardZoneViewSet(viewsets.ModelViewSet):
     queryset = Hazard_Zone.objects.all()
     serializer_class = HazardZoneSerializer
 
-def hello_world(request):
-    return JsonResponse({"message": "Hello, world!"})
-
 def check_vite_dev_server():
     """Check if Vite dev server is running on port 5173"""
     try:

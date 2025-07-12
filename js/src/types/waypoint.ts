@@ -46,7 +46,7 @@ export interface WaypointInput {
  * @property createdAt Optional creation timestamp (ISO string)
  */
 export interface Waypoint {
-  created_at: unknown;
+  created_at: string | number | Date;
   id: number;
   kind: string;
   name: string;

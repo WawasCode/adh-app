@@ -55,8 +55,37 @@ export function calculateCentroid(points: LatLngTuple[]): [number, number] {
  */
 export function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
-  const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/);
+  const match = cleaned.match(/POINT\s*\(\s*([-\d.]+)\s+([-\d.]+)\s*\)/i);
   if (!match) return null;
-  const [, lng, lat] = match; // Note: WKT POINT is in (lon lat) order
-  return [parseFloat(lat), parseFloat(lng)];
+
+  const lng = parseFloat(match[1]);
+  const lat = parseFloat(match[2]);
+
+  if (isNaN(lng) || isNaN(lat)) return null;
+
+  return [lat, lng];
+}
+
+/**
+ * Parses a WKT POLYGON string into an array of LatLng tuples.
+ * @param wkt WKT string representing a polygon (e.g., "POLYGON ((lon1 lat1, lon2 lat2, ...))").
+ * @returns An array of LatLng tuples or an empty array if parsing fails.
+ */
+export function parseWKTPolygon(wkt: string): [number, number][] {
+  const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();
+  const match = cleaned.match(/POLYGON\s*\(\((.+)\)\)/i);
+  if (!match) return [];
+
+  const coords = match[1]
+    .split(",")
+    .map((pair) => pair.trim().split(/\s+/))
+    .filter((pair) => pair.length === 2)
+    .map(([lng, lat]) => {
+      const parsedLng = parseFloat(lng);
+      const parsedLat = parseFloat(lat);
+      return [parsedLat, parsedLng] as [number, number];
+    })
+    .filter(([lat, lng]) => !isNaN(lat) && !isNaN(lng));
+
+  return coords;
 }

@@ -1,10 +1,15 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { cn } from "~/lib/utils";
 import { Navigation as NavigationIcon, Phone, CircleX } from "lucide-react";
 import { Waypoint } from "@/types/waypoint";
 import { HazardZone } from "@/types/hazardZone";
 import { Incident } from "@/types/incident";
+import { ConfirmationDialog } from "./Confirm";
+import apiClient from "@/services/apiClient";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 
 type SlidingCardData = Waypoint | HazardZone | Incident;
 
@@ -91,16 +96,50 @@ const IncidentContent = ({ incident }: { incident: Incident }) => (
   </div>
 );
 
-function deleteElement() {
-  console.log("Delete Item");
-  // Implement the logic to delete the item here
-}
-
 const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
   ({ openNavigation }, ref) => {
     const { isVisible, data, clearData } = useSlidingCardStore();
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     if (!isVisible || !data) return null;
+
+    const handleDelete = async (
+      data: SlidingCardData,
+      clearData: () => void,
+    ) => {
+      try {
+        let endpoint = "";
+        console.log("Deleting item:", data);
+        if (isWaypoint(data)) {
+          endpoint = `/waypoints/${data.id}/`;
+        } else if (isHazardZone(data)) {
+          endpoint = `/hazard-zones/${data.id}/`;
+        } else if (isIncident(data)) {
+          endpoint = `/incidents/${data.id}/`;
+        } else {
+          console.log("Data type not recognized");
+          return;
+        }
+
+        await apiClient.deleteData(
+          endpoint,
+          `${data.kind} deleted successfully`,
+          `Failed to delete ${data.kind}`,
+        );
+
+        if (isWaypoint(data)) {
+          await useWaypointStore.getState().fetchWaypoints();
+        } else if (isHazardZone(data)) {
+          await useHazardZoneStore.getState().fetchHazardZones();
+        } else if (isIncident(data)) {
+          await useIncidentStore.getState().fetchIncidents();
+        }
+
+        clearData();
+      } catch (error) {
+        console.error("Error deleting item:", error);
+      }
+    };
 
     const renderData = (data: SlidingCardData) => {
       if (isWaypoint(data)) {
@@ -141,7 +180,7 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
             <NavigationIcon className="mr-2" size={16} />
             Navigate
           </button>
-          {"telephone" in data && data.telephone && (
+          {data.kind == "waypoint" && "telephone" in data && data.telephone && (
             <a href={`tel:${data.telephone}`}>
               <button className="bg-white font-bold py-2 px-4 rounded border flex items-center">
                 <Phone className="mr-2" size={16} />
@@ -150,13 +189,23 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
             </a>
           )}
           <button
-            onClick={deleteElement}
+            onClick={() => setShowConfirmation(true)}
             className="bg-white font-bold py-2 px-4 rounded border flex items-center"
           >
             <CircleX className="mr-2" size={16} />
             Delete
           </button>
         </div>
+        {showConfirmation && (
+          <ConfirmationDialog
+            onConfirm={() => {
+              setShowConfirmation(false);
+              handleDelete(data, clearData);
+            }}
+            onCancel={() => setShowConfirmation(false)}
+            message="Do you really want to delete this item?"
+          />
+        )}
       </div>
     );
   },
