@@ -102,7 +102,6 @@ export default function ConfigureHazard() {
         await useHazardZoneDisplayStore.getState().fetchHazardZones();
       }
 
-      alert(`${isIncident ? "Incident" : "Hazard"} saved successfully!`);
       resetHazardInput();
       resetZone();
       setPage("main");

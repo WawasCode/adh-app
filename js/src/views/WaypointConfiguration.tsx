@@ -67,7 +67,6 @@ export default function ConfigureWaypoint() {
 
       await useWaypointDisplayStore.getState().fetchWaypoints();
 
-      alert("Waypoint saved successfully!");
       resetWaypointInput();
       setPage("main");
     } catch (error) {

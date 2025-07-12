@@ -83,12 +83,7 @@ const apiClient = {
     }
   },
 
-  async submitData(
-    endpoint: ApiEndpoint,
-    data: ApiData,
-    successMsg = "Data successfully sent",
-    errorMsg = "Failed to send data",
-  ) {
+  async submitData(endpoint: ApiEndpoint, data: ApiData) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
@@ -100,18 +95,12 @@ const apiClient = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      alert(successMsg);
     } catch (error) {
       console.error("Error submitting data:", error);
-      alert(errorMsg);
     }
   },
 
-  async deleteData(
-    endpoint: ApiEndpoint,
-    successMsg = "Data successfully deleted",
-    errorMsg = "Failed to delete data",
-  ) {
+  async deleteData(endpoint: ApiEndpoint) {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "DELETE",
@@ -122,10 +111,8 @@ const apiClient = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      alert(successMsg);
     } catch (error) {
       console.error("Error deleting data:", error);
-      alert(errorMsg);
     }
   },
 };
