@@ -53,24 +53,41 @@ export default function MobileLayout() {
   }, []);
 
   useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        setPosition([lat, lng]);
-        setTimeout(() => setShowMarker(true), MARKER_DISPLAY_DELAY_MS);
-      },
-      (err) => {
-        console.error("GPS error:", err);
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: LOCATION_MAX_AGE_MS,
-        timeout: LOCATION_TIMEOUT_MS,
-      },
-    );
+    let watchId: number;
+    let retryCount = 0;
+    const MAX_RETRIES = 3;
 
-    return () => navigator.geolocation.clearWatch(watchId);
+    const startWatching = () => {
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          setPosition([lat, lng]);
+          setTimeout(() => setShowMarker(true), MARKER_DISPLAY_DELAY_MS);
+          retryCount = 0;
+        },
+        (err) => {
+          console.error("GPS error:", err);
+          if (retryCount < MAX_RETRIES) {
+            retryCount++;
+            setTimeout(startWatching, 5000);
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: LOCATION_MAX_AGE_MS,
+          timeout: LOCATION_TIMEOUT_MS,
+        },
+      );
+    };
+
+    startWatching();
+
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
   }, [setPosition, setShowMarker]);
 
   function handleLocationSelect(location: {
