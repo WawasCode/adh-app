@@ -61,12 +61,6 @@ export default function ConfigureHazard() {
 
     const isIncident = !!location;
 
-    if (!isIncident && points.length < 3) {
-      const center = calculateCentroid(points);
-
-      console.log("Zone center: ", center);
-    }
-
     const payload = {
       name,
       description,
@@ -92,7 +86,7 @@ export default function ConfigureHazard() {
       }), // Include the center field for HazardZone
     };
 
-    const endpoint = isIncident ? "/api/incidents/" : "/api/hazardzones/";
+    const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";
 
     try {
       const res = await fetch(endpoint, {

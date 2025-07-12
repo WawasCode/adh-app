@@ -1,11 +1,10 @@
-import { Polygon } from "react-leaflet";
+import { Polygon, useMapEvents } from "react-leaflet";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
-import { HazardZone } from "../types/hazardZone";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
-import { useLocationStore } from "@/store/useLocationStore";
-import { LatLngTuple } from "leaflet";
+import L from "leaflet";
 import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 import { theme } from "~/styles/theme";
+import { useLocationStore } from "../store/useLocationStore";
 
 /**
  * SavedHazardZones renders hazard zones fetched from the backend.
@@ -13,20 +12,38 @@ import { theme } from "~/styles/theme";
 export function SavedHazardZones() {
   const hazardZones = useHazardZoneStore((s) => s.savedHazardZones);
   const { setData } = useSlidingCardStore();
-  const currentPosition = useLocationStore((state) => state.position);
+  const currentPosition = useLocationStore((s) => s.position);
 
-  const handleMarkerClick = (
-    hazardZone: HazardZone,
-    center: LatLngTuple | null,
-  ) => {
-    if (currentPosition && center) {
-      const distance = calculateDistance(currentPosition as [number, number], [
-        center[0],
-        center[1],
-      ]);
-      setData({ ...hazardZone, distance });
-    } else {
-      setData(hazardZone);
+  const handleMapClick = (e: L.LeafletMouseEvent) => {
+    const clickedLatLng = e.latlng;
+    const clickedZones = hazardZones.filter((zone) => {
+      const polygon = L.polygon(zone.coordinates as [number, number][]);
+      return polygon.getBounds().contains(clickedLatLng);
+    });
+
+    if (clickedZones.length > 0) {
+      const zonesWithDistance = clickedZones.map((zone) => {
+        const centerCoords =
+          typeof zone.center === "string"
+            ? parseWKTPoint(zone.center)!
+            : ([zone.center.coordinates[1], zone.center.coordinates[0]] as [
+                number,
+                number,
+              ]);
+
+        if (currentPosition) {
+          const distance = calculateDistance(currentPosition, centerCoords);
+          return { ...zone, distance };
+        } else {
+          return zone;
+        }
+      });
+
+      setData(
+        zonesWithDistance.length === 1
+          ? zonesWithDistance[0]
+          : zonesWithDistance,
+      );
     }
   };
 
@@ -48,15 +65,6 @@ export function SavedHazardZones() {
   return (
     <>
       {hazardZones.map((zone) => {
-        const centerCoords: LatLngTuple | null =
-          typeof zone.center === "string"
-            ? parseWKTPoint(zone.center)
-            : zone.center?.coordinates
-              ? [zone.center.coordinates[1], zone.center.coordinates[0]]
-              : null;
-
-        if (!centerCoords) return null;
-
         return (
           <Polygon
             key={zone.id}
@@ -66,12 +74,23 @@ export function SavedHazardZones() {
               fillColor: getZoneColor(zone.severity),
               fillOpacity: 0.4,
             }}
-            eventHandlers={{
-              click: () => handleMarkerClick(zone, centerCoords),
-            }}
           />
         );
       })}
+      <MapClickHandler onClick={handleMapClick} />
     </>
   );
+}
+
+function MapClickHandler({
+  onClick,
+}: {
+  onClick: (e: L.LeafletMouseEvent) => void;
+}) {
+  useMapEvents({
+    click: (e) => {
+      onClick(e);
+    },
+  });
+  return null;
 }

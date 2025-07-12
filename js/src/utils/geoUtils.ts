@@ -51,7 +51,7 @@ export function calculateCentroid(points: LatLngTuple[]): [number, number] {
 /**
  * Parses a WKT POINT string into a LatLng tuple.
  * @param wkt WKT string representing a point (e.g., "POINT (lon lat)").
- * @returns A LatLng tuple [lat, lon] or null if parsing fails.
+ * @returns A number tuple [lat, lon] or null if parsing fails.
  */
 export function parseWKTPoint(wkt: string): [number, number] | null {
   const cleaned = wkt.replace(/^SRID=\d+;/, "").trim();

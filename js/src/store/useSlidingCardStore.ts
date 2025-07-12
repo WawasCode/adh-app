@@ -3,15 +3,19 @@ import { Waypoint } from "@/types/waypoint";
 import { HazardZone } from "@/types/hazardZone";
 import { Incident } from "@/types/incident";
 
-export type SlidingCardData = Waypoint | HazardZone | Incident;
+// Define a type for a single data item
+export type SlidingCardDataItem = Waypoint | HazardZone | Incident;
+
+// Define a type for an array of data items
+export type SlidingCardData = SlidingCardDataItem | SlidingCardDataItem[];
 
 /**
  * SlidingCardState – Zustand store for managing the visibility and content
- * of a sliding detail card for a selected item.
+ * of a sliding detail card for selected items.
  *
  * @property isVisible Indicates whether the sliding card is shown
- * @property data The currently selected item for display
- * @property setData Opens the card with a given item
+ * @property data The currently selected items for display
+ * @property setData Opens the card with given items
  * @property clearData Closes the card and clears the state
  */
 interface SlidingCardState {
@@ -23,16 +27,16 @@ interface SlidingCardState {
 
 /**
  * useSlidingCardStore – Zustand store that controls the sliding detail card
- * used to show information about a selected item.
+ * used to show information about selected items.
  */
 export const useSlidingCardStore = create<SlidingCardState>((set) => ({
   isVisible: false,
   data: null,
 
   /**
-   * setData – Displays the sliding card with the selected item.
+   * setData – Displays the sliding card with the selected items.
    *
-   * @param data An item object to show in the card
+   * @param data An item or an array of items to show in the card
    */
   setData: (data) => set({ isVisible: true, data }),
 

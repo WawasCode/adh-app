@@ -1,7 +1,12 @@
 import { forwardRef, useState } from "react";
-import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { cn } from "~/lib/utils";
-import { Navigation as NavigationIcon, Phone, CircleX } from "lucide-react";
+import {
+  Navigation as NavigationIcon,
+  Phone,
+  CircleX,
+  MoveLeft,
+  MoveRight,
+} from "lucide-react";
 import { Waypoint } from "@/types/waypoint";
 import { HazardZone } from "@/types/hazardZone";
 import { Incident } from "@/types/incident";
@@ -10,8 +15,13 @@ import apiClient from "@/services/apiClient";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 
 type SlidingCardData = Waypoint | HazardZone | Incident;
+
+interface SlidingCardProps {
+  openNavigation: () => void;
+}
 
 function isWaypoint(data: SlidingCardData): data is Waypoint {
   return data.kind === "waypoint";
@@ -85,7 +95,6 @@ const IncidentContent = ({ incident }: { incident: Incident }) => (
     <div className="clear-both">
       <div className="text-sm leading-tight space-y-1">
         <div>
-          {/* TODO: Hier die serverity Farbe benutzen, muss aber noch zu der theme Datei bewegt werden */}
           {incident.severity}
           {incident.distance !== undefined &&
             `・${incident.distance.toFixed(2)} km away`}
@@ -96,58 +105,67 @@ const IncidentContent = ({ incident }: { incident: Incident }) => (
   </div>
 );
 
-const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
+export const SlidingCard = forwardRef<HTMLDivElement, SlidingCardProps>(
   ({ openNavigation }, ref) => {
-    const { isVisible, data, clearData } = useSlidingCardStore();
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const { data, clearData } = useSlidingCardStore();
 
-    if (!isVisible || !data) return null;
+    const isArray = Array.isArray(data);
+    const currentData = isArray ? data[currentIndex] : data;
 
-    const handleDelete = async (
-      data: SlidingCardData,
-      clearData: () => void,
-    ) => {
+    if (!currentData) return null;
+
+    const handleDelete = async () => {
       try {
         let endpoint = "";
-        console.log("Deleting item:", data);
-        if (isWaypoint(data)) {
-          endpoint = `/waypoints/${data.id}/`;
-        } else if (isHazardZone(data)) {
-          endpoint = `/hazard-zones/${data.id}/`;
-        } else if (isIncident(data)) {
-          endpoint = `/incidents/${data.id}/`;
+        if (isWaypoint(currentData)) {
+          endpoint = `/waypoints/${currentData.id}/`;
+        } else if (isHazardZone(currentData)) {
+          endpoint = `/hazard-zones/${currentData.id}/`;
+        } else if (isIncident(currentData)) {
+          endpoint = `/incidents/${currentData.id}/`;
         } else {
           console.log("Data type not recognized");
           return;
         }
-
         await apiClient.deleteData(
           endpoint,
-          `${data.kind} deleted successfully`,
-          `Failed to delete ${data.kind}`,
+          `${currentData.kind} deleted successfully`,
+          `Failed to delete ${currentData.kind}`,
         );
-
-        if (isWaypoint(data)) {
+        if (isWaypoint(currentData)) {
           await useWaypointStore.getState().fetchWaypoints();
-        } else if (isHazardZone(data)) {
+        } else if (isHazardZone(currentData)) {
           await useHazardZoneStore.getState().fetchHazardZones();
-        } else if (isIncident(data)) {
+        } else if (isIncident(currentData)) {
           await useIncidentStore.getState().fetchIncidents();
         }
-
         clearData();
       } catch (error) {
         console.error("Error deleting item:", error);
       }
     };
 
-    const renderData = (data: SlidingCardData) => {
-      if (isWaypoint(data)) {
-        return <WaypointContent waypoint={data} />;
-      } else if (isHazardZone(data)) {
-        return <HazardZoneContent hazardZone={data} />;
-      } else if (isIncident(data)) {
-        return <IncidentContent incident={data} />;
+    const handleNext = () => {
+      if (isArray && currentIndex < data.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    };
+
+    const handlePrevious = () => {
+      if (isArray && currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1);
+      }
+    };
+
+    const renderData = () => {
+      if (isWaypoint(currentData)) {
+        return <WaypointContent waypoint={currentData} />;
+      } else if (isHazardZone(currentData)) {
+        return <HazardZoneContent hazardZone={currentData} />;
+      } else if (isIncident(currentData)) {
+        return <IncidentContent incident={currentData} />;
       } else {
         console.log("Data type not recognized");
         return null;
@@ -159,12 +177,12 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
         ref={ref}
         className={cn(
           "fixed inset-x-0 bottom-0 z-10 bg-white rounded-t-lg shadow-lg transform transition-transform duration-300 ease-in-out pointer-events-auto flex flex-col",
-          isVisible ? "translate-y-0" : "translate-y-full",
+          "translate-y-0",
         )}
-        style={{ minHeight: "13rem" }}
+        style={{ minHeight: "13rem", maxHeight: "30rem" }}
       >
         <div className="p-4 flex-1 overflow-y-auto">
-          {renderData(data)}
+          {renderData()}
           <button
             onClick={clearData}
             className="absolute top-4 right-4 text-gray-500"
@@ -180,14 +198,16 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
             <NavigationIcon className="mr-2" size={16} />
             Navigate
           </button>
-          {data.kind == "waypoint" && "telephone" in data && data.telephone && (
-            <a href={`tel:${data.telephone}`}>
-              <button className="bg-white font-bold py-2 px-4 rounded border flex items-center">
-                <Phone className="mr-2" size={16} />
-                Call
-              </button>
-            </a>
-          )}
+          {currentData.kind === "waypoint" &&
+            "telephone" in currentData &&
+            currentData.telephone && (
+              <a href={`tel:${currentData.telephone}`}>
+                <button className="bg-white font-bold py-2 px-4 rounded border flex items-center">
+                  <Phone className="mr-2" size={16} />
+                  Call
+                </button>
+              </a>
+            )}
           <button
             onClick={() => setShowConfirmation(true)}
             className="bg-white font-bold py-2 px-4 rounded border flex items-center"
@@ -196,11 +216,32 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
             Delete
           </button>
         </div>
+        {isArray && data.length > 1 && (
+          <div className="flex justify-around p-2 gap-4 border-t">
+            <button
+              onClick={handlePrevious}
+              disabled={currentIndex === 0}
+              className="bg-red flex items-center disabled:opacity-50"
+            >
+              <MoveLeft className="mr-2" size={20} />
+            </button>
+            <span className="flex items-center text-xs">
+              {currentIndex + 1} / {data.length}
+            </span>
+            <button
+              onClick={handleNext}
+              disabled={currentIndex === data.length - 1}
+              className="bg-white flex items-center disabled:opacity-50"
+            >
+              <MoveRight className="mr-2" size={20} />
+            </button>
+          </div>
+        )}
         {showConfirmation && (
           <ConfirmationDialog
             onConfirm={() => {
               setShowConfirmation(false);
-              handleDelete(data, clearData);
+              handleDelete();
             }}
             onCancel={() => setShowConfirmation(false)}
             message="Do you really want to delete this item?"
@@ -210,5 +251,3 @@ const SlidingCard = forwardRef<HTMLDivElement, { openNavigation: () => void }>(
     );
   },
 );
-
-export default SlidingCard;

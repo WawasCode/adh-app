@@ -151,7 +151,6 @@ export function RemoteMapView({
     setMarker({
       position: [lat, lng],
     });
-    console.log("Long click at:", lat, lng);
   };
 
   useEffect(() => {

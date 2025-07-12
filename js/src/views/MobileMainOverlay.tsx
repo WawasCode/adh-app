@@ -6,7 +6,7 @@ import {
   CompassButton,
   SearchBar,
 } from "@/views/MobileUICommon";
-import SlidingCard from "@/components/ui/SlidingCard";
+import { SlidingCard } from "@/components/ui/SlidingCard";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 
 interface MobileMainOverlayProps {
@@ -80,7 +80,7 @@ export function MobileMainOverlay({
       <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-auto">
         {BottomNavComponent}
       </div>
-      <SlidingCard ref={slidingCardRef} openNavigation={openNavigation} />
+      <SlidingCard openNavigation={openNavigation} />
     </div>
   );
 }
