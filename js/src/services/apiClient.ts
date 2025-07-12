@@ -73,8 +73,6 @@ const apiClient = {
           coordinates: coords,
           severity: zone.severity,
           description: zone.description,
-          isWalkable: zone.isWalkable,
-          isDrivable: zone.isDrivable,
           type: isPoint ? "Point" : "Polygon",
           reportedAt: zone.created_at ? new Date(zone.created_at) : new Date(),
         };

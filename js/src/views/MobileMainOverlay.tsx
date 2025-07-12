@@ -80,7 +80,9 @@ export function MobileMainOverlay({
       <div className="absolute inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] pointer-events-auto">
         {BottomNavComponent}
       </div>
-      <SlidingCard openNavigation={openNavigation} />
+      {isVisible && (
+        <SlidingCard ref={slidingCardRef} openNavigation={openNavigation} />
+      )}
     </div>
   );
 }

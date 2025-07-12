@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
 import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
-import { customMarkerIcon } from "@/utils/customMarkerIcon";
+import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
 import "leaflet/dist/leaflet.css";
 import { useMap } from "react-leaflet";
 import { useEffect } from "react";
@@ -65,7 +65,7 @@ export default function RemoteMapViewWithClick() {
       <StoreMapInZustand />
       <UserMarker />
       <MapClickHandler />
-      {location && <Marker position={location} icon={customMarkerIcon} />}
+      {location && <Marker position={location} icon={waypointMarkerIcon} />}
     </MapContainer>
   );
 }

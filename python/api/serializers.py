@@ -45,7 +45,7 @@ class WaypointSerializer(serializers.ModelSerializer):
             "description",
             "type",
             "telephone",
-            "active",
+            "is_available",
             "created_at",
             "updated_at",
         ]

@@ -13,7 +13,7 @@ import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
 import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
 import { SavedHazardZones } from "@/map/SavedHazardZones";
-import { customMarkerIcon } from "@/utils/customMarkerIcon";
+import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
 import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
@@ -189,7 +189,7 @@ export function RemoteMapView({
             <ChangeMapView center={mapCenter} />
             <Marker
               position={[selectedLocation.lat, selectedLocation.lon]}
-              icon={customMarkerIcon}
+              icon={waypointMarkerIcon}
             >
               {selectedLocation.name && <Popup>{selectedLocation.name}</Popup>}
             </Marker>
@@ -197,7 +197,7 @@ export function RemoteMapView({
         )}
         <LongClickHandler onLongClick={handleLongClick} />
         {marker && (
-          <Marker position={marker.position} icon={customMarkerIcon}>
+          <Marker position={marker.position} icon={waypointMarkerIcon}>
             {marker.name && <Popup>{marker.name}</Popup>}
           </Marker>
         )}

@@ -10,7 +10,7 @@ import markerIconRed from "@/assets/images/markerIconRed.png";
  * Uses the default Leaflet marker images with custom size and anchor settings.
  */
 
-export const customMarkerIcon = new L.Icon({
+export const waypointMarkerIcon = new L.Icon({
   iconUrl: markerIcon,
   iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,

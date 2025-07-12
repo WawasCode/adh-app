@@ -5,7 +5,7 @@ import { LatLngTuple } from "leaflet";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 import { useLocationStore } from "@/store/useLocationStore";
-import { customMarkerIcon } from "@/utils/customMarkerIcon";
+import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
 
 /**
  * SavedWaypointMarkers renders all saved waypoints from the backend on the map.
@@ -43,7 +43,7 @@ export function SavedWaypointMarkers() {
           <Marker
             key={wp.id}
             position={coords}
-            icon={customMarkerIcon}
+            icon={waypointMarkerIcon}
             eventHandlers={{
               click: () => handleMarkerClick(wp, coords),
             }}

@@ -10,14 +10,32 @@ import {
 import { Waypoint } from "@/types/waypoint";
 import { HazardZone } from "@/types/hazardZone";
 import { Incident } from "@/types/incident";
-import { ConfirmationDialog } from "./Confirm";
+import { ConfirmationDialog } from "@/components/ui/Confirm";
 import apiClient from "@/services/apiClient";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { theme } from "~/styles/theme";
 
 type SlidingCardData = Waypoint | HazardZone | Incident;
+
+type SeverityKey = keyof typeof theme.colors.severity;
+
+function getSeverityColor(severity: string): string {
+  const validSeverities: SeverityKey[] = [
+    "low",
+    "medium",
+    "high",
+    "critical",
+    "default",
+  ];
+  return theme.colors.severity[
+    (validSeverities.includes(severity as SeverityKey)
+      ? severity
+      : "default") as SeverityKey
+  ];
+}
 
 interface SlidingCardProps {
   openNavigation: () => void;
@@ -49,7 +67,7 @@ const WaypointContent = ({ waypoint }: { waypoint: Waypoint }) => (
             `・${waypoint.distance.toFixed(2)} km away`}
         </div>
         <div>
-          {waypoint.isAvailable ? (
+          {waypoint.is_available ? (
             <span className="text-green-600">available</span>
           ) : (
             <span className="text-red-600">not available</span>
@@ -69,16 +87,16 @@ const HazardZoneContent = ({ hazardZone }: { hazardZone: HazardZone }) => (
     <div className="clear-both">
       <div className="text-sm leading-tight space-y-1">
         <div>
-          {hazardZone.severity || "unknown"}
+          <span
+            style={{
+              color: getSeverityColor(hazardZone.severity),
+            }}
+          >
+            {hazardZone.severity || "unknown"}
+          </span>
           {hazardZone.distance !== undefined &&
             `・${hazardZone.distance.toFixed(2)} km away`}
         </div>
-        {hazardZone.isWalkable !== undefined && (
-          <div>Walkable: {hazardZone.isWalkable ? "Yes" : "No"}</div>
-        )}
-        {hazardZone.isDrivable !== undefined && (
-          <div>Drivable: {hazardZone.isDrivable ? "Yes" : "No"}</div>
-        )}
         {hazardZone.description && (
           <div>Description: {hazardZone.description}</div>
         )}
@@ -95,7 +113,13 @@ const IncidentContent = ({ incident }: { incident: Incident }) => (
     <div className="clear-both">
       <div className="text-sm leading-tight space-y-1">
         <div>
-          {incident.severity}
+          <span
+            style={{
+              color: getSeverityColor(incident.severity),
+            }}
+          >
+            {incident.severity || "unknown"}
+          </span>
           {incident.distance !== undefined &&
             `・${incident.distance.toFixed(2)} km away`}
         </div>
@@ -115,6 +139,8 @@ export const SlidingCard = forwardRef<HTMLDivElement, SlidingCardProps>(
     const currentData = isArray ? data[currentIndex] : data;
 
     if (!currentData) return null;
+
+    console.log("Current data:", currentData);
 
     const handleDelete = async () => {
       try {
@@ -204,7 +230,7 @@ export const SlidingCard = forwardRef<HTMLDivElement, SlidingCardProps>(
               <a href={`tel:${currentData.telephone}`}>
                 <button className="bg-white font-bold py-2 px-4 rounded border flex items-center">
                   <Phone className="mr-2" size={16} />
-                  Call
+                    Call
                 </button>
               </a>
             )}

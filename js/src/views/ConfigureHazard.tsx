@@ -6,7 +6,6 @@ import { ViewFooter } from "@/components/ui/ViewFooter";
 import { useViewStore } from "@/store/useViewStore";
 import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useZoneStore } from "@/store/useHazardZoneCreationStore";
-import { useState } from "react";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { calculateCentroid } from "@/utils/geoUtils";
 import { useIncidentStore as useIncidentDisplayStore } from "@/store/useIncidentDisplayStore";
@@ -33,8 +32,8 @@ export default function ConfigureHazard() {
   } = useIncidentStore();
 
   const { points, reset: resetZone } = useZoneStore();
-  const [isWalkable, setIsWalkable] = useState(false);
-  const [isDrivable, setIsDrivable] = useState(false);
+  // const [isWalkable, setIsWalkable] = useState(false);
+  // const [isDrivable, setIsDrivable] = useState(false);
 
   const hasLocation =
     (location !== null && Array.isArray(location)) || points.length >= 3;
@@ -65,8 +64,8 @@ export default function ConfigureHazard() {
       name,
       description,
       severity: severity!,
-      isWalkable,
-      isDrivable,
+      // isWalkable,
+      // isDrivable,
       location: isIncident
         ? {
             type: "Point",
@@ -171,7 +170,7 @@ export default function ConfigureHazard() {
         </Button>
 
         {/* Walkable toggle switch */}
-        <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
+        {/* <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is walkable</span>
           <div
             onClick={() => setIsWalkable(!isWalkable)}
@@ -188,7 +187,7 @@ export default function ConfigureHazard() {
         </div>
 
         {/* Drivable toggle switch */}
-        <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
+        {/* <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
           <span>Is drivable</span>
           <div
             onClick={() => setIsDrivable(!isDrivable)}
@@ -202,7 +201,7 @@ export default function ConfigureHazard() {
               }`}
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Shared Footer */}

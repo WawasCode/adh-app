@@ -55,7 +55,7 @@ export interface Waypoint {
   type: WaypointType;
   description?: string;
   telephone?: string;
-  isAvailable?: boolean;
+  is_available: boolean;
   createdAt?: string;
   reportedAt: Date;
 }

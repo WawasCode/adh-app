@@ -9,7 +9,7 @@ import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import { UserMarker } from "@/map/UserMarker";
-import { customMarkerIcon } from "@/utils/customMarkerIcon";
+import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
 
 /**
  * MapClickHandler captures click coordinates and stores them in useZoneStore.
@@ -56,7 +56,7 @@ export default function RemoteZoneMapWithClicks() {
       <UserMarker />
       <MapClickHandler />
       {points.map((pos, i) => (
-        <Marker key={i} position={pos} icon={customMarkerIcon} />
+        <Marker key={i} position={pos} icon={waypointMarkerIcon} />
       ))}
       {points.length >= 3 && (
         <Polygon positions={points} pathOptions={{ color: "red" }} />

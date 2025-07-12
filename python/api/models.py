@@ -41,7 +41,7 @@ class Waypoint(models.Model):
         ('other', 'Other'),
     ], default='other')
     telephone = models.CharField(max_length=20, null=True, blank=True)
-    active = models.BooleanField(default=True)
+    is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

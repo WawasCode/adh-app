@@ -28,8 +28,6 @@ export type HazardZone = {
   severity: string;
   description?: string;
   reportedAt: Date;
-  isWalkable?: boolean;
-  isDrivable?: boolean;
   distance?: number;
 };
 
@@ -48,6 +46,4 @@ export type HazardZoneBackend = {
   center: Location;
   severity?: string;
   description?: string;
-  isWalkable?: boolean;
-  isDrivable?: boolean;
 };

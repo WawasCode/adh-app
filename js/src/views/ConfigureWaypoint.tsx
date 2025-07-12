@@ -50,9 +50,11 @@ export default function ConfigureWaypoint() {
         coordinates: [location[1], location[0]], // [lon, lat]
       },
       type: waypointType,
-      telephone_number: telephone,
-      active: isAvailable,
+      telephone: telephone,
+      is_available: isAvailable,
     };
+
+    console.log("Saving waypoint:", waypoint);
 
     try {
       const res = await fetch("/api/waypoints/", {
