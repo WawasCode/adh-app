@@ -14,7 +14,6 @@ import { cn } from "~/lib/utils";
 import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
 import { SavedHazardZones } from "@/map/SavedHazardZones";
 import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
-import L from "leaflet";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
@@ -64,22 +63,22 @@ function ChangeMapView({ center }: { center: [number, number] }) {
  * and triggers a callback with the clicked coordinates.
  * @param onLongClick Callback function to handle long clicks.
  */
-function LongClickHandler({
-  onLongClick,
-}: {
-  onLongClick: (latlng: L.LatLng) => void;
-}) {
-  const map = useMap();
+// function LongClickHandler({
+//   onLongClick,
+// }: {
+//   onLongClick: (latlng: L.LatLng) => void;
+// }) {
+//   const map = useMap();
 
-  useMapEvents({
-    contextmenu: (e) => {
-      onLongClick(e.latlng);
-      map.flyTo(e.latlng, 15);
-    },
-  });
+//   useMapEvents({
+//     contextmenu: (e) => {
+//       onLongClick(e.latlng);
+//       map.flyTo(e.latlng, 15);
+//     },
+//   });
 
-  return null;
-}
+//   return null;
+// }
 
 /**
  * MapClickHandler clears the selected waypoint when the map is clicked.
@@ -129,10 +128,10 @@ export function RemoteMapView({
 
   const position = useLocationStore((s) => s.position);
 
-  const [marker, setMarker] = useState<{
-    position: [number, number];
-    name?: string;
-  } | null>(null);
+  // const [marker, setMarker] = useState<{
+  //   position: [number, number];
+  //   name?: string;
+  // } | null>(null);
 
   const [mapCenter, setMapCenter] = useState<[number, number]>(
     position || DEFAULT_CENTER,
@@ -146,12 +145,12 @@ export function RemoteMapView({
     }
   }, [position]);
 
-  const handleLongClick = async (latlng: L.LatLng) => {
-    const { lat, lng } = latlng;
-    setMarker({
-      position: [lat, lng],
-    });
-  };
+  // const handleLongClick = async (latlng: L.LatLng) => {
+  //   const { lat, lng } = latlng;
+  //   setMarker({
+  //     position: [lat, lng],
+  //   });
+  // };
 
   useEffect(() => {
     if (
