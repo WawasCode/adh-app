@@ -195,12 +195,12 @@ export function RemoteMapView({
             </Marker>
           </>
         )}
-        <LongClickHandler onLongClick={handleLongClick} />
+        {/* <LongClickHandler onLongClick={handleLongClick} />
         {marker && (
           <Marker position={marker.position} icon={waypointMarkerIcon}>
             {marker.name && <Popup>{marker.name}</Popup>}
           </Marker>
-        )}
+        )} */}
         <UserMarker />
         <SavedHazardZones />
         <SavedHazardIncidents />
