@@ -6,3 +6,4 @@ requests
 mapbox-vector-tile
 protobuf
 django-cors-headers
+django-rest-framework

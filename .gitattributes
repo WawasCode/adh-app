@@ -1,2 +1,3 @@
 *.woff2 filter=lfs diff=lfs merge=lfs -text
 **/*.pbf filter=lfs diff=lfs merge=lfs -text
+js/src/assets/images/markerIconRed.png filter=lfs diff=lfs merge=lfs -text

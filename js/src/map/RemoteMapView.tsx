@@ -10,29 +10,18 @@ import {
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import { theme } from "~/styles/theme";
-import L from "leaflet";
+import { SavedWaypointMarkers } from "@/map/SavedWaypointMarkers";
+import { SavedHazardZones } from "@/map/SavedHazardZones";
+import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
 import { useLocationStore } from "@/store/useLocationStore";
 import VectorTileLayer from "react-leaflet-vector-tile-layer";
+import { useWaypointStore } from "@/store/useWaypointDisplayStore";
+import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
+import { SavedHazardIncidents } from "./SavedHazardIncidents";
+import { useIncidentStore } from "@/store/useIncidentDisplayStore";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { CENTER } from "@/constants";
 
-// Leaflet Marker is bugged
-const customMarkerIcon = new L.Icon({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-  iconSize: [theme.mapMarker.iconSize.width, theme.mapMarker.iconSize.height],
-  iconAnchor: [theme.mapMarker.iconAnchor.x, theme.mapMarker.iconAnchor.y],
-  popupAnchor: [theme.mapMarker.popupAnchor.x, theme.mapMarker.popupAnchor.y],
-  shadowSize: [
-    theme.mapMarker.shadowSize.width,
-    theme.mapMarker.shadowSize.height,
-  ],
-});
-
-const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
 const MIN_ZOOM = 0; // Vector tiles start at zoom 0
 const MAX_ZOOM = 18; // High detail vector tiles end at zoom 18
@@ -61,23 +50,6 @@ interface RemoteMapViewProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selectedLocation?: { lat: number; lon: number; name?: string };
 }
 
-function LongClickHandler({
-  onLongClick,
-}: {
-  onLongClick: (latlng: L.LatLng) => void;
-}) {
-  const map = useMap();
-
-  useMapEvents({
-    contextmenu: (e) => {
-      onLongClick(e.latlng);
-      map.flyTo(e.latlng, 15);
-    },
-  });
-
-  return null;
-}
-
 // Helper component to change map view when location changes
 function ChangeMapView({ center }: { center: [number, number] }) {
   const map = useMap();
@@ -87,10 +59,30 @@ function ChangeMapView({ center }: { center: [number, number] }) {
   return null;
 }
 
-/*
- * MapView component renders a Leaflet map using remote raster tiles.
- * The tiles are served from OpenStreetMap.
- * It includes a user marker and sets the map instance in the store via MapSetter.
+/**
+ * MapClickHandler clears the selected waypoint when the map is clicked.
+ */
+const MapClickHandler = () => {
+  const { clearData } = useSlidingCardStore();
+
+  useMapEvents({
+    click: (e) => {
+      const target = e.originalEvent.target;
+
+      if (target instanceof HTMLElement) {
+        if (!target.classList.contains("leaflet-interactive")) {
+          clearData();
+        }
+      }
+    },
+  });
+
+  return null;
+};
+
+/**
+ * RemoteMapView renders the main map background.
+ * It includes saved waypoints, hazard zones, and the user's location.
  */
 export function RemoteMapView({
   className,
@@ -98,15 +90,25 @@ export function RemoteMapView({
 }: RemoteMapViewProps) {
   const base = "map-container";
 
+  const fetchWaypoints = useWaypointStore((s) => s.fetchWaypoints);
+  useEffect(() => {
+    fetchWaypoints();
+  }, [fetchWaypoints]);
+
+  const fetchHazardZones = useHazardZoneStore((s) => s.fetchHazardZones);
+  useEffect(() => {
+    fetchHazardZones();
+  }, [fetchHazardZones]);
+
+  const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
+  useEffect(() => {
+    fetchIncidents();
+  }, [fetchIncidents]);
+
   const position = useLocationStore((s) => s.position);
 
-  const [marker, setMarker] = useState<{
-    position: [number, number];
-    name?: string;
-  } | null>(null);
-
   const [mapCenter, setMapCenter] = useState<[number, number]>(
-    position || DEFAULT_CENTER,
+    position || CENTER,
   );
   const [isLoading, setIsLoading] = useState<boolean>(!position);
 
@@ -116,14 +118,6 @@ export function RemoteMapView({
       setIsLoading(false);
     }
   }, [position]);
-
-  const handleLongClick = async (latlng: L.LatLng) => {
-    const { lat, lng } = latlng;
-    setMarker({
-      position: [lat, lng],
-    });
-    console.log("Long click at:", lat, lng);
-  };
 
   useEffect(() => {
     if (
@@ -141,6 +135,7 @@ export function RemoteMapView({
 
   return (
     <div className={cn(base, className)}>
+      {/* Ensure the map container fills the parent */}
       <MapContainer
         style={{ height: "100%", width: "100%" }}
         center={position || mapCenter}
@@ -160,20 +155,18 @@ export function RemoteMapView({
             <ChangeMapView center={mapCenter} />
             <Marker
               position={[selectedLocation.lat, selectedLocation.lon]}
-              icon={customMarkerIcon}
+              icon={waypointMarkerIcon}
             >
               {selectedLocation.name && <Popup>{selectedLocation.name}</Popup>}
             </Marker>
           </>
         )}
-        <LongClickHandler onLongClick={handleLongClick} />
-        {marker && (
-          <Marker position={marker.position} icon={customMarkerIcon}>
-            {marker.name && <Popup>{marker.name}</Popup>}
-          </Marker>
-        )}
         <UserMarker />
+        <SavedHazardZones />
+        <SavedHazardIncidents />
+        <SavedWaypointMarkers />
         <MapSetter />
+        <MapClickHandler />
       </MapContainer>
     </div>
   );

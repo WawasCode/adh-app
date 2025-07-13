@@ -9,6 +9,13 @@ export default defineConfig({
     host: true, // Allow external connections
     port: 5173,
     strictPort: true, // Fail if port is already in use
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000", // Proxy to the backend API !! Change this to your backend URL !!
+        changeOrigin: true, // Change the origin of the host header to the target URL
+        secure: false, // Disable SSL verification for development
+      },
+    },
   },
   resolve: {
     // Added resolve configuration

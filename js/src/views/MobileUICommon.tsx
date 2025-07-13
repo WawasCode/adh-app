@@ -18,7 +18,20 @@ import { useLocationStore } from "@/store/useLocationStore";
 const FLY_TO_ZOOM_LEVEL = 15;
 
 // Export Page type for consistent usage
-export type Page = "main" | "navigation" | "incidents";
+export type Page =
+  | "main"
+  | "navigation"
+  | "incidents"
+  | "configureHazard"
+  | "selectLocation"
+  | "selectZone"
+  | "selectAddress"
+  | "circleDetails"
+  | "selectSeverity"
+  | "configureWaypoint"
+  | "waypointType"
+  | "waypointLocation"
+  | "addPlace";
 
 interface SearchBarProps {
   onLocationSelect?: (location: {

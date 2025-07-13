@@ -5,10 +5,21 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.conf import settings
 from django.templatetags.static import static
+from api.models import Incident, Waypoint, Hazard_Zone
+from api.serializers import IncidentSerializer, WaypointSerializer, HazardZoneSerializer
+from rest_framework import viewsets
 
+class IncidentViewSet(viewsets.ModelViewSet):
+    queryset = Incident.objects.all()
+    serializer_class = IncidentSerializer
+    
+class WaypointViewSet(viewsets.ModelViewSet):
+    queryset = Waypoint.objects.all()
+    serializer_class = WaypointSerializer
 
-def hello_world(request):
-    return JsonResponse({"message": "Hello, world!"})
+class HazardZoneViewSet(viewsets.ModelViewSet):
+    queryset = Hazard_Zone.objects.all()
+    serializer_class = HazardZoneSerializer
 
 
 def check_vite_dev_server():

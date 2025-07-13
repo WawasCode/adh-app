@@ -66,6 +66,7 @@ print_status "Running database migrations..."
 python manage.py migrate
 print_success "Database migrations completed"
 
+
 # Collect static files (if needed).
 print_status "Collecting static files..."
 python manage.py collectstatic --noinput --clear 2>/dev/null || true

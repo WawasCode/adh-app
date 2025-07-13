@@ -22,6 +22,13 @@ export const theme = {
       700: "#374151",
       900: "#111827",
     },
+    severity: {
+      low: "#ca8a04",
+      medium: "#f97316",
+      high: "#ef4444",
+      critical: "#b91c1c",
+      default: "#6b7280",
+    },
   },
   spacing: {
     sidebar: "20rem", // 320px
