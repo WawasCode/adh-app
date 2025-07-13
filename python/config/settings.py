@@ -55,7 +55,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    # Replace with your frontend domain
     "http://localhost:5173",
 ]
 

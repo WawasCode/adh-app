@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, ReactElement } from "react";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useViewStore } from "@/store/useViewStore";
 import { RemoteMapView } from "@/map/RemoteMapView";
@@ -106,7 +106,7 @@ export default function MobileLayout() {
     /**
      * Helper to wrap a page component with consistent layout styling and bottom nav
      */
-    function renderPage(component: React.ReactElement) {
+    function renderPage(component: ReactElement) {
       return (
         <div className="absolute inset-0 z-10 pointer-events-auto bg-white">
           {component}

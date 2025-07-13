@@ -13,8 +13,6 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
  * The points are stored in Zustand (`useZoneStore.points`).
  * Saving is only allowed when at least 3 points exist.
  * Final saving to the backend happens in ConfigureHazard.tsx.
- *
- * @returns JSX.Element – Map interface for selecting zone points.
  */
 export default function SelectZone() {
   const {

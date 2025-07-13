@@ -21,8 +21,6 @@ const isValidPhoneNumber = (input: string): boolean => {
  * Allows the user to input name, description, type, and location
  * for a waypoint. Optional fields include telephone and availability status.
  * Data is submitted as GeoJSON Point to the backend.
- *
- * @returns JSX.Element – The rendered waypoint configuration view.
  */
 export default function ConfigureWaypoint() {
   const setPage = useViewStore((s) => s.setPage);

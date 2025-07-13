@@ -37,8 +37,8 @@ export function FloatingLabelTextarea({
           base,
           sizeClasses[sizeVariant],
           "pt-10",
-          "max-h-[160px]", // ≈ 5 Zeilen @ ~32px
-          "overflow-y-auto", // Scrollbar wenn voll
+          "max-h-[160px]",
+          "overflow-y-auto",
           className,
         )}
         style={{ fontSize: "16px", ...props.style }}

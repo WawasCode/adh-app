@@ -5,6 +5,11 @@ export interface WaypointListProps {
   name: string;
 }
 
+/**
+ * WaypointList – Displays a list of waypoints with their details.
+ *
+ * @param waypoints - Array of waypoint objects to display.
+ */
 export function WaypointList({ waypoints, name }: WaypointListProps) {
   const sortedWaypoints = [...waypoints].sort((a, b) => {
     return new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime();

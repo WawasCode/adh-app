@@ -1,15 +1,11 @@
-import {
-  MapContainer,
-  TileLayer,
-  useMapEvents,
-  Polygon,
-  Marker,
-} from "react-leaflet";
+import { MapContainer, useMapEvents, Polygon, Marker } from "react-leaflet";
 import { useZoneStore } from "@/store/useHazardZoneCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import "leaflet/dist/leaflet.css";
 import { UserMarker } from "@/map/UserMarker";
 import { waypointMarkerIcon } from "@/utils/customMarkerIcon";
+import VectorTileLayer from "react-leaflet-vector-tile-layer";
+import { CENTER } from "@/constants";
 
 /**
  * MapClickHandler captures click coordinates and stores them in useZoneStore.
@@ -40,19 +36,15 @@ function MapClickHandler() {
 export default function RemoteZoneMapWithClicks() {
   const points = useZoneStore((s) => s.points);
   const gps = useLocationStore((s) => s.position);
-  const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // fallback: Berlin
 
   return (
     <MapContainer
-      center={gps ?? DEFAULT_CENTER}
+      center={gps ?? CENTER}
       zoom={13}
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
-      <TileLayer
-        attribution="&copy; OpenStreetMap contributors"
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <VectorTileLayer styleUrl="http://localhost:8080/api/styles/osm-bright-local.json" />
       <UserMarker />
       <MapClickHandler />
       {points.map((pos, i) => (

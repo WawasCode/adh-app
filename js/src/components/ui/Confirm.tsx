@@ -6,6 +6,14 @@ interface ConfirmationDialogProps {
   message: string;
 }
 
+/**
+ * ConfirmationDialog – A modal dialog that asks the user to confirm an action.
+ * It provides options to confirm or cancel the action.
+ *
+ * @param onConfirm - Function to call when the user confirms the action.
+ * @param onCancel - Function to call when the user cancels the action.
+ * @param message - The message to display in the dialog.
+ */
 export function ConfirmationDialog({
   onConfirm,
   onCancel,

@@ -15,6 +15,9 @@ export interface IncidentsListProps {
 
 /**
  * IncidentsList – displays a list of incidents with type, title, description, time, and distance.
+ *
+ * @param items - Array of incident objects to display.
+ * @param name - Optional name to display as a header.
  */
 export function IncidentsList({ items, name }: IncidentsListProps) {
   const sortedItems = [...items].sort((a, b) => {

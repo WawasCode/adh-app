@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
+import { MapContainer, useMapEvents, Marker } from "react-leaflet";
 import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
 import { UserMarker } from "@/map/UserMarker";
@@ -7,11 +7,8 @@ import "leaflet/dist/leaflet.css";
 import { useMap } from "react-leaflet";
 import { useEffect } from "react";
 import { useMapStore } from "@/store/useMapStore";
-
-/**
- * Default center fallback (Berlin) if GPS is unavailable
- */
-const CENTER: [number, number] = [52.52, 13.405];
+import VectorTileLayer from "react-leaflet-vector-tile-layer";
+import { CENTER } from "@/constants";
 
 function StoreMapInZustand() {
   const map = useMap();
@@ -58,10 +55,7 @@ export default function RemoteMapViewWithClick() {
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <VectorTileLayer styleUrl="http://localhost:8080/api/styles/osm-bright-local.json" />
       <StoreMapInZustand />
       <UserMarker />
       <MapClickHandler />

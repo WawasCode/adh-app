@@ -11,8 +11,6 @@ import { ViewHeaderClose } from "@/components/ui/ViewHeaderClose";
  * Displays two options: 'Hazard' and 'Waypoint', each leading to their respective
  * configuration views. Includes a header with a cancel button to reset input state
  * and return to the main view.
- *
- * @returns JSX.Element – The rendered view.
  */
 export default function AddPlace() {
   const setPage = useViewStore((s) => s.setPage);

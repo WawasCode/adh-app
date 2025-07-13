@@ -11,8 +11,6 @@ import { useMapStore } from "@/store/useMapStore";
  * The user can either search for an address or tap on the map
  * to select a hazard location. The selected coordinates are stored
  * in the Zustand slice (`hazardInput.location`).
- *
- * @returns JSX.Element – The rendered address selection view.
  */
 export default function SelectAddress() {
   const { setPage } = useViewStore();

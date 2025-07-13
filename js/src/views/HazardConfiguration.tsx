@@ -20,8 +20,6 @@ import apiClient from "@/services/apiClient";
  * the data is submitted to the appropriate backend endpoint.
  *
  * Also includes toggles for 'walkable' and 'drivable' attributes.
- *
- * @returns JSX.Element – The rendered hazard configuration view.
  */
 
 export default function ConfigureHazard() {
@@ -33,8 +31,6 @@ export default function ConfigureHazard() {
   } = useIncidentStore();
 
   const { points, reset: resetZone } = useZoneStore();
-  // const [isWalkable, setIsWalkable] = useState(false);
-  // const [isDrivable, setIsDrivable] = useState(false);
 
   const hasLocation =
     (location !== null && Array.isArray(location)) || points.length >= 3;
@@ -159,40 +155,6 @@ export default function ConfigureHazard() {
             : "Severity"}
           <span className="text-gray-400">&rsaquo;</span>
         </Button>
-
-        {/* Walkable toggle switch */}
-        {/* <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
-          <span>Is walkable</span>
-          <div
-            onClick={() => setIsWalkable(!isWalkable)}
-            className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
-              isWalkable ? "bg-green-500" : "bg-gray-300"
-            }`}
-          >
-            <div
-              className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                isWalkable ? "translate-x-6" : "translate-x-0"
-              }`}
-            />
-          </div>
-        </div>
-
-        {/* Drivable toggle switch */}
-        {/* <div className="flex items-center justify-between text-base font-normal py-4 px-5 rounded-xl border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
-          <span>Is drivable</span>
-          <div
-            onClick={() => setIsDrivable(!isDrivable)}
-            className={`w-12 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out cursor-pointer ${
-              isDrivable ? "bg-green-500" : "bg-gray-300"
-            }`}
-          >
-            <div
-              className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                isDrivable ? "translate-x-6" : "translate-x-0"
-              }`}
-            />
-          </div>
-        </div> */}
       </div>
 
       {/* Shared Footer */}

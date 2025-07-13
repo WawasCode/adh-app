@@ -12,8 +12,6 @@ import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButt
  * 2. A single-point address
  *
  * Navigation is handled via Zustand (`useViewStore`).
- *
- * @returns JSX.Element – The rendered location selection screen.
  */
 export default function SelectLocation() {
   const { setPage } = useViewStore();

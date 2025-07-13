@@ -12,8 +12,6 @@ import { useMapStore } from "@/store/useMapStore";
  * Users can either click on the map or use the search bar to select coordinates.
  * The chosen location is stored in Zustand (`waypointInput.location`) via `usePlaceStore`.
  * After saving, the user is redirected to ConfigureWaypoint.
- *
- * @returns JSX.Element – A map-based interface for setting waypoint coordinates.
  */
 export default function SelectWaypointLocation() {
   const { setPage } = useViewStore();
@@ -58,7 +56,9 @@ export default function SelectWaypointLocation() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header with close button and description */}
       <div className="pt-4 pb-2">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">
           Select Waypoint Location
         </h1>

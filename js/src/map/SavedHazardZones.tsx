@@ -6,6 +6,7 @@ import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 import { theme } from "~/styles/theme";
 import { useLocationStore } from "@/store/useLocationStore";
 import * as turf from "@turf/turf";
+import { HazardSeverity } from "@/types/incident";
 
 /**
  * SavedHazardZones renders hazard zones fetched from the backend.
@@ -54,7 +55,7 @@ export function SavedHazardZones() {
     }
   };
 
-  const getZoneColor = (severity: string | undefined): string => {
+  const getZoneColor = (severity: HazardSeverity | undefined): string => {
     switch (severity) {
       case "low":
         return theme.colors.severity.low;

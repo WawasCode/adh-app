@@ -1,4 +1,5 @@
 export type HazardSeverity = "low" | "medium" | "high" | "critical";
+
 export const hazardSeverities: HazardSeverity[] = [
   "low",
   "medium",
@@ -43,7 +44,7 @@ export interface Incident {
   location: Location | null;
   name: string;
   description: string;
-  severity: string;
+  severity: HazardSeverity;
   reportedAt: Date;
   distance: number;
 }
@@ -60,7 +61,7 @@ export interface IncidentApiResponse {
   name: string;
   location: Location | null;
   description: string;
-  severity: string;
+  severity: HazardSeverity;
   created_at: string;
   updated_at: string;
 }

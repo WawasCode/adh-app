@@ -12,6 +12,11 @@ interface ViewFooterProps {
 /**
  * ViewFooter renders standardized Cancel and Save buttons.
  * goBack is required and called on Back button click.
+ *
+ * @param goBack - Function to call when Back button is clicked.
+ * @param onSave - Function to call when Save button is clicked.
+ * @param saveDisabled - Whether the Save button should be disabled.
+ * @param saveLabel - Custom label for the Save button, defaults to "Save".
  */
 export function ViewFooter({
   goBack,

@@ -1,23 +1,14 @@
 "use client";
 
-import { cn } from "~/lib/utils";
+import CloseButton from "@/components/ui/CloseButton";
 
 interface ViewHeaderCloseProps {
   onCancel: () => void;
-  className?: string;
 }
 
 /**
  * ViewHeaderClose renders a red "X" button for cancel/abort actions.
  */
-export function ViewHeaderClose({ onCancel, className }: ViewHeaderCloseProps) {
-  return (
-    <button
-      onClick={onCancel}
-      className={cn("text-red-500 text-xl font-bold", className)}
-      aria-label="Close"
-    >
-      ✕
-    </button>
-  );
+export function ViewHeaderClose({ onCancel }: ViewHeaderCloseProps) {
+  return <CloseButton onClick={onCancel} />;
 }

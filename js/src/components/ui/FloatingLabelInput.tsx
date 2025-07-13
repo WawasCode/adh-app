@@ -7,6 +7,14 @@ interface FloatingLabelInputProps
   value: string;
 }
 
+/**
+ * FloatingLabelInput – An input component with a floating label that shrinks
+ * when the input is focused or has a value.
+ *
+ * @param label - The label text for the input.
+ * @param value - The current value of the input.
+ * @param props - Additional HTML attributes for the input element.
+ */
 export function FloatingLabelInput({
   label,
   value,

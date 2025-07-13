@@ -20,8 +20,8 @@ import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
 import { SavedHazardIncidents } from "./SavedHazardIncidents";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { CENTER } from "@/constants";
 
-const DEFAULT_CENTER: [number, number] = [52.52, 13.405]; // Berlin
 const ZOOM = 10;
 const MIN_ZOOM = 0; // Vector tiles start at zoom 0
 const MAX_ZOOM = 18; // High detail vector tiles end at zoom 18
@@ -58,28 +58,6 @@ function ChangeMapView({ center }: { center: [number, number] }) {
   }, [center, map]);
   return null;
 }
-
-/**
- * LongClickHandler listens for long clicks on the map
- * and triggers a callback with the clicked coordinates.
- * @param onLongClick Callback function to handle long clicks.
- */
-// function LongClickHandler({
-//   onLongClick,
-// }: {
-//   onLongClick: (latlng: L.LatLng) => void;
-// }) {
-//   const map = useMap();
-
-//   useMapEvents({
-//     contextmenu: (e) => {
-//       onLongClick(e.latlng);
-//       map.flyTo(e.latlng, 15);
-//     },
-//   });
-
-//   return null;
-// }
 
 /**
  * MapClickHandler clears the selected waypoint when the map is clicked.
@@ -129,13 +107,8 @@ export function RemoteMapView({
 
   const position = useLocationStore((s) => s.position);
 
-  // const [marker, setMarker] = useState<{
-  //   position: [number, number];
-  //   name?: string;
-  // } | null>(null);
-
   const [mapCenter, setMapCenter] = useState<[number, number]>(
-    position || DEFAULT_CENTER,
+    position || CENTER,
   );
   const [isLoading, setIsLoading] = useState<boolean>(!position);
 
@@ -145,13 +118,6 @@ export function RemoteMapView({
       setIsLoading(false);
     }
   }, [position]);
-
-  // const handleLongClick = async (latlng: L.LatLng) => {
-  //   const { lat, lng } = latlng;
-  //   setMarker({
-  //     position: [lat, lng],
-  //   });
-  // };
 
   useEffect(() => {
     if (
@@ -195,12 +161,6 @@ export function RemoteMapView({
             </Marker>
           </>
         )}
-        {/* <LongClickHandler onLongClick={handleLongClick} />
-        {marker && (
-          <Marker position={marker.position} icon={waypointMarkerIcon}>
-            {marker.name && <Popup>{marker.name}</Popup>}
-          </Marker>
-        )} */}
         <UserMarker />
         <SavedHazardZones />
         <SavedHazardIncidents />

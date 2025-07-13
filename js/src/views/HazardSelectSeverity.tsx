@@ -13,8 +13,6 @@ import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButt
  *
  * After selection, the user is redirected to ConfigureHazard.
  * State is managed via Zustand (`usePlaceStore`, `useViewStore`).
- *
- * @returns JSX.Element – The rendered severity selection screen.
  */
 export default function SelectSeverity() {
   const { setPage } = useViewStore();

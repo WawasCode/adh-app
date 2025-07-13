@@ -1,4 +1,5 @@
 import { LatLngTuple } from "leaflet";
+import { HazardSeverity } from "./incident";
 
 export interface Location {
   type: "Point";
@@ -25,7 +26,7 @@ export type HazardZone = {
   name: string;
   coordinates: LatLngTuple[];
   center: Location;
-  severity: string;
+  severity: HazardSeverity;
   description?: string;
   reportedAt: Date;
   distance?: number;

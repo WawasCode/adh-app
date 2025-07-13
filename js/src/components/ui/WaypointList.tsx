@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 
+/**
+ * WaypointList displays a list of waypoints fetched from the store.
+ * It uses Zustand to manage state and fetches waypoints on mount.
+ */
 export function WaypointList() {
   const { waypoints, fetchWaypoints } = useWaypointStore();
 

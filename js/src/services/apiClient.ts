@@ -1,7 +1,7 @@
 import { Incident, IncidentApiResponse } from "@/types/incident";
 import { Waypoint } from "@/types/waypoint";
 import { HazardZone, HazardZoneBackend } from "@/types/hazardZone";
-import { parseWKTPolygon } from "@/utils/geoUtils";
+import { parseWKTPoint, parseWKTPolygon } from "@/utils/geoUtils";
 
 const API_BASE_URL = "http://localhost:8080/api";
 type ApiEndpoint = string;
@@ -56,11 +56,11 @@ const apiClient = {
         const pointsWKT = zone.location;
         const isPoint = pointsWKT.includes("POINT");
         let coords: number[][] = [];
+
         if (isPoint) {
-          const match = pointsWKT.match(/\(([\d.]+) ([\d.]+)\)/);
-          if (match) {
-            const [, lat, lng] = match;
-            coords = [[parseFloat(lat), parseFloat(lng)]];
+          const point = parseWKTPoint(pointsWKT);
+          if (point) {
+            coords = [point];
           }
         } else {
           coords = parseWKTPolygon(pointsWKT);

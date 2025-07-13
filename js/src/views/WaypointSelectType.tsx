@@ -4,15 +4,12 @@ import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { WaypointType } from "@/types/waypoint";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { ViewFooterOnlyBackButton } from "@/components/ui/ViewFooterOnlyBackButton";
-
 /**
  * SelectWaypointType – View for selecting a category (type) of waypoint.
  *
  * Users choose from predefined options like Firestation or Hospital.
  * The selected type is saved in Zustand (`waypointInput.waypointType`).
  * After selection, the user is redirected back to ConfigureWaypoint.
- *
- * @returns JSX.Element – A simple selection interface for waypoint categories.
  */
 export default function SelectWaypointType() {
   const { setPage } = useViewStore();
@@ -51,7 +48,9 @@ export default function SelectWaypointType() {
     <div className="flex flex-col h-full px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* Header with close button and title */}
       <div className="pt-4 pb-2">
-        <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        <div className="flex justify-end">
+          <ViewHeaderCloseWithConfirm onConfirm={handleCancel} />
+        </div>
         <h1 className="text-center font-semibold text-xl mt-2">Select Type</h1>
       </div>
 

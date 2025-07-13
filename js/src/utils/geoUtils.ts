@@ -50,6 +50,7 @@ export function calculateCentroid(points: LatLngTuple[]): [number, number] {
 
 /**
  * Parses a WKT POINT string into a LatLng tuple.
+ *
  * @param wkt WKT string representing a point (e.g., "POINT (lon lat)").
  * @returns A number tuple [lat, lon] or null if parsing fails.
  */
@@ -68,6 +69,7 @@ export function parseWKTPoint(wkt: string): [number, number] | null {
 
 /**
  * Parses a WKT POLYGON string into an array of LatLng tuples.
+ *
  * @param wkt WKT string representing a polygon (e.g., "POLYGON ((lon1 lat1, lon2 lat2, ...))").
  * @returns An array of LatLng tuples or an empty array if parsing fails.
  */

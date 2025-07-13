@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, useMapEvents, Marker } from "react-leaflet";
+import { MapContainer, useMapEvents, Marker } from "react-leaflet";
 import { UserMarker } from "@/map/UserMarker";
 import { useIncidentStore } from "@/store/useIncidentCreationStore";
 import { useLocationStore } from "@/store/useLocationStore";
@@ -7,8 +7,8 @@ import { incidentMarkerIcon } from "@/utils/customMarkerIcon";
 import { useMapStore } from "@/store/useMapStore";
 import { useMap } from "react-leaflet";
 import { useEffect } from "react";
-
-const CENTER: [number, number] = [52.52, 13.405];
+import VectorTileLayer from "react-leaflet-vector-tile-layer";
+import { CENTER } from "@/constants";
 
 function StoreMapInZustand() {
   const map = useMap();
@@ -46,10 +46,7 @@ export default function RemoteMapViewWithSingleClick() {
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <VectorTileLayer styleUrl="http://localhost:8080/api/styles/osm-bright-local.json" />
       <UserMarker />
       <MapClickHandler />
       <StoreMapInZustand />

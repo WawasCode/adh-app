@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import CloseButton from "./CloseButton";
 
 interface ViewHeaderCloseProps {
   onConfirm: () => void;
@@ -19,13 +20,7 @@ export function ViewHeaderCloseWithConfirm({
   return (
     <>
       {/* X Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="text-red-500 text-xl font-bold"
-        aria-label="Close"
-      >
-        ✕
-      </button>
+      <CloseButton onClick={() => setOpen(true)} />
 
       {/* Modal */}
       {open &&
