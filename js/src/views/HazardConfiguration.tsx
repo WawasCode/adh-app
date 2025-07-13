@@ -10,6 +10,7 @@ import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithC
 import { calculateCentroid } from "@/utils/geoUtils";
 import { useIncidentStore as useIncidentDisplayStore } from "@/store/useIncidentDisplayStore";
 import { useHazardZoneStore as useHazardZoneDisplayStore } from "@/store/useHazardZoneDisplayStore";
+import apiClient from "@/services/apiClient";
 
 /**
  * ConfigureHazard – View for entering hazard details.
@@ -59,13 +60,12 @@ export default function ConfigureHazard() {
     if (!isFormComplete || (!location && points.length < 3)) return;
 
     const isIncident = !!location;
+    const endpoint = isIncident ? "/incidents/" : "/hazard-zones/";
 
     const payload = {
       name,
       description,
       severity: severity!,
-      // isWalkable,
-      // isDrivable,
       location: isIncident
         ? {
             type: "Point",
@@ -82,19 +82,11 @@ export default function ConfigureHazard() {
           },
       ...(!isIncident && {
         center: { type: "Point", coordinates: calculateCentroid(points) },
-      }), // Include the center field for HazardZone
+      }),
     };
 
-    const endpoint = isIncident ? "/api/incidents/" : "/api/hazard-zones/";
-
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error("Error saving hazard or incident");
+      await apiClient.submitData(endpoint, payload);
 
       if (isIncident) {
         await useIncidentDisplayStore.getState().fetchIncidents();

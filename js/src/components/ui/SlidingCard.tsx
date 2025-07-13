@@ -155,11 +155,7 @@ export const SlidingCard = forwardRef<HTMLDivElement, SlidingCardProps>(
           console.log("Data type not recognized");
           return;
         }
-        await apiClient.deleteData(
-          endpoint,
-          `${currentData.kind} deleted successfully`,
-          `Failed to delete ${currentData.kind}`,
-        );
+        await apiClient.deleteData(endpoint);
         if (isWaypoint(currentData)) {
           await useWaypointStore.getState().fetchWaypoints();
         } else if (isHazardZone(currentData)) {

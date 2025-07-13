@@ -3,7 +3,7 @@ import { Waypoint } from "@/types/waypoint";
 import { HazardZone, HazardZoneBackend } from "@/types/hazardZone";
 import { parseWKTPolygon } from "@/utils/geoUtils";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+const API_BASE_URL = "http://localhost:8080/api";
 type ApiEndpoint = string;
 type ApiData = IncidentApiResponse | Waypoint | HazardZoneBackend | unknown;
 

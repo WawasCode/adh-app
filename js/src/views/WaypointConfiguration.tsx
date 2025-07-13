@@ -6,6 +6,14 @@ import { useWaypointStore } from "@/store/useWaypointCreationStore";
 import { useWaypointStore as useWaypointDisplayStore } from "@/store/useWaypointDisplayStore";
 import { ViewFooter } from "@/components/ui/ViewFooter";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
+import apiClient from "@/services/apiClient";
+
+/**
+ * Checks if the input string is a valid phone number.
+ */
+const isValidPhoneNumber = (input: string): boolean => {
+  return /^\+?[0-9]*$/.test(input);
+};
 
 /**
  * ConfigureWaypoint – View for entering waypoint details.
@@ -57,16 +65,8 @@ export default function ConfigureWaypoint() {
     console.log("Saving waypoint:", waypoint);
 
     try {
-      const res = await fetch("/api/waypoints/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(waypoint),
-      });
-
-      if (!res.ok) throw new Error("Error while saving");
-
+      await apiClient.submitData("/waypoints/", waypoint);
       await useWaypointDisplayStore.getState().fetchWaypoints();
-
       resetWaypointInput();
       setPage("main");
     } catch (error) {
@@ -81,6 +81,16 @@ export default function ConfigureWaypoint() {
   const handleCancel = () => {
     resetWaypointInput();
     setPage("main");
+  };
+
+  /**
+   * Handle telephone input changes to ensure only numbers and '+' are allowed.
+   */
+  const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (isValidPhoneNumber(value) && value.length <= 20) {
+      setWaypointField("telephone", value);
+    }
   };
 
   return (
@@ -145,7 +155,7 @@ export default function ConfigureWaypoint() {
         {/* Optional telephone input */}
         <FloatingLabelInput
           value={telephone}
-          onChange={(e) => setWaypointField("telephone", e.target.value)}
+          onChange={handleTelephoneChange}
           className="rounded-xl py-4 px-5 text-base"
           label="Phone (optional)"
           maxLength={20}

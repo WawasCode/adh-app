@@ -4,7 +4,8 @@ import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import L from "leaflet";
 import { calculateDistance, parseWKTPoint } from "@/utils/geoUtils";
 import { theme } from "~/styles/theme";
-import { useLocationStore } from "../store/useLocationStore";
+import { useLocationStore } from "@/store/useLocationStore";
+import * as turf from "@turf/turf";
 
 /**
  * SavedHazardZones renders hazard zones fetched from the backend.
@@ -16,9 +17,15 @@ export function SavedHazardZones() {
 
   const handleMapClick = (e: L.LeafletMouseEvent) => {
     const clickedLatLng = e.latlng;
+    const clickedPoint = turf.point([clickedLatLng.lng, clickedLatLng.lat]);
+
     const clickedZones = hazardZones.filter((zone) => {
-      const polygon = L.polygon(zone.coordinates as [number, number][]);
-      return polygon.getBounds().contains(clickedLatLng);
+      const polygonCoordinates = zone.coordinates.map((coord) => [
+        coord[1],
+        coord[0],
+      ]);
+      const polygon = turf.polygon([polygonCoordinates]);
+      return turf.booleanPointInPolygon(clickedPoint, polygon);
     });
 
     if (clickedZones.length > 0) {
