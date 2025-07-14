@@ -63,6 +63,11 @@ print_success "Python dependencies installed"
 
 # Run migrations.
 print_status "Running database migrations..."
+# First, ensure we have the latest migrations
+python manage.py makemigrations --check --dry-run > /dev/null 2>&1 || {
+    print_warning "Generating new migrations..."
+    python manage.py makemigrations
+}
 python manage.py migrate
 print_success "Database migrations completed"
 
