@@ -41,7 +41,7 @@ export const searchLocations = async (
 
   try {
     const response = await fetch(
-      `http://localhost:2322/api/?q=${encodeURIComponent(query)}&lat=${lat}&lon=${lon}&limit=10`,
+      `/photon/?q=${encodeURIComponent(query)}&lat=${lat}&lon=${lon}&limit=10`
     );
     const data = await response.json();
     return data.features || [];

@@ -15,6 +15,11 @@ export default defineConfig({
         changeOrigin: true, // Change the origin of the host header to the target URL
         secure: false, // Disable SSL verification for development
       },
+      "/photon": {
+        target: "http://localhost:2322",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/photon/, '/api'),
+      },
     },
   },
   resolve: {
