@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     osm2pgsql \
     osmium-tool \
     postgresql-client \
-    wget
+    wget \
+    openjdk-17-jdk
 
 # Install Git LFS for font file support
 RUN apt-get update && apt-get install -y git-lfs \
