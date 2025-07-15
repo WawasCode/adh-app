@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # prepare-photon.sh - Download Photon geocoding data and JAR file into a photon subdirectory
-# Easy way to do it. You can also build a nominatim instance with your own data and than import them into Photon.
+# Running this script is the easy way to do it. You can also build a nominatim instance with your own data and than import it into Photon. It's a big overhead, but you need to do that if you want to use a custom dataset.
 
 set -e  # Exit on any error
 
