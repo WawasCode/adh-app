@@ -41,7 +41,7 @@ export const searchLocations = async (
 
   try {
     const response = await fetch(
-      `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=${lat}&lon=${lon}&limit=10`,
+      `http://localhost:2322/api/?q=${encodeURIComponent(query)}&lat=${lat}&lon=${lon}&limit=10`,
     );
     const data = await response.json();
     return data.features || [];

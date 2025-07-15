@@ -1,3 +1,5 @@
 *.woff2 filter=lfs diff=lfs merge=lfs -text
 **/*.pbf filter=lfs diff=lfs merge=lfs -text
 js/src/assets/images/markerIconRed.png filter=lfs diff=lfs merge=lfs -text
+photon/photon.jar filter=lfs diff=lfs merge=lfs -text
+photon/photon_data/** filter=lfs diff=lfs merge=lfs -text
