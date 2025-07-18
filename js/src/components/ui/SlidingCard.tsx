@@ -18,8 +18,11 @@ import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { theme } from "~/styles/theme";
+import { PhotonPlace } from "@/types/photon";
+import { useMapStore } from "@/store/useMapStore";
+import { useSearchStore } from "@/store/useSearchStore";
 
-type SlidingCardData = Waypoint | HazardZone | Incident;
+type SlidingCardData = Waypoint | HazardZone | Incident | PhotonPlace;
 
 const severityOptions: HazardSeverity[] = ["low", "medium", "high", "critical"];
 
@@ -40,6 +43,10 @@ function isHazardZone(data: SlidingCardData): data is HazardZone {
 
 function isIncident(data: SlidingCardData): data is Incident {
   return data.kind === "incident";
+}
+
+function isPhotonPlace(data: SlidingCardData): data is PhotonPlace {
+  return data.kind === "photonPlace";
 }
 
 /**
@@ -143,6 +150,31 @@ function IncidentContent({ incident }: { incident: Incident }) {
 }
 
 /**
+ * PhotonPlaceContent – Displays details of a Photon place.
+ *
+ * @param place - The Photon place data to display.
+ */
+function PhotonPlaceContent({ place }: { place: PhotonPlace }) {
+  return (
+    <div>
+      <div className="text-xl flex justify-between items-center">
+        <div>{place.name}</div>
+      </div>
+      <div className="clear-both">
+        <div className="text-sm leading-tight space-y-1">
+          <div>
+            {place.type}
+            {place.distance !== undefined &&
+              `・${place.distance.toFixed(2)} km away`}
+          </div>
+          <div>{place.address}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * SlidingCard – A sliding card component that displays details of a waypoint,
  * hazard zone, or incident. Allows navigation and deletion of the displayed item.
  *
@@ -159,11 +191,21 @@ export function SlidingCard({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data, clearData } = useSlidingCardStore();
-
+  const { setSelectedLocation } = useMapStore();
   const isArray = Array.isArray(data);
   const currentData = isArray ? data[currentIndex] : data;
+  const { clearQuery } = useSearchStore();
 
   if (!currentData) return null;
+
+  const handleClose = () => {
+    if (isPhotonPlace(currentData)) {
+      setSelectedLocation(undefined);
+      clearQuery();
+    }
+
+    clearData();
+  };
 
   const handleDelete = async () => {
     try {
@@ -211,6 +253,8 @@ export function SlidingCard({
       return <HazardZoneContent hazardZone={currentData} />;
     } else if (isIncident(currentData)) {
       return <IncidentContent incident={currentData} />;
+    } else if (isPhotonPlace(currentData)) {
+      return <PhotonPlaceContent place={currentData} />;
     } else {
       console.log("Data type not recognized");
       return null;
@@ -226,13 +270,13 @@ export function SlidingCard({
       )}
       style={{ minHeight: "13rem", maxHeight: "30rem" }}
     >
-      <div className="p-4 flex-1 overflow-y-auto">
+      <div className="p-4 flex-1 overflow-y-auto ">
         {renderData()}
         <button
-          onClick={clearData}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-500"
         >
-          <X size={22} />
+          <X size={24} />
         </button>
       </div>
       <div className="flex justify-center p-4 gap-4">
@@ -253,13 +297,17 @@ export function SlidingCard({
               </button>
             </a>
           )}
-        <button
-          onClick={() => setShowConfirmation(true)}
-          className="bg-white font-bold py-2 px-4 rounded border flex items-center"
-        >
-          <CircleX className="mr-2" size={16} />
-          Delete
-        </button>
+        {currentData.kind === "waypoint" ||
+        currentData.kind === "hazardZone" ||
+        currentData.kind === "incident" ? (
+          <button
+            onClick={() => setShowConfirmation(true)}
+            className="bg-white font-bold py-2 px-4 rounded border flex items-center"
+          >
+            <CircleX className="mr-2" size={16} />
+            Delete
+          </button>
+        ) : null}
       </div>
       {isArray && data.length > 1 && (
         <div className="flex justify-around p-2 gap-4 border-t">
