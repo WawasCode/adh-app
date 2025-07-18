@@ -18,7 +18,7 @@ import SelectLocation from "@/views/HazardSelectLocationType";
 import SelectZone from "@/views/HazardZoneSelectZone";
 import SelectAddress from "@/views/HazardIncidentSelectAddress";
 import { PhotonPlace } from "@/types/photon";
-import { useMapStore } from "@/store/useMapStore";
+import { useSearchStore } from "@/store/useSearchStore";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -34,7 +34,7 @@ export default function MobileLayout() {
 
   const setPosition = useLocationStore((s) => s.setPosition);
   const setShowMarker = useLocationStore((s) => s.setShowMarker);
-  const setSelectedLocation = useMapStore((s) => s.setSelectedLocation);
+  const setSelectedLocation = useSearchStore((s) => s.setSelectedLocation);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");

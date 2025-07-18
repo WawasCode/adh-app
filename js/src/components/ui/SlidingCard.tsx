@@ -19,7 +19,6 @@ import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { theme } from "~/styles/theme";
 import { PhotonPlace } from "@/types/photon";
-import { useMapStore } from "@/store/useMapStore";
 import { useSearchStore } from "@/store/useSearchStore";
 
 type SlidingCardData = Waypoint | HazardZone | Incident | PhotonPlace;
@@ -191,10 +190,9 @@ export function SlidingCard({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data, clearData } = useSlidingCardStore();
-  const { setSelectedLocation } = useMapStore();
+  const { setSelectedLocation, clearQuery } = useSearchStore();
   const isArray = Array.isArray(data);
   const currentData = isArray ? data[currentIndex] : data;
-  const { clearQuery } = useSearchStore();
 
   if (!currentData) return null;
 

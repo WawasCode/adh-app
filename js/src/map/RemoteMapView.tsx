@@ -11,13 +11,14 @@ import { useLocationStore } from "@/store/useLocationStore";
 import VectorTileLayer from "react-leaflet-vector-tile-layer";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
-import { SavedHazardIncidents } from "./SavedHazardIncidents";
+import { SavedHazardIncidents } from "@/map/SavedHazardIncidents";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { CENTER } from "@/constants";
 import { LatLngTuple } from "leaflet";
 import { calculateDistance } from "@/utils/geoUtils";
 import { PhotonPlace } from "@/types/photon";
+import { useSearchStore } from "@/store/useSearchStore";
 
 const ZOOM = 10;
 const MIN_ZOOM = 0; // Vector tiles start at zoom 0
@@ -88,7 +89,7 @@ export function RemoteMapView({ className }: RemoteMapViewProps) {
   const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
   const currentPosition = useLocationStore((s) => s.position);
   const { setData } = useSlidingCardStore();
-  const { selectedLocation } = useMapStore();
+  const { selectedLocation } = useSearchStore();
   const [mapCenter, setMapCenter] = useState<[number, number]>(
     currentPosition || CENTER,
   );
