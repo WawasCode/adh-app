@@ -5,6 +5,7 @@ import { SearchBar } from "@/views/MobileUICommon";
 import RemoteMapViewWithSingleClick from "@/map/MapsForUserInput/RemoteMapWithSingleClick";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { useMapStore } from "@/store/useMapStore";
+import { PhotonPlace } from "@/types/photon";
 /**
  * SelectAddress – View to set a single-point hazard location.
  *
@@ -41,14 +42,10 @@ export default function SelectAddress() {
    * @param location – Object containing `lat`, `lon`, and `name` of selected address
    */
   const map = useMapStore((s) => s.map);
-  const handleSearchSelect = (location: {
-    lat: number;
-    lon: number;
-    name: string;
-  }) => {
-    setHazardField("location", [location.lat, location.lon]);
+  const handleSearchSelect = (args: { place: PhotonPlace; name: string }) => {
+    setHazardField("location", [args.place.coords[0], args.place.coords[1]]);
     if (map) {
-      map.flyTo([location.lat, location.lon], 15);
+      map.flyTo([args.place.coords[0], args.place.coords[1]], 15);
     }
   };
 

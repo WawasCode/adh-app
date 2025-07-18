@@ -55,7 +55,7 @@ export default function RemoteMapViewWithClick() {
       style={{ height: "100%", width: "100%" }}
       zoomControl={false}
     >
-      <VectorTileLayer styleUrl="http://localhost:8080/api/styles/osm-bright-local.json" />
+      <VectorTileLayer styleUrl="/api/styles/osm-bright-local.json" />
       <StoreMapInZustand />
       <UserMarker />
       <MapClickHandler />
