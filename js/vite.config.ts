@@ -11,14 +11,14 @@ export default defineConfig({
     strictPort: true, // Fail if port is already in use
     proxy: {
       "/api": {
-        target: "http://localhost:8000", // Proxy to the backend API !! Change this to your backend URL !!
+        target: "http://localhost:8080", // Proxy to the backend API !! Change this to your backend URL !!
         changeOrigin: true, // Change the origin of the host header to the target URL
         secure: false, // Disable SSL verification for development
       },
       "/photon": {
         target: "http://localhost:2322",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/photon/, '/api'),
+        rewrite: (path) => path.replace(/^\/photon/, "/api"),
       },
     },
   },

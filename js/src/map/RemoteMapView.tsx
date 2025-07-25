@@ -1,12 +1,6 @@
 import { useMapStore } from "@/store/useMapStore";
 import { UserMarker } from "./UserMarker";
-import {
-  MapContainer,
-  useMap,
-  Marker,
-  Popup,
-  useMapEvents,
-} from "react-leaflet";
+import { MapContainer, useMap, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ButtonHTMLAttributes, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
@@ -17,10 +11,14 @@ import { useLocationStore } from "@/store/useLocationStore";
 import VectorTileLayer from "react-leaflet-vector-tile-layer";
 import { useWaypointStore } from "@/store/useWaypointDisplayStore";
 import { useHazardZoneStore } from "@/store/useHazardZoneDisplayStore";
-import { SavedHazardIncidents } from "./SavedHazardIncidents";
+import { SavedHazardIncidents } from "@/map/SavedHazardIncidents";
 import { useIncidentStore } from "@/store/useIncidentDisplayStore";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
 import { CENTER } from "@/constants";
+import { LatLngTuple } from "leaflet";
+import { calculateDistance } from "@/utils/geoUtils";
+import { PhotonPlace } from "@/types/photon";
+import { useSearchStore } from "@/store/useSearchStore";
 
 const ZOOM = 10;
 const MIN_ZOOM = 0; // Vector tiles start at zoom 0
@@ -47,7 +45,7 @@ function MapSetter() {
 
 interface RemoteMapViewProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   center?: [number, number];
-  selectedLocation?: { lat: number; lon: number; name?: string };
+  selectedLocation?: { place: PhotonPlace; name: string };
 }
 
 // Helper component to change map view when location changes
@@ -84,48 +82,60 @@ const MapClickHandler = () => {
  * RemoteMapView renders the main map background.
  * It includes saved waypoints, hazard zones, and the user's location.
  */
-export function RemoteMapView({
-  className,
-  selectedLocation,
-}: RemoteMapViewProps) {
+export function RemoteMapView({ className }: RemoteMapViewProps) {
   const base = "map-container";
-
   const fetchWaypoints = useWaypointStore((s) => s.fetchWaypoints);
+  const fetchHazardZones = useHazardZoneStore((s) => s.fetchHazardZones);
+  const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
+  const currentPosition = useLocationStore((s) => s.position);
+  const { setData } = useSlidingCardStore();
+  const { selectedLocation } = useSearchStore();
+  const [mapCenter, setMapCenter] = useState<[number, number]>(
+    currentPosition || CENTER,
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(!currentPosition);
+
   useEffect(() => {
     fetchWaypoints();
   }, [fetchWaypoints]);
 
-  const fetchHazardZones = useHazardZoneStore((s) => s.fetchHazardZones);
   useEffect(() => {
     fetchHazardZones();
   }, [fetchHazardZones]);
 
-  const fetchIncidents = useIncidentStore((s) => s.fetchIncidents);
   useEffect(() => {
     fetchIncidents();
   }, [fetchIncidents]);
 
-  const position = useLocationStore((s) => s.position);
-
-  const [mapCenter, setMapCenter] = useState<[number, number]>(
-    position || CENTER,
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(!position);
+  const handleMarkerClick = (
+    place: PhotonPlace,
+    coords: LatLngTuple | null,
+  ) => {
+    if (currentPosition && coords) {
+      const distance = calculateDistance(currentPosition as [number, number], [
+        coords[0],
+        coords[1],
+      ]);
+      setData({ ...place, distance });
+    } else {
+      setData(place);
+    }
+  };
 
   useEffect(() => {
-    if (position) {
-      setMapCenter(position);
+    if (currentPosition) {
+      setMapCenter(currentPosition);
       setIsLoading(false);
     }
-  }, [position]);
+  }, [currentPosition]);
 
   useEffect(() => {
     if (
       selectedLocation &&
-      (mapCenter[0] !== selectedLocation.lat ||
-        mapCenter[1] !== selectedLocation.lon)
+      (mapCenter[0] !== selectedLocation.place.coords[0] ||
+        mapCenter[1] !== selectedLocation.place.coords[1])
     ) {
-      setMapCenter([selectedLocation.lat, selectedLocation.lon]);
+      setMapCenter(selectedLocation.place.coords);
     }
   }, [mapCenter, selectedLocation]);
 
@@ -138,7 +148,7 @@ export function RemoteMapView({
       {/* Ensure the map container fills the parent */}
       <MapContainer
         style={{ height: "100%", width: "100%" }}
-        center={position || mapCenter}
+        center={currentPosition || mapCenter}
         zoom={ZOOM}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
@@ -147,18 +157,23 @@ export function RemoteMapView({
         zoomControl={false}
       >
         <VectorTileLayer
-          styleUrl="http://localhost:8080/api/styles/osm-bright-local.json"
+          styleUrl="/api/styles/osm-bright-local.json"
           maxZoom={MAX_ZOOM}
         />
         {selectedLocation && (
           <>
             <ChangeMapView center={mapCenter} />
             <Marker
-              position={[selectedLocation.lat, selectedLocation.lon]}
+              position={selectedLocation.place.coords}
               icon={waypointMarkerIcon}
-            >
-              {selectedLocation.name && <Popup>{selectedLocation.name}</Popup>}
-            </Marker>
+              eventHandlers={{
+                click: () =>
+                  handleMarkerClick(
+                    selectedLocation.place,
+                    selectedLocation.place.coords,
+                  ),
+              }}
+            />
           </>
         )}
         <UserMarker />

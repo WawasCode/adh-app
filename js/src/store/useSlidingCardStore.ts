@@ -2,9 +2,14 @@ import { create } from "zustand";
 import { Waypoint } from "@/types/waypoint";
 import { HazardZone } from "@/types/hazardZone";
 import { Incident } from "@/types/incident";
+import { PhotonPlace } from "@/types/photon";
 
 // Define a type for a single data item
-export type SlidingCardDataItem = Waypoint | HazardZone | Incident;
+export type SlidingCardDataItem =
+  | Waypoint
+  | HazardZone
+  | Incident
+  | PhotonPlace;
 
 // Define a type for an array of data items
 export type SlidingCardData = SlidingCardDataItem | SlidingCardDataItem[];

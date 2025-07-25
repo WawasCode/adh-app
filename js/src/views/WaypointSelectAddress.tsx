@@ -5,6 +5,7 @@ import RemoteMapViewWithClick from "@/map/MapsForUserInput/RemoteMapViewWithClic
 import { SearchBar } from "@/views/MobileUICommon";
 import { ViewHeaderCloseWithConfirm } from "@/components/ui/ViewHeaderCloseWithConfirm";
 import { useMapStore } from "@/store/useMapStore";
+import { PhotonPlace } from "@/types/photon";
 
 /**
  * SelectWaypointLocation – View to define a waypoint's position on the map.
@@ -26,14 +27,10 @@ export default function SelectWaypointLocation() {
    * @param location - Object containing lat/lon and name from the search result.
    */
   const map = useMapStore((s) => s.map);
-  const handleLocationSelect = (location: {
-    lat: number;
-    lon: number;
-    name: string;
-  }) => {
-    setWaypointField("location", [location.lat, location.lon]);
+  const handleLocationSelect = (args: { place: PhotonPlace; name: string }) => {
+    setWaypointField("location", [args.place.coords[0], args.place.coords[1]]);
     if (map) {
-      map.flyTo([location.lat, location.lon], 15);
+      map.flyTo([args.place.coords[0], args.place.coords[1]], 15);
     }
   };
 

@@ -8,16 +8,13 @@ import {
 } from "@/views/MobileUICommon";
 import { SlidingCard } from "@/components/ui/SlidingCard";
 import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { PhotonPlace } from "@/types/photon";
 
 interface MobileMainOverlayProps {
   openNavigation: () => void;
   openAddPlace: () => void;
   BottomNavComponent: React.ReactNode;
-  onLocationSelect?: (location: {
-    lat: number;
-    lon: number;
-    name: string;
-  }) => void;
+  onLocationSelect?: (args: { place: PhotonPlace; name: string }) => void;
 }
 
 // Top search and filter controls

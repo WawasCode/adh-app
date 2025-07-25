@@ -6,14 +6,20 @@ import {
   Info,
   Grid,
   Settings,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "~/lib/utils";
 import { useEffect, useRef, useState } from "react";
-import { searchLocations, PhotonFeature } from "@/services/geocodingService";
+import { searchLocations } from "@/services/geocodingService";
 import { useMapStore } from "@/store/useMapStore";
 import { useLocationStore } from "@/store/useLocationStore";
+import { PhotonFeature, PhotonPlace } from "@/types/photon";
+import { useSlidingCardStore } from "@/store/useSlidingCardStore";
+import { calculateDistance } from "@/utils/geoUtils";
+import { useSearchStore } from "@/store/useSearchStore";
+
 // Zoom level to use when flying to the user's current location.
 const FLY_TO_ZOOM_LEVEL = 15;
 
@@ -34,23 +40,25 @@ export type Page =
   | "addPlace";
 
 interface SearchBarProps {
-  onLocationSelect?: (location: {
-    lat: number;
-    lon: number;
+  onLocationSelect?: (args: {
+    place: PhotonPlace;
     name: string;
     description?: string;
   }) => void;
 }
 
 /**
- * SearchBar component with a leading search icon.
+ * SearchBar – input field with location search functionality.
+ * @param onLocationSelect Callback when a location is selected.
  */
 export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
-  const [query, setQuery] = useState("");
+  const { query, setQuery, clearQuery } = useSearchStore();
   const [results, setResults] = useState<PhotonFeature[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { setData } = useSlidingCardStore();
+  const currentPosition = useLocationStore((s) => s.position);
+  const skipNextEffectRef = useRef(false);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -68,17 +76,20 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
   }, []);
 
   useEffect(() => {
+    if (skipNextEffectRef.current) {
+      skipNextEffectRef.current = false;
+      return;
+    }
+
     if (!query.trim()) {
       setResults([]);
       return;
     }
 
     const timer = setTimeout(async () => {
-      setIsLoading(true);
       const data = await searchLocations(query);
       setResults(data);
       setShowResults(true);
-      setIsLoading(false);
     }, 300);
 
     return () => clearTimeout(timer);
@@ -86,37 +97,57 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
 
   const handleResultSelect = (result: PhotonFeature) => {
     const [lon, lat] = result.geometry.coordinates;
+    const coords = [lat, lon] as [number, number];
     const mainLine = formatMainLine(result.properties);
     const secondaryLine = formatSecondaryLine(result.properties);
 
+    skipNextEffectRef.current = true;
     setQuery(mainLine);
     setShowResults(false);
 
     if (onLocationSelect) {
       onLocationSelect({
-        lat,
-        lon,
+        place: {
+          name: result.properties.name,
+          kind: "photonPlace",
+          coords,
+          type: result.properties.osm_value,
+          address: result.properties.housenumber
+            ? `${result.properties.street} ${result.properties.housenumber}, ${result.properties.postcode} ${result.properties.city}`
+            : result.properties.street
+              ? `${result.properties.street}, ${result.properties.postcode} ${result.properties.city}`
+              : `${result.properties.postcode}, ${result.properties.city}`,
+        },
         name: mainLine,
         description: secondaryLine,
       });
     }
+    setData({
+      name: result.properties.name,
+      kind: "photonPlace",
+      coords,
+      type: result.properties.osm_value,
+      address: result.properties.housenumber
+        ? `${result.properties.street} ${result.properties.housenumber}, ${result.properties.postcode} ${result.properties.city}`
+        : result.properties.street
+          ? `${result.properties.street}, ${result.properties.postcode} ${result.properties.city}`
+          : `${result.properties.postcode}, ${result.properties.city}`,
+      distance: calculateDistance(currentPosition as [number, number], [
+        coords[0],
+        coords[1],
+      ]),
+    });
   };
 
   const formatMainLine = (props: PhotonFeature["properties"]) => {
-    if (props.name) {
-      return (
-        props.name +
-        (props.housenumber
-          ? ` (${props.street} ${props.housenumber})`
-          : ` (${props.street})`)
-      );
-    }
-    if (props.street) {
-      return props.housenumber
-        ? `${props.street} ${props.housenumber}`
-        : props.street;
-    }
-    return "Unnamed location";
+    return (
+      props.name +
+      (props.housenumber
+        ? ` (${props.street} ${props.housenumber})`
+        : props.street
+          ? ` (${props.street})`
+          : "")
+    );
   };
 
   const formatSecondaryLine = (props: PhotonFeature["properties"]) => {
@@ -148,10 +179,13 @@ export function SearchBar({ onLocationSelect }: SearchBarProps = {}) {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.trim() && setShowResults(true)}
         />
-        {isLoading && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <div className="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
-          </div>
+        {query.length > 0 && (
+          <button
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+            onClick={clearQuery}
+          >
+            <X size={24} />
+          </button>
         )}
       </div>
 

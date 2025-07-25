@@ -16,7 +16,9 @@ import SelectWaypointLocation from "@/views/WaypointSelectAddress";
 import SelectSeverity from "@/views/HazardSelectSeverity";
 import SelectLocation from "@/views/HazardSelectLocationType";
 import SelectZone from "@/views/HazardZoneSelectZone";
-import SelectAddress from "./views/HazardIncidentSelectAddress";
+import SelectAddress from "@/views/HazardIncidentSelectAddress";
+import { PhotonPlace } from "@/types/photon";
+import { useSearchStore } from "@/store/useSearchStore";
 
 const MARKER_DISPLAY_DELAY_MS = 1000;
 const LOCATION_MAX_AGE_MS = 10000;
@@ -32,11 +34,7 @@ export default function MobileLayout() {
 
   const setPosition = useLocationStore((s) => s.setPosition);
   const setShowMarker = useLocationStore((s) => s.setShowMarker);
-  const [selectedLocation, setSelectedLocation] = useState<{
-    lat: number;
-    lon: number;
-    name?: string;
-  } | null>(null);
+  const setSelectedLocation = useSearchStore((s) => s.setSelectedLocation);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -90,12 +88,19 @@ export default function MobileLayout() {
     };
   }, [setPosition, setShowMarker]);
 
-  function handleLocationSelect(location: {
-    lat: number;
-    lon: number;
+  /**
+   * Handle location selection from the map.
+   * @param place - The selected place from the map.
+   * @param name - The name of the selected place.
+   */
+  function handleLocationSelect({
+    place,
+    name,
+  }: {
+    place: PhotonPlace;
     name: string;
   }) {
-    setSelectedLocation(location);
+    setSelectedLocation({ place, name });
   }
 
   // Memoize the current page content to avoid re-renders from string comparisons in JSX.
@@ -175,14 +180,14 @@ export default function MobileLayout() {
 
     // Fallback
     return renderPage(<IncidentsPage />);
-  }, [currentPage, setPage, goBack]);
+  }, [currentPage, setPage, handleLocationSelect, goBack]);
 
   if (!isMobile) return <RemoteMapView />;
 
   return (
     <div className="relative w-screen overflow-hidden h-[100svh]">
       <div className="absolute inset-0 z-0">
-        <RemoteMapView selectedLocation={selectedLocation || undefined} />
+        <RemoteMapView />
       </div>
       {currentPageContent}
     </div>
